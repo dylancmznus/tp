@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ManagementSystem {
-    private List<Appointment> appointments;
+    private final List<Appointment> appointments;
 
     public ManagementSystem() {
         appointments = new ArrayList<>();
@@ -37,7 +37,7 @@ public class ManagementSystem {
         System.out.println("Appointments:");
         int count = 1;
         for (Appointment a : appointments) {
-            System.out.println(count + ". " + a.toString());
+            System.out.println(count + ". " + a);
             count++;
         }
     }

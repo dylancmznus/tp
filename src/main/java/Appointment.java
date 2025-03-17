@@ -1,10 +1,10 @@
 public class Appointment {
     private static int runningId = 100;
-    private String id;
-    private String nric;
-    private String date;
-    private String time;
-    private String description;
+    private final String id;
+    private final String nric;
+    private final String date;
+    private final String time;
+    private final String description;
 
     public Appointment(String nric, String date, String time, String description) {
         this.id = "A" + runningId++;
