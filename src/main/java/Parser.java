@@ -28,7 +28,7 @@ public class Parser {
     }
 
     public static boolean isListAppointments(String input) {
-        return input.toLowerCase().equals("list-appointments");
+        return input.equalsIgnoreCase("list-appointments");
     }
 
     public static String[] parseAddAppointment(String input) {
@@ -48,25 +48,30 @@ public class Parser {
         return temp.isBlank() ? null : temp.trim();
     }
 
-    // For placeholder commands
     public static String parseDeletePatient(String input) {
         return input.replaceFirst("(?i)delete-patient\\s*", "").trim();
     }
+
     public static String parseViewPatient(String input) {
         return input.replaceFirst("(?i)view-patient\\s*", "").trim();
     }
+
     public static String parseViewHistory(String input) {
         return input.replaceFirst("(?i)view-history\\s*", "").trim();
     }
 
     private static String extractValue(String input, String prefix) {
         int start = input.toLowerCase().indexOf(prefix.toLowerCase());
-        if (start < 0) return null;
+        if (start < 0) {
+            return null;
+        }
         start += prefix.length();
         String[] possible = {"ic/", "dt/", "t/", "dsc/"};
         int end = input.length();
         for (String p : possible) {
-            if (p.equalsIgnoreCase(prefix)) continue;
+            if (p.equalsIgnoreCase(prefix)) {
+                continue;
+            }
             int idx = input.toLowerCase().indexOf(p.toLowerCase(), start);
             if (idx >= 0 && idx < end) {
                 end = idx;

@@ -11,39 +11,31 @@ public class ClinicEase {
             if (Parser.isBye(input)) {
                 ui.showBye();
                 running = false;
-            }
-            else if (Parser.isAddAppointment(input)) {
+            } else if (Parser.isAddAppointment(input)) {
                 String[] details = Parser.parseAddAppointment(input);
                 if (details == null) {
                     System.out.println("Invalid format. Use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
                 } else {
                     manager.addAppointment(details);
                 }
-            }
-            else if (Parser.isDeleteAppointment(input)) {
+            } else if (Parser.isDeleteAppointment(input)) {
                 String apptId = Parser.parseDeleteAppointment(input);
                 if (apptId == null) {
                     System.out.println("Invalid format. Use: delete-appointment APPOINTMENT_ID");
                 } else {
                     manager.deleteAppointment(apptId);
                 }
-            }
-            else if (Parser.isListAppointments(input)) {
+            } else if (Parser.isListAppointments(input)) {
                 manager.listAppointments();
-            }
-            else if (Parser.isAddPatient(input)) {
+            } else if (Parser.isAddPatient(input)) {
                 System.out.println("Feature not implemented yet.");
-            }
-            else if (Parser.isDeletePatient(input)) {
+            } else if (Parser.isDeletePatient(input)) {
                 System.out.println("Feature not implemented yet.");
-            }
-            else if (Parser.isViewPatient(input)) {
+            } else if (Parser.isViewPatient(input)) {
                 System.out.println("Feature not implemented yet.");
-            }
-            else if (Parser.isViewHistory(input)) {
+            } else if (Parser.isViewHistory(input)) {
                 System.out.println("Feature not implemented yet.");
-            }
-            else {
+            } else {
                 System.out.println("Unknown command.");
             }
         }

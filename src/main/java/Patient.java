@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Patient {
-    private String id;
-    private String name;
-    private String dob;
-    private String contactInfo;
-    private String gender;
-    private String address;
-    private List<String> medicalHistory;
+public class Patient {
+    private final String id;
+    private final String name;
+    private final String dob;
+    private final String contactInfo;
+    private final String gender;
+    private final String address;
+    private final List<String> medicalHistory;
 
     public Patient(String id, String name, String dob, String gender, String address, String contactInfo) {
         this.id = id;
@@ -20,11 +20,25 @@ class Patient {
         this.medicalHistory = new ArrayList<>();
     }
 
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public String getDob() { return dob; }
-    public String getContactInfo() { return contactInfo; }
-    public List<String> getMedicalHistory() { return medicalHistory; }
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public String getContactInfo() {
+        return contactInfo;
+    }
+
+    public List<String> getMedicalHistory() {
+        return medicalHistory;
+    }
 
     @Override
     public String toString() {
