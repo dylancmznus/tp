@@ -1,17 +1,51 @@
-import java.util.Scanner;
-
 public class ClinicEase {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        String line = in.nextLine();
-
         ManagementSystem manager = new ManagementSystem();
+        Ui ui = new Ui();
+        ui.showWelcome();
 
-        if(line.startsWith("add")){
-            manager.addPatient(line);
-        }
-        if(line.startsWith("delete")) {
-            manager.deletePatient(line);
+        boolean running = true;
+        while (running) {
+            String input = ui.readCommand();
+
+            if (Parser.isBye(input)) {
+                ui.showBye();
+                running = false;
+            }
+            else if (Parser.isAddAppointment(input)) {
+                String[] details = Parser.parseAddAppointment(input);
+                if (details == null) {
+                    System.out.println("Invalid format. Use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
+                } else {
+                    manager.addAppointment(details);
+                }
+            }
+            else if (Parser.isDeleteAppointment(input)) {
+                String apptId = Parser.parseDeleteAppointment(input);
+                if (apptId == null) {
+                    System.out.println("Invalid format. Use: delete-appointment APPOINTMENT_ID");
+                } else {
+                    manager.deleteAppointment(apptId);
+                }
+            }
+            else if (Parser.isListAppointments(input)) {
+                manager.listAppointments();
+            }
+            else if (Parser.isAddPatient(input)) {
+                System.out.println("Feature not implemented yet.");
+            }
+            else if (Parser.isDeletePatient(input)) {
+                System.out.println("Feature not implemented yet.");
+            }
+            else if (Parser.isViewPatient(input)) {
+                System.out.println("Feature not implemented yet.");
+            }
+            else if (Parser.isViewHistory(input)) {
+                System.out.println("Feature not implemented yet.");
+            }
+            else {
+                System.out.println("Unknown command.");
+            }
         }
     }
 }
