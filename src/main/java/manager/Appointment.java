@@ -1,4 +1,4 @@
-package MainFunction;
+package manager;
 
 public class Appointment {
     private static int runningId = 100;
