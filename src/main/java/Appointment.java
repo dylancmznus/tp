@@ -1,5 +1,3 @@
-package MainFunction;
-
 public class Appointment {
     private static int runningId = 100;
     private final String id;

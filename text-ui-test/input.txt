@@ -1,6 +1,1 @@
-add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St
-add-patient n/Jane Smith ic/T7654321B dob/02-02-1985 g/F p/87654321 a/456 Side St
-list-patient
-delete-patient ic/S1234567A
-list-patient
-bye
+James Gosling

@@ -1,5 +1,3 @@
-package Misc;
-
 public class Parser {
     public static boolean isBye(String input) {
         return input.equalsIgnoreCase("bye");
@@ -15,10 +13,6 @@ public class Parser {
 
     public static boolean isViewPatient(String input) {
         return input.toLowerCase().startsWith("view-patient");
-    }
-
-    public static boolean isListPatient(String input) {
-        return input.toLowerCase().startsWith("list-patient");
     }
 
     public static boolean isViewHistory(String input) {
@@ -54,18 +48,12 @@ public class Parser {
         return temp.isBlank() ? null : temp.trim();
     }
 
-    public static String[] parseAddPatient(String input) {
-        String temp = input.replaceFirst("(?i)add-patient\\s*", "");
-        String name = extractValue(temp, "n/");
-        String nric = extractValue(temp, "ic/");
-        String birthdate = extractValue(temp, "dob/");
-        String gender = extractValue(temp, "g/");
-        String phone = extractValue(temp, "p/");
-        String address = extractValue(temp, "a/");
-        if (name == null || nric == null  || birthdate == null || gender == null || phone == null || address == null) {
-            return null;
-        }
-        return new String[]{nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim()};
+    public static String parseDeletePatient(String input) {
+        return input.replaceFirst("(?i)delete-patient\\s*", "").trim();
+    }
+
+    public static String parseViewPatient(String input) {
+        return input.replaceFirst("(?i)view-patient\\s*", "").trim();
     }
 
     public static String parseViewHistory(String input) {
@@ -78,7 +66,7 @@ public class Parser {
             return null;
         }
         start += prefix.length();
-        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/"};
+        String[] possible = {"ic/", "dt/", "t/", "dsc/"};
         int end = input.length();
         for (String p : possible) {
             if (p.equalsIgnoreCase(prefix)) {

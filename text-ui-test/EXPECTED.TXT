@@ -1,30 +1,9 @@
-MainFunction.Patient added: John Doe
------------------------
-MainFunction.Patient added: Jane Smith
------------------------
-===== MainFunction.Patient List =====
-1. MainFunction.Patient ID: S1234567A
-   Name: John Doe
-   Date of Birth: 01-01-1990
-   Gender: M
-   Address: 123 Main St
-   Contact: 98765432
------------------------
-2. MainFunction.Patient ID: T7654321B
-   Name: Jane Smith
-   Date of Birth: 02-02-1985
-   Gender: F
-   Address: 456 Side St
-   Contact: 87654321
------------------------
-MainFunction.Patient removed successfully: John Doe (NRIC: S1234567A)
------------------------
-===== MainFunction.Patient List =====
-1. MainFunction.Patient ID: T7654321B
-   Name: Jane Smith
-   Date of Birth: 02-02-1985
-   Gender: F
-   Address: 456 Side St
-   Contact: 87654321
------------------------
-Goodbye!
+Hello from
+ ____        _        
+|  _ \ _   _| | _____ 
+| | | | | | | |/ / _ \
+| |_| | |_| |   <  __/
+|____/ \__,_|_|\_\___|
+
+What is your name?
+Hello James Gosling
