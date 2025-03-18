@@ -1,6 +1,6 @@
-package cetest;
+package ce_test;
 
-import MainFunction.ManagementSystem;
+import manager.ManagementSystem;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
