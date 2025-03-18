@@ -48,6 +48,10 @@ public class ManagementSystem {
             return;
         }
 
+        if (patients.containsKey(nric)) {
+            Patient removedPatient = patients.remove(nric);
+            System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName()
+                    + " (NRIC: " + nric + ")");
 
         if (patients.containsKey(nric)) {
             Patient removedPatient = patients.remove(nric);
@@ -57,6 +61,17 @@ public class ManagementSystem {
         }
     }
 
+    public void viewPatient(String line) {
+        String nric = line.substring(13);
+        if (nric == null || nric.isBlank()) {
+            System.out.println("Invalid NRIC provided.");
+            return;
+        }
+
+        System.out.println("===== MainFunction.Patient Details =====");
+        System.out.println(patients.values());
+        System.out.println("-----------------------");
+    }
 
     public void listPatients() {
         if (patients.isEmpty()) {
