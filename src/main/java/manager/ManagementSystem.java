@@ -52,6 +52,10 @@ public class ManagementSystem {
             Patient removedPatient = patients.remove(nric);
             System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName()
                     + " (NRIC: " + nric + ")");
+
+        if (patients.containsKey(nric)) {
+            Patient removedPatient = patients.remove(nric);
+            System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName() + " (NRIC: " + nric + ")");
         } else {
             System.out.println("Error: MainFunction.Patient with NRIC " + nric + " not found.");
         }
