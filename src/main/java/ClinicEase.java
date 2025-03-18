@@ -1,3 +1,7 @@
+import MainFunction.ManagementSystem;
+import Misc.Parser;
+import Misc.Ui;
+
 public class ClinicEase {
     public static void main(String[] args) {
         ManagementSystem manager = new ManagementSystem();
@@ -28,9 +32,11 @@ public class ClinicEase {
             } else if (Parser.isListAppointments(input)) {
                 manager.listAppointments();
             } else if (Parser.isAddPatient(input)) {
-                System.out.println("Feature not implemented yet.");
+                manager.addPatient(input);
             } else if (Parser.isDeletePatient(input)) {
-                System.out.println("Feature not implemented yet.");
+                manager.deletePatient(input);
+            } else if (Parser.isListPatient(input)){
+                manager.listPatients();
             } else if (Parser.isViewPatient(input)) {
                 System.out.println("Feature not implemented yet.");
             } else if (Parser.isViewHistory(input)) {
