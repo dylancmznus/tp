@@ -1,3 +1,5 @@
+package MainFunction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,28 +22,13 @@ public class Patient {
         this.medicalHistory = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public String getContactInfo() {
-        return contactInfo;
-    }
-
-    public List<String> getMedicalHistory() {
-        return medicalHistory;
-    }
+    public String getName() {return name;}
 
     @Override
     public String toString() {
-        return "Patient ID: " + id + ", Name: " + name + ", Date of Birth: " + dob + ", Contact: " + contactInfo;
+        return String.format(
+                "MainFunction.Patient ID: %s\n   Name: %s\n   Date of Birth: %s\n   Gender: %s\n   Address: %s\n   Contact: %s",
+                id, name, dob, gender, address, contactInfo
+        );
     }
 }
