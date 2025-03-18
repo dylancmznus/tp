@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Patient {
-    private final String id;
+    public final String id;
     private final String name;
     private final String dob;
     private final String contactInfo;
@@ -45,7 +45,8 @@ public class Patient {
     @Override
     public String toString() {
         return String.format(
-                "MainFunction.Patient ID: %s\n   Name: %s\n   Date of Birth: %s\n   Gender: %s\n   Address: %s\n   Contact: %s",
+                "MainFunction.Patient ID: %s\n   Name: %s\n   Date of Birth: %s\n   " +
+                        "Gender: %s\n   Address: %s\n   Contact: %s",
                 id, name, dob, gender, address, contactInfo
         );
     }

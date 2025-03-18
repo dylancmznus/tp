@@ -35,10 +35,10 @@ public class ClinicEase {
                 manager.addPatient(input);
             } else if (Parser.isDeletePatient(input)) {
                 manager.deletePatient(input);
+            } else if (Parser.isViewPatient(input)) {
+                manager.viewPatient(input);
             } else if (Parser.isListPatient(input)){
                 manager.listPatients();
-            } else if (Parser.isViewPatient(input)) {
-                System.out.println("Feature not implemented yet.");
             } else if (Parser.isViewHistory(input)) {
                 System.out.println("Feature not implemented yet.");
             } else {
