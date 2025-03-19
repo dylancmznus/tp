@@ -7,7 +7,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 class MedicalHistoryManagerTest {
 
     private MedicalHistoryManager medicalHistoryManager;
@@ -41,11 +40,4 @@ class MedicalHistoryManagerTest {
         assertTrue(history.contains("Hypertension"), "Medical history should contain 'Hypertension'");
     }
 
-    @Test
-    void viewMedicalHistoryByNric() {
-    }
-
-    @Test
-    void viewMedicalHistoryByName() {
-    }
 }
