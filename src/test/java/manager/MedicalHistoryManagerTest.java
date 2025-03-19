@@ -1,33 +1,25 @@
-import manager.Patient;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+package manager;
 
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MedicalHistoryManagerTest {
 
-    private MedicalHistoryManager medicalHistoryManager;
-
-    @BeforeEach
-    void setUp() {
-        medicalHistoryManager = new MedicalHistoryManager();
-    }
-
     @Test
     void storeMedicalHistory_storeMedHistoryOnNewPatient_expectOneNewPatientWithMedHistory() {
-        // Arrange
+        MedicalHistoryManager mhm = new MedicalHistoryManager();
+
         String name = "John Doe";
         String nric = "S1234567A";
         String medHistory = "Diabetes, Hypertension";
 
-        // Act
-        medicalHistoryManager.storeMedicalHistory(name, nric, medHistory);
+        mhm.storeMedicalHistory(name, nric, medHistory);
 
-        // Assert
-        List<Patient> patients = medicalHistoryManager.getPatients();
+        List<Patient> patients = mhm.getPatients();
         assertEquals(1, patients.size(), "There should be one patient stored");
 
         Patient storedPatient = patients.get(0);
@@ -39,5 +31,5 @@ class MedicalHistoryManagerTest {
         assertTrue(history.contains("Diabetes"), "Medical history should contain 'Diabetes'");
         assertTrue(history.contains("Hypertension"), "Medical history should contain 'Hypertension'");
     }
-}
 
+}

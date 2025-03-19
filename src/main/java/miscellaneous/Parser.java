@@ -1,6 +1,6 @@
 package miscellaneous;
 
-import exception.ClinicEaseException;
+import exception.InvalidInputFormatException;
 
 public class Parser {
     public static boolean isBye(String input) {
@@ -27,6 +27,9 @@ public class Parser {
         return input.toLowerCase().startsWith("list-patient");
     }
 
+    public static boolean isStoreHistory(String input) {
+        return input.toLowerCase().startsWith("store-history");
+    }
 
     public static boolean isViewHistory(String input) {
         return input.toLowerCase().startsWith("view-history");
@@ -44,30 +47,32 @@ public class Parser {
 
 
     public static boolean isListAppointments(String input) {
-        return input.equalsIgnoreCase("list-appointments");
+        return input.equalsIgnoreCase("list-appointment");
     }
 
 
-    public static String[] parseAddAppointment(String input) {
-        String temp = input.replaceFirst("(?i)add-appointment\\s*", "");
+    public static String[] parseAddAppointment(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)add-appointment\\s+", "");
         String nric = extractValue(temp, "ic/");
         String date = extractValue(temp, "dt/");
         String time = extractValue(temp, "t/");
         String desc = extractValue(temp, "dsc/");
         if (nric == null || date == null || time == null || desc == null) {
-            return null;
+            throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!"
+                    + System.lineSeparator() +  "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
         }
         return new String[]{nric.trim(), date.trim(), time.trim(), desc.trim()};
     }
 
-
-    public static String parseDeleteAppointment(String input) {
-        String temp = input.replaceFirst("(?i)delete-appointment\\s*", "");
-        return temp.isBlank() ? null : temp.trim();
+    public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
+        if (!input.matches("(?i)delete-appointment\\s+A\\d+")) {
+            throw new InvalidInputFormatException("Invalid format! Please use: " +
+                    "delete-appointment APPOINTMENT_ID");
+        }
+        return input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
     }
 
-
-    public static String[] parseAddPatient(String input) {
+    public static String[] parseAddPatient(String input) throws InvalidInputFormatException {
         String temp = input.replaceFirst("(?i)add-patient\\s*", "");
         String name = extractValue(temp, "n/");
         String nric = extractValue(temp, "ic/");
@@ -76,12 +81,13 @@ public class Parser {
         String phone = extractValue(temp, "p/");
         String address = extractValue(temp, "a/");
         if (name == null || nric == null || birthdate == null || gender == null || phone == null || address == null) {
-            return null;
+            throw new InvalidInputFormatException ("Patient details are incomplete!" + System.lineSeparator()
+                    + "Also, please use: add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS");
         }
         return new String[]{nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim()};
     }
 
-    public static String[] parseViewHistory(String input) throws ClinicEaseException {
+    public static String[] parseViewHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "view-history" (case-insensitive) and get the remaining string.
         String temp = input.replaceFirst("(?i)view-history\\s*", "");
         String type;
@@ -107,14 +113,14 @@ public class Parser {
 
         // Return null if the parsed value is null or empty
         if (nameOrIc == null || nameOrIc.isEmpty()) {
-            throw new ClinicEaseException("Invalid format. Use: view-history NRIC or view-history NAME");
+            throw new InvalidInputFormatException("Invalid format. Please use: view-history NRIC or view-history NAME");
         }
 
         // Return the result as [type, value]
         return new String[]{type, nameOrIc};
     }
 
-    public static String[] parseStoreHistory(String input) throws ClinicEaseException{
+    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException{
         // Remove the command prefix "store-history" (case-insensitive)
         // and get the remaining string.
         String temp = input.replaceFirst("(?i)store-history\\s*", "");
@@ -126,13 +132,13 @@ public class Parser {
 
         // If any part is missing, return null to indicate a parse failure
         if (name == null || nric == null || medHistory == null) {
-            throw new ClinicEaseException("Invalid format. Use: store-history n/NAME ic/NRIC h/MEDICAL_HISTORY");
+            throw new InvalidInputFormatException("Invalid format. " +
+                    "Please use: store-history n/NAME ic/NRIC h/MEDICAL_HISTORY");
         }
 
         // Return the trimmed values as an array
         return new String[]{name.trim(), nric.trim(), medHistory.trim()};
     }
-
 
     private static String extractValue(String input, String prefix) {
         String lowerInput = input.toLowerCase();
@@ -182,10 +188,5 @@ public class Parser {
         String detail = input.substring(start, end).trim();
         return detail.isEmpty() ? null : detail;
     }
-
-    public static boolean isStoreHistory(String input) {
-        return input.toLowerCase().startsWith("store-history");
-    }
-
 
 }

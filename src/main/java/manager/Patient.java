@@ -46,12 +46,24 @@ public class Patient {
     @Override
     public String toString() {
         return String.format(
-                "MainFunction.Patient ID: %s\n   " +
-                "Name: %s\n   " +
-                "Date of Birth: %s\n   " +
-                "Gender: %s\n   " +
-                "Address: %s\n   " +
+                "Patient ID: %s\n" +
+                "Name: %s\n" +
+                "Date of Birth: %s\n" +
+                "Gender: %s\n" +
+                "Address: %s\n" +
                 "Contact: %s",
+                id, name, dob, gender, address, contactInfo
+        );
+    }
+
+    public String toStringForListView() {
+        return String.format(
+                "Patient ID: %s\n   " +
+                        "Name: %s\n   " +
+                        "Date of Birth: %s\n   " +
+                        "Gender: %s\n   " +
+                        "Address: %s\n   " +
+                        "Contact: %s",
                 id, name, dob, gender, address, contactInfo
         );
     }

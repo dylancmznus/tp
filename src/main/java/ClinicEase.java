@@ -1,5 +1,8 @@
-import exception.ClinicEaseException;
+import exception.DuplicatePatientIDException;
+import exception.InvalidInputFormatException;
+
 import manager.ManagementSystem;
+import manager.MedicalHistoryManager;
 import miscellaneous.Parser;
 import miscellaneous.Ui;
 
@@ -18,6 +21,14 @@ public class ClinicEase {
                 if (Parser.isBye(input)) {
                     ui.showBye();
                     running = false;
+                } else if (Parser.isAddPatient(input)) {
+                    manager.addPatient(input);
+                } else if (Parser.isDeletePatient(input)) {
+                    manager.deletePatient(input);
+                } else if (Parser.isViewPatient(input)) {
+                    manager.viewPatient(input);
+                } else if (Parser.isListPatient(input)) {
+                    manager.listPatients();
                 } else if (Parser.isViewHistory(input)) {
                     String[] typeAndValue = Parser.parseViewHistory(input);
                     String type = typeAndValue[0];
@@ -30,33 +41,22 @@ public class ClinicEase {
                     }
                 } else if (Parser.isStoreHistory(input)) {
                     String[] details = Parser.parseStoreHistory(input);
-                    // details = [name, nric, medHistory]
                     mhManager.storeMedicalHistory(details[0], details[1], details[2]);
                 } else if (Parser.isAddAppointment(input)) {
                     String[] details = Parser.parseAddAppointment(input);
                     manager.addAppointment(details);
                 } else if (Parser.isDeleteAppointment(input)) {
                     String apptId = Parser.parseDeleteAppointment(input);
-                    if (apptId == null || apptId.isEmpty()) {
-                        System.out.println("Invalid format. Use: delete-appointment APPOINTMENT_ID");
-                    } else {
-                        manager.deleteAppointment(apptId);
-                    }
+                    manager.deleteAppointment(apptId);
                 } else if (Parser.isListAppointments(input)) {
                     manager.listAppointments();
-                } else if (Parser.isAddPatient(input)) {
-                    manager.addPatient(input);
-                } else if (Parser.isDeletePatient(input)) {
-                    manager.deletePatient(input);
-                } else if (Parser.isViewPatient(input)) {
-                    manager.viewPatient(input);
-                } else if (Parser.isListPatient(input)) {
-                    manager.listPatients();
                 } else {
-                    System.out.println("Unknown command.");
+                    Ui.showLine();
+                    System.out.println("Unknown command. Please try again.");
+                    Ui.showLine();
                 }
-            } catch (ClinicEaseException e) {
-                System.out.println(e.getMessage());
+            } catch (InvalidInputFormatException | DuplicatePatientIDException e) {
+                ui.showError(e.getMessage());
             }
         }
     }
