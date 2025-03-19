@@ -39,5 +39,5 @@ class MedicalHistoryManagerTest {
         assertTrue(history.contains("Diabetes"), "Medical history should contain 'Diabetes'");
         assertTrue(history.contains("Hypertension"), "Medical history should contain 'Hypertension'");
     }
-
 }
+
