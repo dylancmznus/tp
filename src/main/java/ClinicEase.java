@@ -1,6 +1,6 @@
 import manager.ManagementSystem;
-import misc.Parser;
-import misc.Ui;
+import miscellaneous.Parser;
+import miscellaneous.Ui;
 
 public class ClinicEase {
     public static void main(String[] args) {

@@ -1,18 +1,19 @@
 package manager;
 
-import misc.Parser;
+import miscellaneous.Parser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ManagementSystem {
-    private final Map<String, Patient> patients;
     private final List<Appointment> appointments;
+    private final Map<String, Patient> patients;
 
     public ManagementSystem() {
-        patients = new HashMap<>();
         appointments = new ArrayList<>();
+        patients = new HashMap<>();
     }
 
     public Map<String, Patient> getPatient() {

@@ -1,5 +1,4 @@
-package ce_test;
-
+package tests;
 
 import manager.ManagementSystem;
 import org.junit.jupiter.api.Test;
