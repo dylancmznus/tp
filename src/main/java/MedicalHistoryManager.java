@@ -1,3 +1,5 @@
+import manager.Patient;
+
 import java.util.ArrayList;
 import java.util.List;
 

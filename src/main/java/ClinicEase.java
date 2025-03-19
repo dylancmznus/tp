@@ -1,3 +1,8 @@
+import exception.ClinicEaseException;
+import manager.ManagementSystem;
+import miscellaneous.Parser;
+import miscellaneous.Ui;
+
 public class ClinicEase {
     public static void main(String[] args) {
         ManagementSystem manager = new ManagementSystem();
@@ -14,26 +19,19 @@ public class ClinicEase {
                     ui.showBye();
                     running = false;
                 } else if (Parser.isViewHistory(input)) {
-                    // 解析用户的 view-history 命令，获得 [type, value]
                     String[] typeAndValue = Parser.parseViewHistory(input);
                     String type = typeAndValue[0];
                     String value = typeAndValue[1];
 
-                    // 根据 type 判断调用哪个方法
                     if ("ic".equals(type)) {
                         mhManager.viewMedicalHistoryByNric(value);
                     } else {
                         mhManager.viewMedicalHistoryByName(value);
                     }
                 } else if (Parser.isStoreHistory(input)) {
-                    // 解析 store-history 命令
                     String[] details = Parser.parseStoreHistory(input);
-                    if (details == null) {
-                        System.out.println("Invalid format. Use: store-history n/NAME ic/NRIC h/MEDICAL_HISTORY");
-                    } else {
-                        // details = [name, nric, medHistory]
-                        mhManager.storeMedicalHistory(details[0], details[1], details[2]);
-                    }
+                    // details = [name, nric, medHistory]
+                    mhManager.storeMedicalHistory(details[0], details[1], details[2]);
                 } else if (Parser.isAddAppointment(input)) {
                     String[] details = Parser.parseAddAppointment(input);
                     manager.addAppointment(details);
@@ -46,6 +44,14 @@ public class ClinicEase {
                     }
                 } else if (Parser.isListAppointments(input)) {
                     manager.listAppointments();
+                } else if (Parser.isAddPatient(input)) {
+                    manager.addPatient(input);
+                } else if (Parser.isDeletePatient(input)) {
+                    manager.deletePatient(input);
+                } else if (Parser.isViewPatient(input)) {
+                    manager.viewPatient(input);
+                } else if (Parser.isListPatient(input)) {
+                    manager.listPatients();
                 } else {
                     System.out.println("Unknown command.");
                 }

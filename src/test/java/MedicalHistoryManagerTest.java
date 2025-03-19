@@ -1,3 +1,4 @@
+import manager.Patient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +39,7 @@ class MedicalHistoryManagerTest {
         assertTrue(history.contains("Diabetes"), "Medical history should contain 'Diabetes'");
         assertTrue(history.contains("Hypertension"), "Medical history should contain 'Hypertension'");
     }
+
     @Test
     void viewMedicalHistoryByNric() {
     }

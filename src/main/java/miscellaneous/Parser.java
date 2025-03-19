@@ -1,35 +1,52 @@
+package miscellaneous;
+
+import exception.ClinicEaseException;
+
 public class Parser {
     public static boolean isBye(String input) {
         return input.equalsIgnoreCase("bye");
     }
 
+
     public static boolean isAddPatient(String input) {
         return input.toLowerCase().startsWith("add-patient");
     }
+
 
     public static boolean isDeletePatient(String input) {
         return input.toLowerCase().startsWith("delete-patient");
     }
 
+
     public static boolean isViewPatient(String input) {
         return input.toLowerCase().startsWith("view-patient");
     }
+
+
+    public static boolean isListPatient(String input) {
+        return input.toLowerCase().startsWith("list-patient");
+    }
+
 
     public static boolean isViewHistory(String input) {
         return input.toLowerCase().startsWith("view-history");
     }
 
+
     public static boolean isAddAppointment(String input) {
         return input.toLowerCase().startsWith("add-appointment");
     }
+
 
     public static boolean isDeleteAppointment(String input) {
         return input.toLowerCase().startsWith("delete-appointment");
     }
 
+
     public static boolean isListAppointments(String input) {
         return input.equalsIgnoreCase("list-appointments");
     }
+
 
     public static String[] parseAddAppointment(String input) {
         String temp = input.replaceFirst("(?i)add-appointment\\s*", "");
@@ -43,24 +60,26 @@ public class Parser {
         return new String[]{nric.trim(), date.trim(), time.trim(), desc.trim()};
     }
 
+
     public static String parseDeleteAppointment(String input) {
         String temp = input.replaceFirst("(?i)delete-appointment\\s*", "");
         return temp.isBlank() ? null : temp.trim();
     }
 
-    public static String parseDeletePatient(String input) {
-        return input.replaceFirst("(?i)delete-patient\\s*", "").trim();
-    }
 
-    public static String parseViewPatient(String input) {
-        return input.replaceFirst("(?i)view-patient\\s*", "").trim();
+    public static String[] parseAddPatient(String input) {
+        String temp = input.replaceFirst("(?i)add-patient\\s*", "");
+        String name = extractValue(temp, "n/");
+        String nric = extractValue(temp, "ic/");
+        String birthdate = extractValue(temp, "dob/");
+        String gender = extractValue(temp, "g/");
+        String phone = extractValue(temp, "p/");
+        String address = extractValue(temp, "a/");
+        if (name == null || nric == null || birthdate == null || gender == null || phone == null || address == null) {
+            return null;
+        }
+        return new String[]{nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim()};
     }
-
-    /**
-     * 解析 "view-history ic/NRIC" 或 "view-history n/NAME"
-     * 返回 {type, value}，type 可为 "ic" 或 "n"
-     * 若不符合格式，则尝试根据内容判断 NRIC（简单正则）或姓名
-     */
 
     public static String[] parseViewHistory(String input) throws ClinicEaseException {
         // Remove the command prefix "view-history" (case-insensitive) and get the remaining string.
@@ -114,6 +133,7 @@ public class Parser {
         return new String[]{name.trim(), nric.trim(), medHistory.trim()};
     }
 
+
     private static String extractValue(String input, String prefix) {
         String lowerInput = input.toLowerCase();
         String lowerPrefix = prefix.toLowerCase();
@@ -136,7 +156,7 @@ public class Parser {
         }
 
         start += prefix.length();
-        String[] possible = {"ic/", "n/", "dt/", "t/", "dsc/", "h/"};
+        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/", "h/"};
         int end = input.length();
 
         // Determine where the current parameter's detail ends by finding the start of the next parameter
