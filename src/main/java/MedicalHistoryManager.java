@@ -48,14 +48,6 @@ public class MedicalHistoryManager {
         }
     }
 
-//    private Patient findPatientByNric(String nric) {
-//        for (Patient p : patients) {
-//            if (p.getId().trim().equalsIgnoreCase(nric)) {
-//                return p;
-//            }
-//        }
-//        return null;
-//    }
 
     public Patient findPatientByNric(String nric) {
         String target = nric.trim().toUpperCase(); // 统一转为大写
