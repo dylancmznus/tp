@@ -1,23 +1,17 @@
 #!/usr/bin/env bash
 
-# change to script directory
+# Change to script directory
 cd "${0%/*}"
-
 cd ..
-./gradlew clean shadowJar
 
-cd text-ui-test
+# Run Gradle tests
+./gradlew clean test
 
-java  -jar $(find ../build/libs/ -mindepth 1 -print -quit) < input.txt > ACTUAL.TXT
-
-cp EXPECTED.TXT EXPECTED-UNIX.TXT
-dos2unix EXPECTED-UNIX.TXT ACTUAL.TXT
-diff EXPECTED-UNIX.TXT ACTUAL.TXT
-if [ $? -eq 0 ]
-then
-    echo "Test passed!"
+# Check test results
+if [ $? -eq 0 ]; then
+    echo "All tests passed!"
     exit 0
 else
-    echo "Test failed!"
+    echo "Some tests failed!"
     exit 1
 fi

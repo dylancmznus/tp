@@ -1,38 +1,55 @@
+package miscellaneous;
+
 import exception.InvalidInputFormatException;
 
 public class Parser {
-
     public static boolean isBye(String input) {
         return input.equalsIgnoreCase("bye");
     }
+
 
     public static boolean isAddPatient(String input) {
         return input.toLowerCase().startsWith("add-patient");
     }
 
+
     public static boolean isDeletePatient(String input) {
         return input.toLowerCase().startsWith("delete-patient");
     }
 
+
     public static boolean isViewPatient(String input) {
         return input.toLowerCase().startsWith("view-patient");
+    }
+
+
+    public static boolean isListPatient(String input) {
+        return input.toLowerCase().startsWith("list-patient");
+    }
+
+    public static boolean isStoreHistory(String input) {
+        return input.toLowerCase().startsWith("store-history");
     }
 
     public static boolean isViewHistory(String input) {
         return input.toLowerCase().startsWith("view-history");
     }
 
+
     public static boolean isAddAppointment(String input) {
         return input.toLowerCase().startsWith("add-appointment");
     }
+
 
     public static boolean isDeleteAppointment(String input) {
         return input.toLowerCase().startsWith("delete-appointment");
     }
 
+
     public static boolean isListAppointments(String input) {
-        return input.equalsIgnoreCase("list-appointments");
+        return input.equalsIgnoreCase("list-appointment");
     }
+
 
     public static String[] parseAddAppointment(String input) throws InvalidInputFormatException {
         String temp = input.replaceFirst("(?i)add-appointment\\s+", "");
@@ -42,29 +59,84 @@ public class Parser {
         String desc = extractValue(temp, "dsc/");
         if (nric == null || date == null || time == null || desc == null) {
             throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!" + System.lineSeparator() +
-                    "Please follow this format: add-appointment ic/NRIC dt/MM-DD t/HHmm dsc/DESCRIPTION");
+                    "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
         }
         return new String[]{nric.trim(), date.trim(), time.trim(), desc.trim()};
     }
 
     public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
         if (!input.matches("(?i)delete-appointment\\s+A\\d+")) {
-            throw new InvalidInputFormatException("Invalid format. Please follow this format: " +
+            throw new InvalidInputFormatException("Invalid format! Please use: " +
                     "delete-appointment APPOINTMENT_ID");
         }
         return input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
     }
 
-    public static String parseDeletePatient(String input) {
-        return input.replaceFirst("(?i)delete-patient\\s*", "").trim();
+    public static String[] parseAddPatient(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)add-patient\\s*", "");
+        String name = extractValue(temp, "n/");
+        String nric = extractValue(temp, "ic/");
+        String birthdate = extractValue(temp, "dob/");
+        String gender = extractValue(temp, "g/");
+        String phone = extractValue(temp, "p/");
+        String address = extractValue(temp, "a/");
+        if (name == null || nric == null || birthdate == null || gender == null || phone == null || address == null) {
+            throw new InvalidInputFormatException ("Patient details are incomplete!" + System.lineSeparator()
+                    + "Also, please use: add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS");
+        }
+        return new String[]{nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim()};
     }
 
-    public static String parseViewPatient(String input) {
-        return input.replaceFirst("(?i)view-patient\\s*", "").trim();
+    public static String[] parseViewHistory(String input) throws InvalidInputFormatException {
+        // Remove the command prefix "view-history" (case-insensitive) and get the remaining string.
+        String temp = input.replaceFirst("(?i)view-history\\s*", "");
+        String type;
+        String nameOrIc;
+
+        // Check if the remaining string starts with "ic/" or "n/" (case-insensitive).
+        if (temp.toLowerCase().startsWith("ic/")) {
+            type = "ic";
+            // Extract the real content after "ic/" using extractValue(...)
+            nameOrIc = extractValue(temp, "ic/");
+        } else {
+            // If there's no explicit prefix, try to detect NRIC vs. name.
+            // Uses a simple regex matching a 9-character format: e.g., S1234567A
+            if (temp.matches("^[A-Za-z]\\d{7}[A-Za-z]$")) {
+                type = "ic";
+                nameOrIc = temp.trim();
+            } else {
+                // Otherwise, assume it's a name
+                type = "n";
+                nameOrIc = temp.trim();
+            }
+        }
+
+        // Return null if the parsed value is null or empty
+        if (nameOrIc == null || nameOrIc.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format. Please use: view-history NRIC or view-history NAME");
+        }
+
+        // Return the result as [type, value]
+        return new String[]{type, nameOrIc};
     }
 
-    public static String parseViewHistory(String input) {
-        return input.replaceFirst("(?i)view-history\\s*", "").trim();
+    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException{
+        // Remove the command prefix "store-history" (case-insensitive)
+        // and get the remaining string.
+        String temp = input.replaceFirst("(?i)store-history\\s*", "");
+
+        // Extract n/NAME, ic/NRIC, and h/MEDICAL_HISTORY from the remaining string
+        String name = extractValue(temp, "n/");
+        String nric = extractValue(temp, "ic/");
+        String medHistory = extractValue(temp, "h/");
+
+        // If any part is missing, return null to indicate a parse failure
+        if (name == null || nric == null || medHistory == null) {
+            throw new InvalidInputFormatException("Invalid format. Please use: store-history n/NAME ic/NRIC h/MEDICAL_HISTORY");
+        }
+
+        // Return the trimmed values as an array
+        return new String[]{name.trim(), nric.trim(), medHistory.trim()};
     }
 
     private static String extractValue(String input, String prefix) {
@@ -89,7 +161,7 @@ public class Parser {
         }
 
         start += prefix.length();
-        String[] possible = {"ic/", "dt/", "t/", "dsc/"};
+        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/", "h/"};
         int end = input.length();
 
         // Determine where the current parameter's detail ends by finding the start of the next parameter
@@ -115,4 +187,5 @@ public class Parser {
         String detail = input.substring(start, end).trim();
         return detail.isEmpty() ? null : detail;
     }
+
 }
