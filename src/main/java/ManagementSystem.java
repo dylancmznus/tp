@@ -9,24 +9,24 @@ public class ManagementSystem {
     }
 
     public void addAppointment(String[] details) {
-        String nric = details[0];
-        String date = details[1];
-        String time = details[2];
-        String desc = details[3];
-        Appointment appt = new Appointment(nric, date, time, desc);
-        appointments.add(appt);
-        System.out.println("Appointment added for NRIC " + nric + " on " + date + " at " + time + ".");
+//        String nric = details[0];
+//        String date = details[1];
+//        String time = details[2];
+//        String desc = details[3];
+//        Appointment appt = new Appointment(nric, date, time, desc);
+//        appointments.add(appt);
+//        System.out.println("Appointment added for NRIC " + nric + " on " + date + " at " + time + ".");
     }
 
     public void deleteAppointment(String apptId) {
-        for (int i = 0; i < appointments.size(); i++) {
-            if (appointments.get(i).getId().equalsIgnoreCase(apptId)) {
-                appointments.remove(i);
-                System.out.println("Appointment " + apptId + " is deleted successfully.");
-                return;
-            }
-        }
-        System.out.println("No appointment found with ID " + apptId + ".");
+//        for (int i = 0; i < appointments.size(); i++) {
+//            if (appointments.get(i).getId().equalsIgnoreCase(apptId)) {
+//                appointments.remove(i);
+//                System.out.println("Appointment " + apptId + " is deleted successfully.");
+//                return;
+//            }
+//        }
+//        System.out.println("No appointment found with ID " + apptId + ".");
     }
 
     public void listAppointments() {
