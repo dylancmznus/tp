@@ -42,9 +42,9 @@ public class MedicalHistoryManager {
             Ui.showLine();
             System.out.println("No patient found with NRIC " + nric + ".");
         } else {
+            Ui.showLine();
             printPatientHistory(patient);
         }
-        Ui.showLine();
     }
 
     public void viewMedicalHistoryByName(String name) {
