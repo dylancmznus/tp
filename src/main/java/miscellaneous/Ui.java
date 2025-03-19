@@ -3,8 +3,9 @@ package miscellaneous;
 import java.util.Scanner;
 
 public class Ui {
-    private final Scanner sc;
     public static final String DIVIDER = "-".repeat(100);
+
+    private final Scanner sc;
 
     public Ui() {
         sc = new Scanner(System.in);
