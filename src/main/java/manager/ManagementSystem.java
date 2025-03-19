@@ -1,18 +1,19 @@
 package manager;
 
-import misc.Parser;
+import miscellaneous.Parser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ManagementSystem {
-    private final Map<String, Patient> patients;
     private final List<Appointment> appointments;
+    private final Map<String, Patient> patients;
 
     public ManagementSystem() {
-        patients = new HashMap<>();
         appointments = new ArrayList<>();
+        patients = new HashMap<>();
     }
 
     public Map<String, Patient> getPatient() {
@@ -20,55 +21,46 @@ public class ManagementSystem {
     }
 
     public void addPatient(String line) {
-        String [] details = Parser.parseAddPatient(line);
+        String[] details = Parser.parseAddPatient(line);
 
-
-        if (details == null){
-            System.out.println("Patients details is incomplete!");
+        if (details == null) {
+            System.out.println("Patient details are incomplete!");
+            return;
+        } else if (patients.containsKey(details[0])) {
+            System.out.println("Error: Patient ID already exists!");
             return;
         }
 
-
-        else if (patients.containsKey(details[0])) {
-            System.out.println("MainFunction.Patient ID already exists!");
-            return;
-        }
-
-
-        Patient newPatient = new Patient(details[0], details[1], details[2], details[3], details[4], details[5]);
+        Patient newPatient = new Patient(details[0], details[1], details[2],
+                details[3], details[4], details[5]);
         patients.put(details[0], newPatient);
-        System.out.println("MainFunction.Patient added: " + details[1]);
+        System.out.println("Patient added: " + details[1]);
     }
-
 
     public void deletePatient(String line) {
         String nric = line.substring(15);
-        if (nric == null || nric.isBlank()) {
+        if (nric.isBlank()) {
             System.out.println("Invalid NRIC provided.");
             return;
         }
 
         if (patients.containsKey(nric)) {
             Patient removedPatient = patients.remove(nric);
-            System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName()
+            System.out.println("Patient removed successfully: " + removedPatient.getName()
                     + " (NRIC: " + nric + ")");
-
-        if (patients.containsKey(nric)) {
-            Patient removedPatient = patients.remove(nric);
-            System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName() + " (NRIC: " + nric + ")");
         } else {
-            System.out.println("Error: MainFunction.Patient with NRIC " + nric + " not found.");
+            System.out.println("Error: Patient with NRIC " + nric + " not found.");
         }
     }
 
     public void viewPatient(String line) {
         String nric = line.substring(13);
-        if (nric == null || nric.isBlank()) {
+        if (nric.isBlank()) {
             System.out.println("Invalid NRIC provided.");
             return;
         }
 
-        System.out.println("===== MainFunction.Patient Details =====");
+        System.out.println("===== Patient Details =====");
         System.out.println(patients.values());
         System.out.println("-----------------------");
     }
@@ -78,7 +70,7 @@ public class ManagementSystem {
             System.out.println("No patients have been added.");
             return;
         }
-        System.out.println("===== MainFunction.Patient List =====");
+        System.out.println("===== Patient List =====");
         int count = 1;
         for (Patient p : patients.values()) {
             System.out.println(count + ". " + p);
@@ -92,16 +84,18 @@ public class ManagementSystem {
         String date = details[1];
         String time = details[2];
         String desc = details[3];
+
         Appointment appt = new Appointment(nric, date, time, desc);
         appointments.add(appt);
-        System.out.println("MainFunction.Appointment added for NRIC " + nric + " on " + date + " at " + time + ".");
+        System.out.println("Appointment added for NRIC " + nric
+                + " on " + date + " at " + time + ".");
     }
 
     public void deleteAppointment(String apptId) {
         for (int i = 0; i < appointments.size(); i++) {
             if (appointments.get(i).getId().equalsIgnoreCase(apptId)) {
                 appointments.remove(i);
-                System.out.println("MainFunction.Appointment " + apptId + " is deleted successfully.");
+                System.out.println("Appointment " + apptId + " is deleted successfully.");
                 return;
             }
         }
