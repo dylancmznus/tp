@@ -41,14 +41,12 @@ public class ManagementSystem {
         Ui.showLine();
     }
 
-    public void deletePatient(String line) {
-        String nric = line.substring(15);
-        if (nric.isBlank()) {
-            Ui.showLine();
-            System.out.println("Invalid NRIC provided.");
-            Ui.showLine();
-            return;
+    public void deletePatient(String line) throws InvalidInputFormatException {
+        if (line.length() < 15) {
+            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient [NRIC]");
         }
+
+        String nric = line.substring(15).trim();  // Trim whitespace
 
         if (patients.containsKey(nric)) {
             Patient removedPatient = patients.remove(nric);
@@ -58,18 +56,27 @@ public class ManagementSystem {
             Ui.showLine();
         } else {
             Ui.showLine();
-            System.out.println("Error: Patient with NRIC " + nric + " not found.");
+            System.out.println("Patient with NRIC " + nric + " not found.");
             Ui.showLine();
         }
     }
 
-    public void viewPatient(String line) {
-        String nric = line.substring(13);
-        if (nric.isBlank()) {
-            System.out.println("Invalid NRIC provided.");
+    public void viewPatient(String line) throws InvalidInputFormatException{
+        if (line.length() < 13) {
+            throw new InvalidInputFormatException("Invalid command format. Use: view-patient [NRIC]");
+        }
+
+        String nric = line.substring(13).trim(); // Extract and trim NRIC
+
+        // Check if patient exists
+        if (!patients.containsKey(nric)) {
+            Ui.showLine();
+            System.out.println("Patient with NRIC " + nric + " not found.");
+            Ui.showLine();
             return;
         }
 
+        Ui.showLine();
         System.out.println("-".repeat(43)+ "Patient Details" + "-".repeat(43));
         System.out.println(patients.get(nric).toString());
         Ui.showLine();
