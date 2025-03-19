@@ -43,15 +43,10 @@ public class ManagementSystem {
 
     public void deletePatient(String line) {
         String nric = line.substring(15);
-        if (nric == null || nric.isBlank()) {
+        if (nric.isBlank()) {
             System.out.println("Invalid NRIC provided.");
             return;
         }
-
-        if (patients.containsKey(nric)) {
-            Patient removedPatient = patients.remove(nric);
-            System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName()
-                    + " (NRIC: " + nric + ")");
 
         if (patients.containsKey(nric)) {
             Patient removedPatient = patients.remove(nric);
@@ -63,7 +58,7 @@ public class ManagementSystem {
 
     public void viewPatient(String line) {
         String nric = line.substring(13);
-        if (nric == null || nric.isBlank()) {
+        if (nric.isBlank()) {
             System.out.println("Invalid NRIC provided.");
             return;
         }
