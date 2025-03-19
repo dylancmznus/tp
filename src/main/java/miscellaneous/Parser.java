@@ -58,8 +58,8 @@ public class Parser {
         String time = extractValue(temp, "t/");
         String desc = extractValue(temp, "dsc/");
         if (nric == null || date == null || time == null || desc == null) {
-            throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!" + System.lineSeparator() +
-                    "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
+            throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!"
+                    + System.lineSeparator() +  "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
         }
         return new String[]{nric.trim(), date.trim(), time.trim(), desc.trim()};
     }
@@ -132,7 +132,8 @@ public class Parser {
 
         // If any part is missing, return null to indicate a parse failure
         if (name == null || nric == null || medHistory == null) {
-            throw new InvalidInputFormatException("Invalid format. Please use: store-history n/NAME ic/NRIC h/MEDICAL_HISTORY");
+            throw new InvalidInputFormatException("Invalid format. " +
+                    "Please use: store-history n/NAME ic/NRIC h/MEDICAL_HISTORY");
         }
 
         // Return the trimmed values as an array

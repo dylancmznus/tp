@@ -2,7 +2,6 @@ package manager;
 
 import exception.DuplicatePatientIDException;
 import exception.InvalidInputFormatException;
-import miscellaneous.Parser;
 
 import java.util.List;
 
@@ -16,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ManagementSystemTest {
 
     @Test
-    void addPatient_correctInput_expectOneNewPatient() throws DuplicatePatientIDException, InvalidInputFormatException {
+    void addPatient_correctInput_expectOneNewPatient() throws DuplicatePatientIDException,
+            InvalidInputFormatException {
         ManagementSystem system = new ManagementSystem();
         String input = "add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St";
 
@@ -26,7 +26,8 @@ class ManagementSystemTest {
     }
 
     @Test
-    void addPatient_duplicatePatientID_expectException() throws DuplicatePatientIDException, InvalidInputFormatException {
+    void addPatient_duplicatePatientID_expectException() throws DuplicatePatientIDException,
+            InvalidInputFormatException {
         ManagementSystem system = new ManagementSystem();
         String input1 = "add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St";
         String input2 = "add-patient n/John Smith ic/S1234567A dob/01-10-1999 g/M p/91207878 a/123 High St";
@@ -37,7 +38,8 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deletePatient_correctInput_expectPatientDeleted() throws DuplicatePatientIDException, InvalidInputFormatException {
+    void deletePatient_correctInput_expectPatientDeleted() throws DuplicatePatientIDException,
+            InvalidInputFormatException {
         ManagementSystem system = new ManagementSystem();
 
         system.addPatient("add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St");
@@ -47,7 +49,8 @@ class ManagementSystemTest {
     }
 
     @Test
-    void viewPatient_correctInput_expectSpecifiedPatientViewed() throws DuplicatePatientIDException, InvalidInputFormatException, DuplicatePatientIDException {
+    void viewPatient_correctInput_expectSpecifiedPatientViewed() throws InvalidInputFormatException,
+            DuplicatePatientIDException {
         ManagementSystem system = new ManagementSystem();
 
         system.addPatient("add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St");
@@ -71,7 +74,8 @@ class ManagementSystemTest {
         assertEquals("S1234567D", addedAppointment.getNric(), "NRIC does not match");
         assertEquals("03-10", addedAppointment.getDate(), "Date does not match");
         assertEquals("1200", addedAppointment.getTime(), "Time does not match");
-        assertEquals("medical check-up", addedAppointment.getDescription(), "Description does not match");
+        assertEquals("medical check-up", addedAppointment.getDescription(),
+                "Description does not match");
     }
 
 

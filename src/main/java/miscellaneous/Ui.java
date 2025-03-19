@@ -4,12 +4,11 @@ import java.util.Scanner;
 
 public class Ui {
     private final Scanner sc;
+    public static final String DIVIDER = "-".repeat(100);
 
     public Ui() {
         sc = new Scanner(System.in);
     }
-
-    public static final String DIVIDER = "-".repeat(100);
 
     public static void showLine() {
         System.out.println(DIVIDER);
