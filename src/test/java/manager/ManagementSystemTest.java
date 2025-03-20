@@ -15,14 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ManagementSystemTest {
 
     @Test
-    void addPatient_correctInput_expectOneNewPatient() throws DuplicatePatientIDException,
-            InvalidInputFormatException {
-        ManagementSystem system = new ManagementSystem();
-        String input = "add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St";
+    void addPatient_correctInput_expectOnePatient() throws DuplicatePatientIDException, InvalidInputFormatException {
+        ManagementSystem manager = new ManagementSystem();
+        String input = "add-patient n/John Doe ic/S1234567A dob/12-12-1990 g/M p/91234567 a/123 Main St";
 
-        system.addPatient(input);
+        manager.addPatient(input);
 
-        assertTrue(system.getPatient().containsKey("S1234567A"));
+        assertTrue(manager.getPatient().containsKey("S1234567A"));
     }
 
     @Test
@@ -80,7 +79,7 @@ class ManagementSystemTest {
 
 
     @Test
-    void deleteAppointment_existingId_expectAppointmentDeleted()  {
+    void deleteAppointment_existingId_expectAppointmentDeleted() {
         ManagementSystem ms = new ManagementSystem();
         String[] details = {"S1234567D", "03-10", "1200", "medical check-up"};
 
@@ -94,7 +93,7 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deleteAppointment_nonExistingId_expectNoAppointmentDeleted()  {
+    void deleteAppointment_nonExistingId_expectNoAppointmentDeleted() {
         ManagementSystem ms = new ManagementSystem();
         String[] details = {"S1234567D", "03-10", "1200", "medical check-up"};
 
