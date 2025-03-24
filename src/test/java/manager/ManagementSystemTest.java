@@ -48,18 +48,6 @@ class ManagementSystemTest {
     }
 
     @Test
-    void viewPatient_correctInput_expectSpecifiedPatientViewed() throws InvalidInputFormatException,
-            DuplicatePatientIDException {
-        ManagementSystem system = new ManagementSystem();
-
-        system.addPatient("add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St");
-
-        system.viewPatient("view-patient S1234567A");
-
-        assertTrue(system.getPatient().containsKey("S1234567A"));
-    }
-
-    @Test
     void addAppointment_correctInput_expectOneNewAppointment() {
         ManagementSystem ms = new ManagementSystem();
         String[] details = {"S1234567D", "03-10", "1200", "medical check-up"};
@@ -104,6 +92,18 @@ class ManagementSystemTest {
         ms.deleteAppointment(nonExistingId);
 
         assertEquals(1, appointments.size(), "Expected previous appointment to be in the list.");
+    }
+
+    @Test
+    void viewPatients_correctInput_expectPatientsViewed() throws
+    DuplicatePatientIDException, InvalidInputFormatException {
+        ManagementSystem system = new ManagementSystem();
+
+        system.addPatient("add-patient n/John Doe ic/S1234567A " +
+                "dob/01-01-1990 g/M p/98765432 a/123 Main St");
+
+        system.viewPatient("view-patient S1234567A");
+        assertTrue(system.getPatient().containsKey("S1234567A"));
     }
 
 }
