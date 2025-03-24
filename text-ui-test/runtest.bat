@@ -3,17 +3,12 @@ setlocal enableextensions
 pushd %~dp0
 
 cd ..
-call gradlew clean shadowJar
+call gradlew clean test
 
-cd build\libs
-for /f "tokens=*" %%a in (
-    'dir /b *.jar'
-) do (
-    set jarloc=%%a
+if %errorlevel% equ 0 (
+    echo All tests passed!
+    exit /b 0
+) else (
+    echo Some tests failed!
+    exit /b 1
 )
-
-java -jar %jarloc% < ..\..\text-ui-test\input.txt > ..\..\text-ui-test\ACTUAL.TXT
-
-cd ..\..\text-ui-test
-
-FC ACTUAL.TXT EXPECTED.TXT >NUL && ECHO Test passed! || Echo Test failed!

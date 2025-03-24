@@ -1,76 +1,85 @@
 package manager;
 
-import misc.Parser;
+import exception.DuplicatePatientIDException;
+import exception.InvalidInputFormatException;
+import miscellaneous.Parser;
+import miscellaneous.Ui;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ManagementSystem {
-    private final Map<String, Patient> patients;
     private final List<Appointment> appointments;
+    private final Map<String, Patient> patients;
 
     public ManagementSystem() {
-        patients = new HashMap<>();
         appointments = new ArrayList<>();
+        patients = new HashMap<>();
     }
 
     public Map<String, Patient> getPatient() {
         return patients;
     }
 
-    public void addPatient(String line) {
-        String [] details = Parser.parseAddPatient(line);
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
 
+    public void addPatient(String line) throws DuplicatePatientIDException, InvalidInputFormatException {
+        String[] details = Parser.parseAddPatient(line);
 
-        if (details == null){
-            System.out.println("Patients details is incomplete!");
-            return;
+        if (patients.containsKey(details[0])) {
+            throw new DuplicatePatientIDException("Patient ID already exists!");
         }
-
-
-        else if (patients.containsKey(details[0])) {
-            System.out.println("MainFunction.Patient ID already exists!");
-            return;
-        }
-
 
         Patient newPatient = new Patient(details[0], details[1], details[2], details[3], details[4], details[5]);
         patients.put(details[0], newPatient);
-        System.out.println("MainFunction.Patient added: " + details[1]);
+        Ui.showLine();
+        System.out.println("Patient added: " + details[1]);
+        Ui.showLine();
     }
 
-
-    public void deletePatient(String line) {
-        String nric = line.substring(15);
-        if (nric == null || nric.isBlank()) {
-            System.out.println("Invalid NRIC provided.");
-            return;
+    public void deletePatient(String line) throws InvalidInputFormatException {
+        if (line.length() < 15) {
+            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient [NRIC]");
         }
+
+        String nric = line.substring(15).trim();  // Trim whitespace
 
         if (patients.containsKey(nric)) {
             Patient removedPatient = patients.remove(nric);
-            System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName()
+            Ui.showLine();
+            System.out.println("Patient removed successfully: " + removedPatient.getName()
                     + " (NRIC: " + nric + ")");
-
-        if (patients.containsKey(nric)) {
-            Patient removedPatient = patients.remove(nric);
-            System.out.println("MainFunction.Patient removed successfully: " + removedPatient.getName() + " (NRIC: " + nric + ")");
+            Ui.showLine();
         } else {
-            System.out.println("Error: MainFunction.Patient with NRIC " + nric + " not found.");
+            Ui.showLine();
+            System.out.println("Patient with NRIC " + nric + " not found.");
+            Ui.showLine();
         }
     }
 
-    public void viewPatient(String line) {
-        String nric = line.substring(13);
-        if (nric == null || nric.isBlank()) {
-            System.out.println("Invalid NRIC provided.");
+    public void viewPatient(String line) throws InvalidInputFormatException{
+        if (line.length() < 13) {
+            throw new InvalidInputFormatException("Invalid command format. Use: view-patient [NRIC]");
+        }
+
+        String nric = line.substring(13).trim(); // Extract and trim NRIC
+
+        // Check if patient exists
+        if (!patients.containsKey(nric)) {
+            Ui.showLine();
+            System.out.println("Patient with NRIC " + nric + " not found.");
+            Ui.showLine();
             return;
         }
 
-        System.out.println("===== MainFunction.Patient Details =====");
-        System.out.println(patients.values());
-        System.out.println("-----------------------");
+        Ui.showLine();
+        System.out.println("-".repeat(43)+ "Patient Details" + "-".repeat(43));
+        System.out.println(patients.get(nric).toString());
+        Ui.showLine();
     }
 
     public void listPatients() {
@@ -78,11 +87,11 @@ public class ManagementSystem {
             System.out.println("No patients have been added.");
             return;
         }
-        System.out.println("===== MainFunction.Patient List =====");
+        System.out.println("-".repeat(43)+ "Patient Details" + "-".repeat(43));
         int count = 1;
         for (Patient p : patients.values()) {
-            System.out.println(count + ". " + p);
-            System.out.println("-----------------------");
+            System.out.println(count + ". " + p.toStringForListView());
+            Ui.showLine();
             count++;
         }
     }
@@ -94,30 +103,45 @@ public class ManagementSystem {
         String desc = details[3];
         Appointment appt = new Appointment(nric, date, time, desc);
         appointments.add(appt);
-        System.out.println("MainFunction.Appointment added for NRIC " + nric + " on " + date + " at " + time + ".");
+
+        Ui.showLine();
+        System.out.println("Appointment added for NRIC: " + nric + " on " + date + " at " + time + ".");
+        System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
+        Ui.showLine();
     }
 
     public void deleteAppointment(String apptId) {
         for (int i = 0; i < appointments.size(); i++) {
             if (appointments.get(i).getId().equalsIgnoreCase(apptId)) {
                 appointments.remove(i);
-                System.out.println("MainFunction.Appointment " + apptId + " is deleted successfully.");
+
+                Ui.showLine();
+                System.out.println("Appointment " + apptId + " is deleted successfully.");
+                System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
+                Ui.showLine();
                 return;
             }
         }
-        System.out.println("No appointment found with ID " + apptId + ".");
+        Ui.showLine();
+        System.out.println("No appointment found with ID: " + apptId + ".");
+        Ui.showLine();
     }
 
     public void listAppointments() {
         if (appointments.isEmpty()) {
+            Ui.showLine();
             System.out.println("No appointments found.");
+            Ui.showLine();
             return;
         }
-        System.out.println("Appointments:");
+
+        System.out.println("-".repeat(43)+ "Appointments" + "-".repeat(43));
         int count = 1;
         for (Appointment a : appointments) {
             System.out.println(count + ". " + a);
             count++;
         }
+        Ui.showLine();
     }
+
 }
