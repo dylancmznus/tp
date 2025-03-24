@@ -96,7 +96,7 @@ class ManagementSystemTest {
 
     @Test
     void viewPatients_correctInput_expectPatientsViewed() throws
-    DuplicatePatientIDException, InvalidInputFormatException {
+            DuplicatePatientIDException, InvalidInputFormatException {
         ManagementSystem system = new ManagementSystem();
 
         system.addPatient("add-patient n/John Doe ic/S1234567A " +
