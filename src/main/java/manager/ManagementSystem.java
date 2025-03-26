@@ -55,11 +55,11 @@ public class ManagementSystem {
     }
 
     public void storeMedicalHistory(String name, String nric, String medHistory) {
-        Patient existingPatient = findPatientByNric(nric);
+        Patient existedPatient = findPatientByNric(nric);
 
-        if (existingPatient == null) {
-            existingPatient = new Patient(nric, name, "", "", "", "");
-            patients.add(existingPatient);
+        if (existedPatient == null) {
+            existedPatient = new Patient(nric, name, "", "", "", "");
+            patients.add(existedPatient);
             Ui.showLine();
             System.out.println("New patient " + name + " (NRIC: " + nric + ") created.");
         } else {
@@ -68,37 +68,38 @@ public class ManagementSystem {
 
         String[] historyEntries = medHistory.split(",\s*");
         for (String entry : historyEntries) {
-            if (!existingPatient.getMedicalHistory().contains(entry.trim())) {
-                existingPatient.getMedicalHistory().add(entry.trim());
+            if (!existedPatient.getMedicalHistory().contains(entry.trim())) {
+                existedPatient.getMedicalHistory().add(entry.trim());
             }
         }
         System.out.println("Medical history added for " + name + " (NRIC: " + nric + ").");
+
         Ui.showLine();
     }
 
     public void viewMedicalHistoryByNric(String nric) {
-        Patient matchedPatients = findPatientByNric(nric.trim());
+        Patient foundPatients = findPatientByNric(nric.trim());
 
-        if (matchedPatients == null) {
+        if (foundPatients == null) {
             Ui.showLine();
-            System.out.println("No patient found with NRIC " + nric + ".");
+            System.out.println("No patient/patients found with NRIC " + nric + ".");
         } else {
             Ui.showLine();
-            Ui.showPatientHistory(matchedPatients);
+            Ui.showPatientHistory(foundPatients);
         }
     }
 
     public void viewMedicalHistoryByName(String name) {
-        List<Patient> matchedPatients = findPatientsByName(name.trim());
+        List<Patient> foundPatients = findPatientsByName(name.trim());
 
         Ui.showLine();
 
-        if (matchedPatients.isEmpty()) {
+        if (foundPatients.isEmpty()) {
             System.out.println("No patients found with name '" + name + "'.");
             Ui.showLine();
         } else {
-            System.out.println("Found " + matchedPatients.size() + " patient(s) with name '" + name + "'");
-            for (Patient p : matchedPatients) {
+            System.out.println("Found " + foundPatients.size() + " patient(s) with name '" + name + "'");
+            for (Patient p : foundPatients) {
                 Ui.showPatientHistory(p);
             }
         }
@@ -106,10 +107,10 @@ public class ManagementSystem {
 
     // Find patient by NRIC
     private Patient findPatientByNric(String nric) {
-        String target = nric.trim().toUpperCase();
+        String object = nric.trim().toUpperCase();
         for (Patient p : patients) {
             String patientId = p.getId().trim().toUpperCase();
-            if (patientId.equals(target)) {
+            if (patientId.equals(object)) {
                 return p;
             }
         }
@@ -118,13 +119,13 @@ public class ManagementSystem {
 
     // Find patients by Name
     public List<Patient> findPatientsByName(String name) {
-        List<Patient> result = new ArrayList<>();
+        List<Patient> object = new ArrayList<>();
         for (Patient p : patients) {
             if (p.getName().trim().equalsIgnoreCase(name)) {
-                result.add(p);
+                object.add(p);
             }
         }
-        return result;
+        return object;
     }
 
 
