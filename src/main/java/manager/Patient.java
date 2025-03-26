@@ -13,7 +13,8 @@ public class Patient {
     private final String address;
     private final List<String> medicalHistory;
 
-    public Patient(String id, String name, String dob, String gender, String address, String contactInfo, List<String> medicalHistory) {
+    public Patient(String id, String name, String dob, String gender, String address,
+                   String contactInfo, List<String> medicalHistory) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -62,18 +63,14 @@ public class Patient {
                 : String.join(", ", medicalHistory);
 
         return String.format(
-                "Patient ID: %s\n   " +
-                        "Name: %s\n   " +
-                        "Date of Birth: %s\n   " +
-                        "Gender: %s\n   " +
-                        "Address: %s\n   " +
-                        "Contact: %s\n   " +
-                        "Medical History: %s",
+                "Patient ID: %s\n   Name: %s\n   Date of Birth: %s\n   Gender: %s\n   " +
+                        "Address: %s\n   Contact: %s\n   Medical History: %s",
                 id, name, dob, gender, address, contactInfo, history
         );
     }
 
     public String toFileFormat() {
-        return this.id + "|" + this.name + "|" + this.dob + "|" + this.gender + "|" + this.address + "|" + this.contactInfo + "|" + this.medicalHistory;
+        return this.id + "|" + this.name + "|" + this.dob + "|" + this.gender + "|"
+                + this.address + "|" + this.contactInfo + "|" + this.medicalHistory;
     }
 }

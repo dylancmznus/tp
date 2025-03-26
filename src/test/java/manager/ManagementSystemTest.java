@@ -13,7 +13,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class ManagementSystemTest {
 
@@ -68,7 +71,9 @@ class ManagementSystemTest {
 
         List<String> lines = Files.readAllLines(TEST_FILE_PATH);
         assertFalse(lines.isEmpty(), "Patient file is empty.");
-        assertTrue(lines.get(0).contains("John Doe"), "Saved patient name not found in file.");
-        assertTrue(lines.get(0).contains("S1234567A"), "Saved patient NRIC not found in file.");
+
+        String line = lines.get(0);
+        assertTrue(line.contains("John Doe"), "Saved patient name not found in file.");
+        assertTrue(line.contains("S1234567A"), "Saved patient NRIC not found in file.");
     }
 }

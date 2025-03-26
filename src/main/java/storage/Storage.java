@@ -2,7 +2,10 @@ package storage;
 
 import exception.UnloadedStorageException;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -46,13 +49,17 @@ public class Storage {
     public static List<Patient> loadPatients() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
         File file = new File(patientFilePath);
-        if (!file.exists()) return patients;
+        if (!file.exists()) {
+            return patients;
+        }
 
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 Patient patient = Parser.parsePatient(line);
-                if (patient != null) patients.add(patient);
+                if (patient != null) {
+                    patients.add(patient);
+                }
             }
         } catch (Exception e) {
             throw new UnloadedStorageException("Unable to load patient data!");

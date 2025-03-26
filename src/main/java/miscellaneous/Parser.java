@@ -157,8 +157,9 @@ public class Parser {
         String desc = extractValue(temp, "dsc/");
 
         if (nric == null || date == null || time == null || desc == null) {
-            throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!"
-                    + System.lineSeparator() +  "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
+            String msg = "Missing details or wrong format for add-appointment!" + System.lineSeparator()
+                    + "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION";
+            throw new InvalidInputFormatException(msg);
         }
         return new Appointment(nric.trim(), date.trim(), time.trim(), desc.trim());
     }
