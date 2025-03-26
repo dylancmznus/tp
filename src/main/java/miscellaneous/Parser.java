@@ -63,7 +63,7 @@ public class Parser {
         String history = extractValue(temp, "h/");
 
         if (name == null || nric == null || birthdate == null || gender == null || phone == null || address == null) {
-            throw new InvalidInputFormatException ("Patient details are incomplete!" + System.lineSeparator()
+            throw new InvalidInputFormatException("Patient details are incomplete!" + System.lineSeparator()
                     + "Also, please use: add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS");
         }
 
@@ -75,7 +75,8 @@ public class Parser {
             }
         }
 
-        return new Patient(nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim(), medHistory);
+        return new Patient(nric.trim(), name.trim(), birthdate.trim(),
+                gender.trim(), address.trim(), phone.trim(), medHistory);
     }
 
     private static String parseDeletePatient(String input) throws InvalidInputFormatException {
@@ -129,7 +130,7 @@ public class Parser {
         return new String[]{type, nameOrIc};
     }
 
-    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException{
+    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "store-history" (case-insensitive)
         // and get the remaining string.
         String temp = input.replaceFirst("(?i)store-history\\s*", "");
@@ -225,7 +226,9 @@ public class Parser {
 
     public static Patient parsePatient(String line) {
         String[] tokens = line.split("\\|");
-        if (tokens.length < 7) return null;
+        if (tokens.length < 7) {
+            return null;
+        }
 
         String id = tokens[0];
         String name = tokens[1];

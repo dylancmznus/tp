@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Patient {
-  
+
     private final String id;
     private final String name;
     private final String dob;
@@ -48,11 +48,11 @@ public class Patient {
     public String toString() {
         return String.format(
                 "Patient ID: %s\n" +
-                "Name: %s\n" +
-                "Date of Birth: %s\n" +
-                "Gender: %s\n" +
-                "Address: %s\n" +
-                "Contact: %s",
+                        "Name: %s\n" +
+                        "Date of Birth: %s\n" +
+                        "Gender: %s\n" +
+                        "Address: %s\n" +
+                        "Contact: %s",
                 id, name, dob, gender, address, contactInfo
         );
     }

@@ -59,7 +59,8 @@ class ManagementSystemTest {
     }
 
     @Test
-    void addPatient_validInput_expectPatientAddedAndSaved() throws DuplicatePatientIDException, UnloadedStorageException, IOException {
+    void addPatient_validInput_expectPatientAddedAndSaved()
+            throws DuplicatePatientIDException, UnloadedStorageException, IOException {
         List<Patient> emptyList = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(emptyList);
 
