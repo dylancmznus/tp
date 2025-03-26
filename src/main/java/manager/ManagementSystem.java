@@ -1,25 +1,21 @@
 package manager;
 
 import exception.DuplicatePatientIDException;
-import exception.InvalidInputFormatException;
-import miscellaneous.Parser;
 import miscellaneous.Ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ManagementSystem {
     private final List<Appointment> appointments;
-    private final Map<String, Patient> patients;
+    private final List <Patient> patients;
 
     public ManagementSystem() {
         appointments = new ArrayList<>();
-        patients = new HashMap<>();
+        patients = new ArrayList<>();
     }
 
-    public Map<String, Patient> getPatient() {
+    public List<Patient> getPatients() {
         return patients;
     }
 
@@ -27,121 +23,122 @@ public class ManagementSystem {
         return appointments;
     }
 
-    public void addPatient(String line) throws DuplicatePatientIDException, InvalidInputFormatException {
-        String[] details = Parser.parseAddPatient(line);
-
-        if (patients.containsKey(details[0])) {
-            throw new DuplicatePatientIDException("Patient ID already exists!");
-        }
-
-        Patient newPatient = new Patient(details[0], details[1], details[2], details[3], details[4], details[5]);
-        patients.put(details[0], newPatient);
-        Ui.showLine();
-        System.out.println("Patient added: " + details[1]);
-        Ui.showLine();
-    }
-
-    public void deletePatient(String line) throws InvalidInputFormatException {
-        if (line.length() < 15) {
-            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient [NRIC]");
-        }
-
-        String nric = line.substring(15).trim();  // Trim whitespace
-
-        if (patients.containsKey(nric)) {
-            Patient removedPatient = patients.remove(nric);
-            Ui.showLine();
-            System.out.println("Patient removed successfully: " + removedPatient.getName()
-                    + " (NRIC: " + nric + ")");
-            Ui.showLine();
-        } else {
-            Ui.showLine();
-            System.out.println("Patient with NRIC " + nric + " not found.");
-            Ui.showLine();
-        }
-    }
-
-    public void viewPatient(String line) throws InvalidInputFormatException{
-        if (line.length() < 13) {
-            throw new InvalidInputFormatException("Invalid command format. Use: view-patient [NRIC]");
-        }
-
-        String nric = line.substring(13).trim(); // Extract and trim NRIC
-
-        // Check if patient exists
-        if (!patients.containsKey(nric)) {
-            Ui.showLine();
-            System.out.println("Patient with NRIC " + nric + " not found.");
-            Ui.showLine();
-            return;
-        }
-
-        Ui.showLine();
-        System.out.println("-".repeat(43)+ "Patient Details" + "-".repeat(43));
-        System.out.println(patients.get(nric).toString());
-        Ui.showLine();
-    }
-
-    public void listPatients() {
-        if (patients.isEmpty()) {
-            System.out.println("No patients have been added.");
-            return;
-        }
-        System.out.println("-".repeat(43)+ "Patient Details" + "-".repeat(43));
-        int count = 1;
-        for (Patient p : patients.values()) {
-            System.out.println(count + ". " + p.toStringForListView());
-            Ui.showLine();
-            count++;
-        }
-    }
-
-    public void addAppointment(String[] details) {
-        String nric = details[0];
-        String date = details[1];
-        String time = details[2];
-        String desc = details[3];
-        Appointment appt = new Appointment(nric, date, time, desc);
-        appointments.add(appt);
-
-        Ui.showLine();
-        System.out.println("Appointment added for NRIC: " + nric + " on " + date + " at " + time + ".");
-        System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
-        Ui.showLine();
-    }
-
-    public void deleteAppointment(String apptId) {
-        for (int i = 0; i < appointments.size(); i++) {
-            if (appointments.get(i).getId().equalsIgnoreCase(apptId)) {
-                appointments.remove(i);
-
-                Ui.showLine();
-                System.out.println("Appointment " + apptId + " is deleted successfully.");
-                System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
-                Ui.showLine();
-                return;
+    public void addPatient(Patient patient) throws DuplicatePatientIDException {
+        for (Patient existingPatient : patients) {
+            if (existingPatient.getId().equals(patient.getId())) {
+                throw new DuplicatePatientIDException("Patient ID already exists!");
             }
         }
-        Ui.showLine();
-        System.out.println("No appointment found with ID: " + apptId + ".");
+        patients.add(patient);
+    }
+
+    public Patient deletePatient(String nric) {
+        for (Patient patient : patients) {
+            if (patient.getId().equals(nric)) {
+                patients.remove(patient);
+                // Return the removed patient
+                return patient;
+            }
+        }
+        return null;
+    }
+
+    public Patient viewPatient(String nric) {
+        Patient matchedPatient = null;
+        for (Patient patient : patients) {
+            if (patient.getId().equals(nric)) {
+                matchedPatient = patient;
+                break;
+            }
+        }
+        return matchedPatient;
+    }
+
+    public void storeMedicalHistory(String name, String nric, String medHistory) {
+        Patient existingPatient = findPatientByNric(nric);
+
+        if (existingPatient == null) {
+            existingPatient = new Patient(nric, name, "", "", "", "");
+            patients.add(existingPatient);
+            Ui.showLine();
+            System.out.println("New patient " + name + " (NRIC: " + nric + ") created.");
+        } else {
+            Ui.showLine();
+        }
+
+        String[] historyEntries = medHistory.split(",\s*");
+        for (String entry : historyEntries) {
+            if (!existingPatient.getMedicalHistory().contains(entry.trim())) {
+                existingPatient.getMedicalHistory().add(entry.trim());
+            }
+        }
+        System.out.println("Medical history added for " + name + " (NRIC: " + nric + ").");
         Ui.showLine();
     }
 
-    public void listAppointments() {
-        if (appointments.isEmpty()) {
-            Ui.showLine();
-            System.out.println("No appointments found.");
-            Ui.showLine();
-            return;
-        }
+    public void viewMedicalHistoryByNric(String nric) {
+        Patient matchedPatients = findPatientByNric(nric.trim());
 
-        System.out.println("-".repeat(43)+ "Appointments" + "-".repeat(43));
-        int count = 1;
-        for (Appointment a : appointments) {
-            System.out.println(count + ". " + a);
-            count++;
+        if (matchedPatients == null) {
+            Ui.showLine();
+            System.out.println("No patient found with NRIC " + nric + ".");
+        } else {
+            Ui.showLine();
+            Ui.showPatientHistory(matchedPatients);
         }
-        Ui.showLine();
     }
 
+    public void viewMedicalHistoryByName(String name) {
+        List<Patient> matchedPatients = findPatientsByName(name.trim());
+
+        Ui.showLine();
+
+        if (matchedPatients.isEmpty()) {
+            System.out.println("No patients found with name '" + name + "'.");
+            Ui.showLine();
+        } else {
+            System.out.println("Found " + matchedPatients.size() + " patient(s) with name '" + name + "'");
+            for (Patient p : matchedPatients) {
+                Ui.showPatientHistory(p);
+            }
+        }
+    }
+
+    // Find patient by NRIC
+    private Patient findPatientByNric(String nric) {
+        String target = nric.trim().toUpperCase();
+        for (Patient p : patients) {
+            String patientId = p.getId().trim().toUpperCase();
+            if (patientId.equals(target)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    // Find patients by Name
+    public List<Patient> findPatientsByName(String name) {
+        List<Patient> result = new ArrayList<>();
+        for (Patient p : patients) {
+            if (p.getName().trim().equalsIgnoreCase(name)) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+
+    public void addAppointment(Appointment appointment) {
+        appointments.add(appointment);
+    }
+
+    public Appointment deleteAppointment(String apptId) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getId().equalsIgnoreCase(apptId)) {
+                appointments.remove(appointment);
+                return appointment;
+            }
+        }
+        return null;
+    }
 }
