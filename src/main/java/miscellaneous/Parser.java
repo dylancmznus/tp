@@ -59,12 +59,13 @@ public class Parser {
         String desc = extractValue(temp, "dsc/");
         if (nric == null || date == null || time == null || desc == null) {
             throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!"
-                    + System.lineSeparator() +  "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
+                    + System.lineSeparator() + "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
         }
         return new String[]{nric.trim(), date.trim(), time.trim(), desc.trim()};
     }
 
     public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
+        assert input != null : "Input cannot be null in parseDeleteAppointment()";
         if (!input.matches("(?i)delete-appointment\\s+A\\d+")) {
             throw new InvalidInputFormatException("Invalid format! Please use: " +
                     "delete-appointment APPOINTMENT_ID");
@@ -73,6 +74,7 @@ public class Parser {
     }
 
     public static String[] parseAddPatient(String input) throws InvalidInputFormatException {
+        assert input != null : "Input cannot be null in parseAddPatient()";
         String temp = input.replaceFirst("(?i)add-patient\\s*", "");
         String name = extractValue(temp, "n/");
         String nric = extractValue(temp, "ic/");
@@ -81,7 +83,7 @@ public class Parser {
         String phone = extractValue(temp, "p/");
         String address = extractValue(temp, "a/");
         if (name == null || nric == null || birthdate == null || gender == null || phone == null || address == null) {
-            throw new InvalidInputFormatException ("Patient details are incomplete!" + System.lineSeparator()
+            throw new InvalidInputFormatException("Patient details are incomplete!" + System.lineSeparator()
                     + "Also, please use: add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS");
         }
         return new String[]{nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim()};
@@ -89,6 +91,7 @@ public class Parser {
 
     public static String[] parseViewHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "view-history" (case-insensitive) and get the remaining string.
+        assert input != null : "Input cannot be null in parseViewHistory()";
         String temp = input.replaceFirst("(?i)view-history\\s*", "");
         String type;
         String nameOrIc;
@@ -120,7 +123,7 @@ public class Parser {
         return new String[]{type, nameOrIc};
     }
 
-    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException{
+    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "store-history" (case-insensitive)
         // and get the remaining string.
         String temp = input.replaceFirst("(?i)store-history\\s*", "");
