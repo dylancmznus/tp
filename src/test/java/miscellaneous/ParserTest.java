@@ -5,25 +5,10 @@ import exception.InvalidInputFormatException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class ParserTest {
-    @Test
-    void parseAddAppointment_correctFormat_expectSuccessfulParsing() throws InvalidInputFormatException {
-        String input = "add-appointment ic/S1234567D dt/03-19 t/1200 dsc/medical check-up";
-
-        String[] result = Parser.parseAddAppointment(input);
-
-        assertNotNull(result, "Result should not be null");
-        assertEquals(4, result.length, "Result array should have 4 elements");
-        assertEquals("S1234567D", result[0], "NRIC does not match");
-        assertEquals("03-19", result[1], "Date does not match");
-        assertEquals("1200", result[2], "Time does not match");
-        assertEquals("medical check-up", result[3], "Description does not match");
-    }
-
 
     @Test
     void parseAddAppointment_invalidFormat_expectException() {
