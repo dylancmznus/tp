@@ -1,18 +1,20 @@
 package manager;
 
 import exception.DuplicatePatientIDException;
+import exception.UnloadedStorageException;
 import miscellaneous.Ui;
+import storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManagementSystem {
     private final List<Appointment> appointments;
-    private final List <Patient> patients;
+    private final List<Patient> patients;
 
-    public ManagementSystem() {
+    public ManagementSystem(List<Patient> list) {
         appointments = new ArrayList<>();
-        patients = new ArrayList<>();
+        patients = list;
     }
 
     public List<Patient> getPatients() {
@@ -23,13 +25,14 @@ public class ManagementSystem {
         return appointments;
     }
 
-    public void addPatient(Patient patient) throws DuplicatePatientIDException {
+    public void addPatient(Patient patient) throws DuplicatePatientIDException, UnloadedStorageException {
         for (Patient existingPatient : patients) {
             if (existingPatient.getId().equals(patient.getId())) {
                 throw new DuplicatePatientIDException("Patient ID already exists!");
             }
         }
         patients.add(patient);
+        Storage.savePatients(patients);
     }
 
     public Patient deletePatient(String nric) {
@@ -58,7 +61,7 @@ public class ManagementSystem {
         Patient existingPatient = findPatientByNric(nric);
 
         if (existingPatient == null) {
-            existingPatient = new Patient(nric, name, "", "", "", "");
+            existingPatient = new Patient(nric, name, "", "", "", "", null);
             patients.add(existingPatient);
             Ui.showLine();
             System.out.println("New patient " + name + " (NRIC: " + nric + ") created.");
