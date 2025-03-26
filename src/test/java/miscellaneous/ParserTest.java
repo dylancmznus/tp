@@ -62,4 +62,52 @@ class ParserTest {
 
         assertThrows(InvalidInputFormatException.class, () -> Parser.parseDeleteAppointment(input));
     }
+
+    @Test
+    void parseViewHistory_validNric() throws InvalidInputFormatException {
+        String[] result = Parser.parseViewHistory("view-history S1234567D");
+        assertEquals("ic", result[0]);
+        assertEquals("S1234567D", result[1]);
+    }
+
+    @Test
+    void parseViewHistory_validName() throws InvalidInputFormatException {
+        String[] result = Parser.parseViewHistory("view-history John Doe");
+        assertEquals("n", result[0]);
+        assertEquals("John Doe", result[1]);
+    }
+
+    @Test
+    void parseViewHistory_explicitNricPrefix() throws InvalidInputFormatException {
+        String[] result = Parser.parseViewHistory("view-history ic/S1234567A");
+        assertEquals("ic", result[0]);
+        assertEquals("S1234567A", result[1]);
+    }
+
+    @Test
+    void parseViewHistory_invalidInput_expectException() {
+        assertThrows(InvalidInputFormatException.class, () ->
+                Parser.parseViewHistory("view-history"));
+        assertThrows(InvalidInputFormatException.class, () ->
+                Parser.parseViewHistory("view-history  "));
+    }
+
+    @Test
+    void parseStoreHistory_validInput_expectSuccess() throws InvalidInputFormatException {
+        String[] result = Parser.parseStoreHistory("store-history n/John Doe ic/S1234567D h/Allergic to nuts");
+        assertEquals("John Doe", result[0]);
+        assertEquals("S1234567D", result[1]);
+        assertEquals("Allergic to nuts", result[2]);
+    }
+
+    @Test
+    void parseStoreHistory_missingFields_expectException() {
+        assertThrows(InvalidInputFormatException.class, () ->
+                Parser.parseStoreHistory("store-history ic/S1234567D h/Allergic to nuts"));
+        assertThrows(InvalidInputFormatException.class, () ->
+                Parser.parseStoreHistory("store-history n/John Doe h/Allergic to nuts"));
+        assertThrows(InvalidInputFormatException.class, () ->
+                Parser.parseStoreHistory("store-history n/John Doe ic/S1234567D"));
+    }
 }
+
