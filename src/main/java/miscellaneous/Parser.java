@@ -1,80 +1,54 @@
 package miscellaneous;
 
+import command.AddAppointmentCommand;
+import command.AddPatientCommand;
+import command.Command;
+import command.DeleteAppointmentCommand;
+import command.DeletePatientCommand;
+import command.ExitCommand;
+import command.ListAppointmentCommand;
+import command.ListPatientCommand;
+import command.StoreMedHistoryCommand;
+import command.ViewMedHistoryCommand;
+import command.ViewPatientCommand;
 import exception.InvalidInputFormatException;
+import exception.UnknownCommandException;
+import manager.Appointment;
+import manager.Patient;
 
 public class Parser {
-    public static boolean isBye(String input) {
-        return input.equalsIgnoreCase("bye");
-    }
+    public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
+        // Split into two parts to extract the command keyword and its detail
+        String[] parts = userInput.split(" ", 2);
+        String commandWord = parts[0];
 
-
-    public static boolean isAddPatient(String input) {
-        return input.toLowerCase().startsWith("add-patient");
-    }
-
-
-    public static boolean isDeletePatient(String input) {
-        return input.toLowerCase().startsWith("delete-patient");
-    }
-
-
-    public static boolean isViewPatient(String input) {
-        return input.toLowerCase().startsWith("view-patient");
-    }
-
-
-    public static boolean isListPatient(String input) {
-        return input.toLowerCase().startsWith("list-patient");
-    }
-
-    public static boolean isStoreHistory(String input) {
-        return input.toLowerCase().startsWith("store-history");
-    }
-
-    public static boolean isViewHistory(String input) {
-        return input.toLowerCase().startsWith("view-history");
-    }
-
-
-    public static boolean isAddAppointment(String input) {
-        return input.toLowerCase().startsWith("add-appointment");
-    }
-
-
-    public static boolean isDeleteAppointment(String input) {
-        return input.toLowerCase().startsWith("delete-appointment");
-    }
-
-
-    public static boolean isListAppointments(String input) {
-        return input.equalsIgnoreCase("list-appointment");
-    }
-
-
-    public static String[] parseAddAppointment(String input) throws InvalidInputFormatException {
-        String temp = input.replaceFirst("(?i)add-appointment\\s+", "");
-        String nric = extractValue(temp, "ic/");
-        String date = extractValue(temp, "dt/");
-        String time = extractValue(temp, "t/");
-        String desc = extractValue(temp, "dsc/");
-        if (nric == null || date == null || time == null || desc == null) {
-            throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!"
-                    + System.lineSeparator() + "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
+        switch (commandWord) {
+        case "bye":
+            return new ExitCommand();
+        case "add-patient":
+            return new AddPatientCommand(parseAddPatient(userInput));
+        case "delete-patient":
+            return new DeletePatientCommand(parseDeletePatient(userInput));
+        case "view-patient":
+            return new ViewPatientCommand(parseViewPatient(userInput));
+        case "list-patient":
+            return new ListPatientCommand();
+        case "store-history":
+            return new StoreMedHistoryCommand(parseStoreHistory(userInput));
+        case "view-history":
+            return new ViewMedHistoryCommand(parseViewHistory(userInput));
+        case "add-appointment":
+            return new AddAppointmentCommand(parseAddAppointment(userInput));
+        case "delete-appointment":
+            return new DeleteAppointmentCommand(parseDeleteAppointment(userInput));
+        case "list-appointment":
+            return new ListAppointmentCommand();
+        default:
+            throw new UnknownCommandException("Unknown command. Please try again.");
         }
-        return new String[]{nric.trim(), date.trim(), time.trim(), desc.trim()};
     }
 
-    public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
-        assert input != null : "Input cannot be null in parseDeleteAppointment()";
-        if (!input.matches("(?i)delete-appointment\\s+A\\d+")) {
-            throw new InvalidInputFormatException("Invalid format! Please use: " +
-                    "delete-appointment APPOINTMENT_ID");
-        }
-        return input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
-    }
-
-    public static String[] parseAddPatient(String input) throws InvalidInputFormatException {
-        assert input != null : "Input cannot be null in parseAddPatient()";
+    private static Patient parseAddPatient(String input) throws InvalidInputFormatException {
         String temp = input.replaceFirst("(?i)add-patient\\s*", "");
         String name = extractValue(temp, "n/");
         String nric = extractValue(temp, "ic/");
@@ -82,16 +56,34 @@ public class Parser {
         String gender = extractValue(temp, "g/");
         String phone = extractValue(temp, "p/");
         String address = extractValue(temp, "a/");
+
         if (name == null || nric == null || birthdate == null || gender == null || phone == null || address == null) {
-            throw new InvalidInputFormatException("Patient details are incomplete!" + System.lineSeparator()
+            throw new InvalidInputFormatException ("Patient details are incomplete!" + System.lineSeparator()
                     + "Also, please use: add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS");
         }
-        return new String[]{nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim()};
+        return new Patient(nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim());
+    }
+
+    private static String parseDeletePatient(String input) throws InvalidInputFormatException {
+        if (input.length() < 15) {
+            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient [NRIC]");
+        }
+
+        String nric = input.substring(15).trim();
+        return nric;
+    }
+
+    private static String parseViewPatient(String input) throws InvalidInputFormatException {
+        if (input.length() < 13) {
+            throw new InvalidInputFormatException("Invalid command format. Use: view-patient [NRIC]");
+        }
+
+        String nric = input.substring(13).trim(); // Extract and trim NRIC
+        return nric;
     }
 
     public static String[] parseViewHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "view-history" (case-insensitive) and get the remaining string.
-        assert input != null : "Input cannot be null in parseViewHistory()";
         String temp = input.replaceFirst("(?i)view-history\\s*", "");
         String type;
         String nameOrIc;
@@ -123,7 +115,7 @@ public class Parser {
         return new String[]{type, nameOrIc};
     }
 
-    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException {
+    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException{
         // Remove the command prefix "store-history" (case-insensitive)
         // and get the remaining string.
         String temp = input.replaceFirst("(?i)store-history\\s*", "");
@@ -141,6 +133,30 @@ public class Parser {
 
         // Return the trimmed values as an array
         return new String[]{name.trim(), nric.trim(), medHistory.trim()};
+    }
+
+    public static Appointment parseAddAppointment(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)add-appointment\\s+", "");
+        String nric = extractValue(temp, "ic/");
+        String date = extractValue(temp, "dt/");
+        String time = extractValue(temp, "t/");
+        String desc = extractValue(temp, "dsc/");
+
+        if (nric == null || date == null || time == null || desc == null) {
+            throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!"
+                    + System.lineSeparator() +  "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
+        }
+        return new Appointment(nric.trim(), date.trim(), time.trim(), desc.trim());
+    }
+
+    public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
+        if (!input.matches("(?i)delete-appointment\\s+A\\d+")) {
+            throw new InvalidInputFormatException("Invalid format! Please use: " +
+                    "delete-appointment APPOINTMENT_ID");
+        }
+
+        String apptId = input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
+        return apptId;
     }
 
     private static String extractValue(String input, String prefix) {
