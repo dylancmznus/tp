@@ -87,6 +87,83 @@ class ManagementSystemTest {
     }
 
     @Test
+    void deletePatient_existingPatient_patientDeleted() {
+        List<Patient> patients = new ArrayList<>();
+        Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
+                "M", "123 Main St", "81234567", new ArrayList<>());
+        patients.add(patient);
+        ManagementSystem manager = new ManagementSystem(patients);
+
+        Patient deletedPatient = manager.deletePatient("S1234567A");
+
+        assertNotNull(deletedPatient, "Patient should be deleted");
+        assertEquals("John Doe", deletedPatient.getName(), "Deleted patient's name should match");
+        assertEquals("S1234567A", deletedPatient.getId(), "Deleted patient's NRIC should match");
+        assertEquals(0, manager.getPatients().size(), "Patients list should be empty after deletion");
+    }
+
+    @Test
+    void deletePatient_nonExistentPatient_patientNotFound() {
+        List<Patient> patients = new ArrayList<>();
+        Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
+                "M", "123 Main St", "81234567", new ArrayList<>());
+        patients.add(patient);
+        ManagementSystem manager = new ManagementSystem(patients);
+
+        Patient deletedPatient = manager.deletePatient("S9999999X");
+
+        assertNull(deletedPatient, "Patient should not be found and returned as null");
+        assertEquals(1, manager.getPatients().size(), "Patients list should remain unchanged");
+    }
+
+    @Test
+    void deletePatient_emptyList_patientNotFound() {
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients);
+
+        Patient deletedPatient = manager.deletePatient("S1234567A");
+
+        assertNull(deletedPatient, "Patient should not be found in an empty system");
+        assertEquals(0, manager.getPatients().size(), "Patients list should remain empty");
+    }
+
+    @Test
+    void viewPatient_validNric_patientFound() {
+        List<Patient> patients = new ArrayList<>();
+        patients.add(new Patient("S1234567A", "John Doe", "1990-01-01",
+                "M", "123 Main St", "81234567", new ArrayList<>()));
+        ManagementSystem manager = new ManagementSystem(patients);
+
+        Patient retrievedPatient = manager.viewPatient("S1234567A");
+
+        assertNotNull(retrievedPatient, "Patient should be found");
+        assertEquals("John Doe", retrievedPatient.getName(), "Patient name should match");
+        assertEquals("S1234567A", retrievedPatient.getId(), "Patient NRIC should match");
+    }
+
+    @Test
+    void viewPatient_invalidNric_patientNotFound() {
+        List<Patient> patients = new ArrayList<>();
+        patients.add(new Patient("S1234567A", "John Doe", "1990-01-01",
+                "M", "123 Main St", "81234567", new ArrayList<>()));
+        ManagementSystem manager = new ManagementSystem(patients);
+
+        Patient retrievedPatient = manager.viewPatient("S9999999X");
+
+        assertNull(retrievedPatient, "Patient should not be found with this NRIC");
+    }
+
+    @Test
+    void viewPatient_emptySystem_patientNotFound() {
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients);
+
+        Patient retrievedPatient = manager.viewPatient("S1234567A");
+
+        assertNull(retrievedPatient, "Patient should not be found when system is empty");
+    }
+
+    @Test
     void addAppointment_validInput_expectAppointmentAdded() {
         List<Patient> emptyList = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(emptyList);
