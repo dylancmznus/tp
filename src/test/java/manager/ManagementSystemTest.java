@@ -156,4 +156,28 @@ class ManagementSystemTest {
         assertNull(removedAppointment, "Should return null");
     }
 
+    @Test
+    void sortAppointments_sortByDateTime_expectSortedAppointments() {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
+        List<Appointment> appointments = new ArrayList<>();
+
+        LocalDateTime appointmentTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime2 = LocalDateTime.parse("2025-03-24 1200", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime3 = LocalDateTime.parse("2025-03-25 1000", DATE_TIME_FORMAT);
+
+        Appointment appointment1 = new Appointment("S1234567D", appointmentTime1, "Checkup");
+        appointments.add(appointment1);
+
+        Appointment appointment2 = new Appointment("S4567890D", appointmentTime2, "CT scan");
+        appointments.add(appointment2);
+
+        Appointment appointment3 = new Appointment("S7891234D", appointmentTime3, "Consultation");
+        appointments.add(appointment3);
+
+        manager.sortAppointments(appointments);
+
+        assertEquals("CT scan", appointments.get(0).getDescription());
+        assertEquals("Consultation", appointments.get(1).getDescription());
+        assertEquals("Checkup", appointments.get(2).getDescription());
+    }
 }

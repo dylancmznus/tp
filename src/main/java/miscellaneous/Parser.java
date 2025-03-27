@@ -8,6 +8,7 @@ import command.DeletePatientCommand;
 import command.ExitCommand;
 import command.ListAppointmentCommand;
 import command.ListPatientCommand;
+import command.SortAppointmentCommand;
 import command.StoreMedHistoryCommand;
 import command.ViewMedHistoryCommand;
 import command.ViewPatientCommand;
@@ -51,6 +52,8 @@ public class Parser {
             return new DeleteAppointmentCommand(parseDeleteAppointment(userInput));
         case "list-appointment":
             return new ListAppointmentCommand();
+        case "sort-appointment":
+            return new SortAppointmentCommand();
         default:
             throw new UnknownCommandException("Unknown command. Please try again.");
         }

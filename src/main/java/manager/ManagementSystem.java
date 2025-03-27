@@ -6,6 +6,7 @@ import miscellaneous.Ui;
 import storage.Storage;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ManagementSystem {
@@ -143,5 +144,15 @@ public class ManagementSystem {
             }
         }
         return null;
+    }
+
+    public List<Appointment> sortAppointments(List<Appointment> appointments) {
+        // comparing NRIC and Desc could be useless as there will not have clashing appointments
+        appointments.sort(Comparator
+                .comparing(Appointment::getDateTime)
+                .thenComparing(Appointment::getNric)
+                .thenComparing(Appointment::getDescription));
+
+        return appointments;
     }
 }
