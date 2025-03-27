@@ -175,7 +175,7 @@ public class Parser {
             LocalDateTime dateTime = LocalDateTime.parse(combined, DATE_TIME_FORMAT);
             return new Appointment(nric.trim(), dateTime, desc.trim());
         } catch (DateTimeParseException e) {
-            throw new InvalidInputFormatException("Invalid date/time format. Please use dt/yyyy-MM-dd and t/HHmm");
+            throw new InvalidInputFormatException("Invalid date/time format. Please use: dt/yyyy-MM-dd and t/HHmm");
         }
     }
 
