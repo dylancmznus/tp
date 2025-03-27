@@ -17,6 +17,7 @@ public class ClinicEase {
     private Storage storage;
 
     public ClinicEase(String filePath) {
+        assert filePath != null : "File path cannot be null";
         this.ui = new Ui();
         this.storage= new Storage(filePath);
 

@@ -46,6 +46,7 @@ public class ManagementSystem {
         return null;
     }
 
+    //@@author dylancmznus
     public Patient viewPatient(String nric) {
         Patient matchedPatient = null;
         for (Patient patient : patients) {

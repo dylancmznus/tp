@@ -1,6 +1,11 @@
 package miscellaneous;
 
+import command.AddAppointmentCommand;
+import command.Command;
+import command.DeleteAppointmentCommand;
+import command.ListAppointmentCommand;
 import exception.InvalidInputFormatException;
+import exception.UnknownCommandException;
 import manager.Appointment;
 
 import java.time.LocalDateTime;
@@ -8,7 +13,9 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 import static manager.Appointment.DATE_TIME_FORMAT;
+import static miscellaneous.Parser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -135,5 +142,39 @@ class ParserTest {
         assertThrows(InvalidInputFormatException.class, () ->
                 Parser.parseStoreHistory("store-history n/John Doe ic/S1234567D"));
     }
+
+
+    @Test
+    void parse_addAppointmentCommand_expectAddAppointmentCommand() throws InvalidInputFormatException,
+            UnknownCommandException {
+        Command command = Parser.parse("add-appointment ic/S1234567D dt/2025-03-27 t/1900 dsc/Checkup");
+        assertInstanceOf(AddAppointmentCommand.class, command);
+    }
+
+    @Test
+    void parse_wrongFormatAddAppointment_expectInvalidInputFormatException() {
+        String input = "add-appointment ic/ dt/ t/ dsc/";
+        assertThrows(InvalidInputFormatException.class, () -> Parser.parse(input));
+    }
+
+    @Test
+    void parse_deleteAppointmentCommand_expectDeleteAppointmentCommand() throws InvalidInputFormatException,
+            UnknownCommandException {
+        Command command = Parser.parse("delete-appointment A100");
+        assertInstanceOf(DeleteAppointmentCommand.class, command);
+    }
+
+    @Test
+    void parse_listAppointmentCommand_expectListAppointmentCommandCommand() throws Exception {
+        Command command = Parser.parse("list-appointment");
+        assertInstanceOf(ListAppointmentCommand.class, command);
+    }
+
+    @Test
+    void parse_unknownCommand_expectUnknownCommandException() {
+        String userInput = "bee-boo";
+        assertThrows(UnknownCommandException.class, () -> parse(userInput));
+    }
+
 }
 

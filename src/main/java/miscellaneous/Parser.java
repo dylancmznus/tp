@@ -56,7 +56,6 @@ public class Parser {
         }
     }
 
-    //@@author JudHoka
     private static Patient parseAddPatient(String input) throws InvalidInputFormatException {
         String temp = input.replaceFirst("(?i)add-patient\\s*", "");
         String name = extractValue(temp, "n/");
@@ -102,7 +101,6 @@ public class Parser {
         return nric;
     }
 
-    //@@author jyukuan
     public static String[] parseViewHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "view-history" (case-insensitive) and get the remaining string.
         String temp = input.replaceFirst("(?i)view-history\\s*", "");
@@ -156,7 +154,6 @@ public class Parser {
         return new String[]{name.trim(), nric.trim(), medHistory.trim()};
     }
 
-    //@@author chwenyee
     public static Appointment parseAddAppointment(String input) throws InvalidInputFormatException {
         String temp = input.replaceFirst("(?i)add-appointment\\s+", "");
         String nric = extractValue(temp, "ic/");
@@ -190,6 +187,8 @@ public class Parser {
     }
 
     private static String extractValue(String input, String prefix) {
+        assert prefix != null : "Prefix cannot be null";
+
         String lowerInput = input.toLowerCase();
         String lowerPrefix = prefix.toLowerCase();
         int start = -1;
@@ -238,7 +237,6 @@ public class Parser {
         return detail.isEmpty() ? null : detail;
     }
 
-    //@@author JudHoka
     public static Patient parsePatient(String line) {
         String[] tokens = line.split("\\|");
         if (tokens.length < 7) {
