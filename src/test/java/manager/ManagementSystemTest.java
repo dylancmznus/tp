@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,5 +80,30 @@ class ManagementSystemTest {
         String line = lines.get(0);
         assertTrue(line.contains("John Doe"), "Saved patient name not found in file.");
         assertTrue(line.contains("S1234567A"), "Saved patient NRIC not found in file.");
+    }
+
+    @Test
+    void addAppointment_validInput_expectAppointmentAdded() throws DuplicatePatientIDException,
+            UnloadedStorageException {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-20 1900", DATE_TIME_FORMAT);
+
+        Appointment appointment = new Appointment("S1234567D", appointmentTime,
+                "Medical Check-up");
+
+        manager.addAppointment(appointment);
+
+        assertEquals(1, manager.getAppointments().size());
+        assertEquals("S1234567D", manager.getAppointments().get(0).getNric());
+        assertEquals(LocalDate.of(2025, 3, 20), manager.getAppointments().get(0).getDate());
+        assertEquals(LocalTime.of(19, 0), manager.getAppointments().get(0).getTime());
+    }
+
+    @Test
+    void deleteAppointment_() {
     }
 }

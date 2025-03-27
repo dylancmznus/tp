@@ -1,19 +1,24 @@
 package manager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Appointment {
+
+    public static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
     private static int runningId = 100;
     private final String id;
     private final String nric;
-    private final String date;
-    private final String time;
+    private final LocalDateTime dateTime;
     private final String description;
 
-    public Appointment(String nric, String date, String time, String description) {
+    public Appointment(String nric, LocalDateTime dateTime, String description) {
         this.id = "A" + runningId++;
         this.nric = nric;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.description = description;
     }
 
@@ -25,12 +30,16 @@ public class Appointment {
         return nric;
     }
 
-    public String getDate() {
-        return date;
+    public LocalDate getDate() {
+        return dateTime.toLocalDate();
     }
 
-    public String getTime() {
-        return time;
+    public LocalTime getTime() {
+        return dateTime.toLocalTime();
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     public String getDescription() {
@@ -39,6 +48,6 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "[" + id + "] - " + nric + " - " + date + " " + time + " - " + description;
+        return "[" + id + "] - " + nric + " - " + dateTime.format(DATE_TIME_FORMAT)  + " - " + description;
     }
 }

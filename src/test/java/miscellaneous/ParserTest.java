@@ -1,31 +1,57 @@
 package miscellaneous;
 
 import exception.InvalidInputFormatException;
+import manager.Appointment;
+
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
+import static manager.Appointment.DATE_TIME_FORMAT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class ParserTest {
 
     @Test
+    void parseAddAppointment_validInput_returnsAppointment() throws Exception {
+        String input = "add-appointment ic/S1234567D dt/2025-03-20 t/1430 dsc/Checkup";
+
+        Appointment appointment = Parser.parseAddAppointment(input);
+
+        assertNotNull(appointment);
+        assertEquals("S1234567D", appointment.getNric());
+        assertEquals(LocalDateTime.parse("2025-03-20 1430", DATE_TIME_FORMAT), appointment.getDateTime());
+        assertEquals("Checkup", appointment.getDescription());
+    }
+
+    @Test
     void parseAddAppointment_invalidFormat_expectException() {
-        String input = "add-appointment ic/S1234567D dt/03-19 t/1200";
+        String input = "add-appointment ic/S1234567D dt/2025-03-19 t/1200";
 
         assertThrows(InvalidInputFormatException.class, () -> Parser.parseAddAppointment(input));
     }
 
     @Test
-    void parseAddAppointment_missingDetail_expectedException() {
-        String input = "add-appointment ic/ dt/03-19 t/1200 dsc/medical check-up";
+    void parseAddAppointment_missingDetail_expectException() {
+        String input = "add-appointment ic/ dt/2025-03-19 t/1200 dsc/medical check-up";
 
         assertThrows(InvalidInputFormatException.class, () -> Parser.parseAddAppointment(input));
     }
 
     @Test
-    void parseDeleteAppointment_validInput_expectedSuccess() throws InvalidInputFormatException {
+    void parseAddAppointment_invalidDateTimeFormat_throwsException() {
+        String input1 = "add-appointment ic/S1234567D dt/03-19 t/1900 dsc/Checkup";
+        assertThrows(InvalidInputFormatException.class, () -> Parser.parseAddAppointment(input1));
+
+        String input2 = "add-appointment ic/S1234567D dt/2025-03-20 t/7:00PM dsc/Checkup";
+        assertThrows(InvalidInputFormatException.class, () -> Parser.parseAddAppointment(input2));
+    }
+
+    @Test
+    void parseDeleteAppointment_validInput_expectSuccess() throws InvalidInputFormatException {
         String input = "delete-appointment A100";
         String result = Parser.parseDeleteAppointment(input);
 
@@ -41,7 +67,7 @@ class ParserTest {
     }
 
     @Test
-    void parseDeleteAppointment_invalidAppointmentId_expectedException() {
+    void parseDeleteAppointment_invalidAppointmentId_expectException() {
         String input = "delete-appointment 100";
 
         assertThrows(InvalidInputFormatException.class, () -> Parser.parseDeleteAppointment(input));

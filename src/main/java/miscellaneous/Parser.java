@@ -16,9 +16,13 @@ import exception.UnknownCommandException;
 import manager.Appointment;
 import manager.Patient;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static manager.Appointment.DATE_TIME_FORMAT;
 
 public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
@@ -52,6 +56,7 @@ public class Parser {
         }
     }
 
+    //@@author JudHoka
     private static Patient parseAddPatient(String input) throws InvalidInputFormatException {
         String temp = input.replaceFirst("(?i)add-patient\\s*", "");
         String name = extractValue(temp, "n/");
@@ -97,6 +102,7 @@ public class Parser {
         return nric;
     }
 
+    //@@author jyukuan
     public static String[] parseViewHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "view-history" (case-insensitive) and get the remaining string.
         String temp = input.replaceFirst("(?i)view-history\\s*", "");
@@ -150,6 +156,7 @@ public class Parser {
         return new String[]{name.trim(), nric.trim(), medHistory.trim()};
     }
 
+    //@@author chwenyee
     public static Appointment parseAddAppointment(String input) throws InvalidInputFormatException {
         String temp = input.replaceFirst("(?i)add-appointment\\s+", "");
         String nric = extractValue(temp, "ic/");
@@ -162,7 +169,14 @@ public class Parser {
                     + "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION";
             throw new InvalidInputFormatException(msg);
         }
-        return new Appointment(nric.trim(), date.trim(), time.trim(), desc.trim());
+
+        try {
+            String combined = date.trim() + " " + time.trim();
+            LocalDateTime dateTime = LocalDateTime.parse(combined, DATE_TIME_FORMAT);
+            return new Appointment(nric.trim(), dateTime, desc.trim());
+        } catch (DateTimeParseException e) {
+            throw new InvalidInputFormatException("Invalid date/time format. Please use dt/yyyy-MM-dd and t/HHmm");
+        }
     }
 
     public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
@@ -224,6 +238,7 @@ public class Parser {
         return detail.isEmpty() ? null : detail;
     }
 
+    //@@author JudHoka
     public static Patient parsePatient(String line) {
         String[] tokens = line.split("\\|");
         if (tokens.length < 7) {

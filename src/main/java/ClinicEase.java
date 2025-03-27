@@ -18,7 +18,7 @@ public class ClinicEase {
 
     public ClinicEase(String filePath) {
         this.ui = new Ui();
-        storage = new Storage(filePath);
+        this.storage= new Storage(filePath);
 
         try {
             this.manager = new ManagementSystem(Storage.loadPatients());

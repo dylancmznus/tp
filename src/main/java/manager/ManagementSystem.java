@@ -57,6 +57,7 @@ public class ManagementSystem {
         return matchedPatient;
     }
 
+    //@@author jyukuan
     public void storeMedicalHistory(String name, String nric, String medHistory) {
         Patient existingPatient = findPatientByNric(nric);
 
@@ -107,7 +108,6 @@ public class ManagementSystem {
         }
     }
 
-    // Find patient by NRIC
     private Patient findPatientByNric(String nric) {
         String target = nric.trim().toUpperCase();
         for (Patient p : patients) {
@@ -119,8 +119,7 @@ public class ManagementSystem {
         return null;
     }
 
-    // Find patients by Name
-    public List<Patient> findPatientsByName(String name) {
+    private List<Patient> findPatientsByName(String name) {
         List<Patient> result = new ArrayList<>();
         for (Patient p : patients) {
             if (p.getName().trim().equalsIgnoreCase(name)) {
@@ -130,7 +129,7 @@ public class ManagementSystem {
         return result;
     }
 
-
+    //@@author chwenyee
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
     }
