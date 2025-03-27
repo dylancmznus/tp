@@ -16,9 +16,13 @@ import exception.UnknownCommandException;
 import manager.Appointment;
 import manager.Patient;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static manager.Appointment.DATE_TIME_FORMAT;
 
 public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
@@ -162,7 +166,14 @@ public class Parser {
                     + "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION";
             throw new InvalidInputFormatException(msg);
         }
-        return new Appointment(nric.trim(), date.trim(), time.trim(), desc.trim());
+
+        try {
+            String combined = date.trim() + " " + time.trim();
+            LocalDateTime dateTime = LocalDateTime.parse(combined, DATE_TIME_FORMAT);
+            return new Appointment(nric.trim(), dateTime, desc.trim());
+        } catch (DateTimeParseException e) {
+            throw new InvalidInputFormatException("Invalid date/time format. Please use dt/yyyy-MM-dd and t/HHmm");
+        }
     }
 
     public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
@@ -176,6 +187,8 @@ public class Parser {
     }
 
     private static String extractValue(String input, String prefix) {
+        assert prefix != null : "Prefix cannot be null";
+
         String lowerInput = input.toLowerCase();
         String lowerPrefix = prefix.toLowerCase();
         int start = -1;
