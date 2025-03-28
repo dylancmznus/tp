@@ -1,7 +1,19 @@
 package miscellaneous;
 
 
-import command.*;
+import command.AddPatientCommand;
+import command.Command;
+import command.DeletePatientCommand;
+import command.ExitCommand;
+import command.AddAppointmentCommand;
+import command.DeleteAppointmentCommand;
+import command.EditPatientCommand;
+import command.ListAppointmentCommand;
+import command.EditPatientHistoryCommand;
+import command.ListPatientCommand;
+import command.StoreMedHistoryCommand;
+import command.ViewPatientCommand;
+import command.ViewMedHistoryCommand;
 import exception.InvalidInputFormatException;
 import exception.UnknownCommandException;
 import manager.Appointment;
