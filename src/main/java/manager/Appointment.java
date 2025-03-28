@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import static java.lang.Integer.parseInt;
+
 public class Appointment {
 
     public static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
@@ -22,8 +24,19 @@ public class Appointment {
         this.description = description;
     }
 
+    public Appointment(String id, String nric, LocalDateTime dateTime, String description) {
+        this.id = id;
+        this.nric = nric;
+        this.dateTime = dateTime;
+        this.description = description;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public static void setRunningId(int newId) {
+        runningId = newId;
     }
 
     public String getNric() {
@@ -42,6 +55,10 @@ public class Appointment {
         return dateTime;
     }
 
+    public static int getRunningId() {
+        return runningId;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -49,5 +66,9 @@ public class Appointment {
     @Override
     public String toString() {
         return "[" + id + "] - " + nric + " - " + dateTime.format(DATE_TIME_FORMAT)  + " - " + description;
+    }
+
+    public String toFileFormat() {
+        return id.substring(1) + "|" + this.nric + "|" + dateTime.format(DATE_TIME_FORMAT) + "|" + this.description;
     }
 }

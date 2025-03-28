@@ -12,9 +12,9 @@ public class ManagementSystem {
     private final List<Appointment> appointments;
     private final List<Patient> patients;
 
-    public ManagementSystem(List<Patient> list) {
-        appointments = new ArrayList<>();
-        patients = list;
+    public ManagementSystem(List<Patient> loadedPatients, List<Appointment> loadedAppointments) {
+        appointments = loadedAppointments;
+        patients = loadedPatients;
     }
 
     public List<Patient> getPatients() {
@@ -188,14 +188,16 @@ public class ManagementSystem {
     }
 
     //@@author chwenyee
-    public void addAppointment(Appointment appointment) {
+    public void addAppointment(Appointment appointment) throws UnloadedStorageException {
         appointments.add(appointment);
+        Storage.saveAppointments(appointments);
     }
 
-    public Appointment deleteAppointment(String apptId) {
+    public Appointment deleteAppointment(String apptId) throws UnloadedStorageException {
         for (Appointment appointment : appointments) {
             if (appointment.getId().equalsIgnoreCase(apptId)) {
                 appointments.remove(appointment);
+                Storage.saveAppointments(appointments);
                 return appointment;
             }
         }

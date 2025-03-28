@@ -109,7 +109,7 @@ public class Ui {
         Appointment currentAppt = appointments.get(appointments.size() - 1);
 
         showLine();
-        System.out.println("Appointment added for NRIC: " + currentAppt.getId() + " on " + currentAppt.getDate()
+        System.out.println("Appointment added for NRIC: " + currentAppt.getNric() + " Entry number: " + currentAppt.getId() + " on " + currentAppt.getDate()
                 + " at " + currentAppt.getTime() + ".");
         System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
         showLine();
