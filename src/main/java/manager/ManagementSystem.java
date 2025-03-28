@@ -26,7 +26,10 @@ public class ManagementSystem {
     }
 
     public void addPatient(Patient patient) throws DuplicatePatientIDException, UnloadedStorageException {
+        assert patient != null : "Patient should not be null";
+
         for (Patient existingPatient : patients) {
+            assert existingPatient != null : "Existing patient in list should not be null";
             if (existingPatient.getId().equals(patient.getId())) {
                 throw new DuplicatePatientIDException("Patient ID already exists!");
             }
@@ -36,6 +39,7 @@ public class ManagementSystem {
     }
 
     public Patient deletePatient(String nric) throws UnloadedStorageException {
+        assert nric != null && !nric.isBlank() : "NRIC must not be null or blank";
         for (Patient patient : patients) {
             if (patient.getId().equals(nric)) {
                 patients.remove(patient);
@@ -48,6 +52,7 @@ public class ManagementSystem {
     }
 
     public Patient viewPatient(String nric) {
+        assert nric != null && !nric.isBlank() : "NRIC must not be null or blank";
         Patient matchedPatient = null;
         for (Patient patient : patients) {
             if (patient.getId().equals(nric)) {
