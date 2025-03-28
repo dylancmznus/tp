@@ -1,5 +1,6 @@
 package miscellaneous;
 
+
 import command.*;
 import exception.InvalidInputFormatException;
 import exception.UnknownCommandException;
@@ -204,8 +205,7 @@ public class Parser {
         }
 
         start += prefix.length();
-        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/", "h/",
-                "old/", "new/"};
+        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/", "h/", "old/", "new/"};
         int end = input.length();
 
         // Determine where the current parameter's detail ends by finding the start of the next parameter
@@ -236,7 +236,8 @@ public class Parser {
         String temp = input.replaceFirst("(?i)edit-patient\\s*", "");
         String nric = extractValue(temp, "ic/");
         if (nric == null) {
-            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-patient ic/NRIC [n/NAME] [dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]");
+            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-patient ic/NRIC [n/NAME] " +
+                    "[dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]");
         }
         String name = extractValue(temp, "n/");
         String dob = extractValue(temp, "dob/");
@@ -252,14 +253,16 @@ public class Parser {
 
         String nric = extractValue(temp, "ic/");
         if (nric == null) {
-            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-history ic/NRIC old/OLD_HISTORY new/NEW_HISTORY");
+            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-history ic/NRIC " +
+                    "old/OLD_HISTORY new/NEW_HISTORY");
         }
 
         String oldHistory = extractValue(temp, "old/");
         String newHistory = extractValue(temp, "new/");
 
         if (oldHistory == null || newHistory == null) {
-            throw new InvalidInputFormatException("Missing old or new history text! Usage: edit-history ic/NRIC old/OLD_TEXT new/NEW_TEXT");
+            throw new InvalidInputFormatException("Missing old or new history text! Usage: edit-history " +
+                    "ic/NRIC old/OLD_TEXT new/NEW_TEXT");
         }
 
         return new String[]{nric, oldHistory, newHistory};
