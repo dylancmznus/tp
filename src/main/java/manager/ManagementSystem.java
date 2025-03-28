@@ -54,6 +54,32 @@ public class ManagementSystem {
         return matchedPatient;
     }
 
+    public void editPatient(String nric, String newName, String newDob, String newGender,
+                            String newAddress, String newPhone) {
+        Patient patient = findPatientByNric(nric);
+        if (patient == null) {
+            System.out.println("Patient with NRIC " + nric + " not found.");
+            return;
+        }
+        if (newName != null && !newName.isBlank()) {
+            patient.setName(newName);
+        }
+        if (newDob != null && !newDob.isBlank()) {
+            patient.setDob(newDob);
+        }
+        if (newGender != null && !newGender.isBlank()) {
+            patient.setGender(newGender);
+        }
+        if (newAddress != null && !newAddress.isBlank()) {
+            patient.setAddress(newAddress);
+        }
+        if (newPhone != null && !newPhone.isBlank()) {
+            patient.setContactInfo(newPhone);
+        }
+        System.out.println("Patient with NRIC " + nric + " updated successfully.");
+    }
+
+
     public void storeMedicalHistory(String name, String nric, String medHistory) {
         Patient existedPatient = findPatientByNric(nric);
 
@@ -104,6 +130,28 @@ public class ManagementSystem {
             }
         }
     }
+
+    public void editPatientHistory(String nric, String oldHistory, String newHistory) {
+        Patient patient = findPatientByNric(nric);
+        if (patient == null) {
+            System.out.println("Patient with NRIC " + nric + " not found.");
+            return;
+        }
+        List<String> histories = patient.getMedicalHistory();
+        boolean foundOld = false;
+        for (int i = 0; i < histories.size(); i++) {
+            if (histories.get(i).equalsIgnoreCase(oldHistory.trim())) {
+                histories.set(i, newHistory.trim());
+                foundOld = true;
+                System.out.println("Replaced old history \"" + oldHistory + "\" with \"" + newHistory + "\".");
+                break;
+            }
+        }
+        if (!foundOld) {
+            System.out.println("Old history \"" + oldHistory + "\" not found for patient " + patient.getName());
+        }
+    }
+
 
     // Find patient by NRIC
     private Patient findPatientByNric(String nric) {

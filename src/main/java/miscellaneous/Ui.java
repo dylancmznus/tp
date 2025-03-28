@@ -68,12 +68,10 @@ public class Ui {
             showLine();
             return;
         }
-
-        System.out.println("-".repeat(43) + "Patient Details" + "-".repeat(43));
         System.out.println(matchedPatient);
         showLine();
-
     }
+
 
     public void showPatientList(List<Patient> patients) {
         if (patients.isEmpty()) {
@@ -81,7 +79,7 @@ public class Ui {
             return;
         }
 
-        System.out.println("-".repeat(43)+ "Patient Details" + "-".repeat(43));
+        System.out.println("-".repeat(43) + "Patient Details" + "-".repeat(43));
 
         int count = 1;
         for (Patient p : patients) {
@@ -90,6 +88,7 @@ public class Ui {
             count++;
         }
     }
+
 
     public static void showPatientHistory(Patient patient) {
         System.out.println("Medical History for " + patient.getName() + " (NRIC: " + patient.getId() + "):");
