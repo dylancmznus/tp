@@ -87,7 +87,7 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deletePatient_existingPatient_patientDeleted() {
+    void deletePatient_existingPatient_patientDeleted() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
         Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>());
@@ -103,7 +103,7 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deletePatient_nonExistentPatient_patientNotFound() {
+    void deletePatient_nonExistentPatient_patientNotFound() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
         Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>());
@@ -117,7 +117,7 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deletePatient_emptyList_patientNotFound() {
+    void deletePatient_emptyList_patientNotFound() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(patients);
 
