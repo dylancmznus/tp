@@ -13,14 +13,15 @@ public class Patient {
     private String address;
     private final List<String> medicalHistory;
 
-    public Patient(String id, String name, String dob, String gender, String address, String contactInfo) {
+    public Patient(String id, String name, String dob, String gender, String address,
+                   String contactInfo, List<String> medicalHistory) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.gender = gender;
         this.address = address;
         this.contactInfo = contactInfo;
-        this.medicalHistory = new ArrayList<>();
+        this.medicalHistory = new ArrayList<>(medicalHistory);
     }
 
     public String getId() {
@@ -99,4 +100,8 @@ public class Patient {
         return result;
     }
 
+    public String toFileFormat() {
+        return this.id + "|" + this.name + "|" + this.dob + "|" + this.gender + "|"
+                + this.address + "|" + this.contactInfo + "|" + this.medicalHistory;
+    }
 }
