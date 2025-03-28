@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Patient {
 
-    private final String id;
-    private final String name;
-    private final String dob;
-    private final String contactInfo;
-    private final String gender;
-    private final String address;
+    private String id;
+    private String name;
+    private String dob;
+    private String contactInfo;
+    private String gender;
+    private String address;
     private final List<String> medicalHistory;
 
     public Patient(String id, String name, String dob, String gender, String address,
@@ -44,29 +44,60 @@ public class Patient {
         return medicalHistory;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return String.format(
                 "Patient ID: %s\n" +
-                        "Name: %s\n" +
-                        "Date of Birth: %s\n" +
-                        "Gender: %s\n" +
-                        "Address: %s\n" +
-                        "Contact: %s",
-                id, name, dob, gender, address, contactInfo
+                "Name: %s\n" +
+                "Date of Birth: %s\n" +
+                "Gender: %s\n" +
+                "Address: %s\n" +
+                "Contact: %s\n" +
+                "Medical History: %s",
+                id, name, dob, gender, address, contactInfo, medicalHistory
         );
     }
 
     public String toStringForListView() {
-        String history = medicalHistory.isEmpty()
-                ? "None"
-                : String.join(", ", medicalHistory);
-
-        return String.format(
-                "Patient ID: %s\n   Name: %s\n   Date of Birth: %s\n   Gender: %s\n   " +
-                        "Address: %s\n   Contact: %s\n   Medical History: %s",
-                id, name, dob, gender, address, contactInfo, history
+        String result = String.format(
+                "Patient ID: %s\n   " +
+                        "Name: %s\n   " +
+                        "Date of Birth: %s\n   " +
+                        "Gender: %s\n   " +
+                        "Address: %s\n   " +
+                        "Contact: %s",
+                id, name, dob, gender, address, contactInfo
         );
+
+        if (medicalHistory.isEmpty()) {
+            result += "\n   Medical History: None";
+        } else {
+            result += "\n   Medical History:";
+            for (String h : medicalHistory) {
+                result += "\n   - " + h;
+            }
+        }
+        return result;
     }
 
     public String toFileFormat() {
