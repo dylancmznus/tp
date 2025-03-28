@@ -77,7 +77,9 @@ public class Ui {
 
     public void showPatientList(List<Patient> patients) {
         if (patients.isEmpty()) {
+            showLine();
             System.out.println("No patients have been added.");
+            showLine();
             return;
         }
 

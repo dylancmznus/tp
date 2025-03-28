@@ -1,18 +1,20 @@
 package manager;
 
 import exception.DuplicatePatientIDException;
+import exception.UnloadedStorageException;
 import miscellaneous.Ui;
+import storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManagementSystem {
     private final List<Appointment> appointments;
-    private final List <Patient> patients;
+    private final List<Patient> patients;
 
-    public ManagementSystem() {
+    public ManagementSystem(List<Patient> list) {
         appointments = new ArrayList<>();
-        patients = new ArrayList<>();
+        patients = list;
     }
 
     public List<Patient> getPatients() {
@@ -23,13 +25,14 @@ public class ManagementSystem {
         return appointments;
     }
 
-    public void addPatient(Patient patient) throws DuplicatePatientIDException {
+    public void addPatient(Patient patient) throws DuplicatePatientIDException, UnloadedStorageException {
         for (Patient existingPatient : patients) {
             if (existingPatient.getId().equals(patient.getId())) {
                 throw new DuplicatePatientIDException("Patient ID already exists!");
             }
         }
         patients.add(patient);
+        Storage.savePatients(patients);
     }
 
     public Patient deletePatient(String nric) {
@@ -43,6 +46,7 @@ public class ManagementSystem {
         return null;
     }
 
+    //@@author dylancmznus
     public Patient viewPatient(String nric) {
         Patient matchedPatient = null;
         for (Patient patient : patients) {
@@ -54,12 +58,13 @@ public class ManagementSystem {
         return matchedPatient;
     }
 
+    //@@author jyukuan
     public void storeMedicalHistory(String name, String nric, String medHistory) {
-        Patient existedPatient = findPatientByNric(nric);
+        Patient existingPatient = findPatientByNric(nric);
 
-        if (existedPatient == null) {
-            existedPatient = new Patient(nric, name, "", "", "", "");
-            patients.add(existedPatient);
+        if (existingPatient == null) {
+            existingPatient = new Patient(nric, name, "", "", "", "", null);
+            patients.add(existingPatient);
             Ui.showLine();
             System.out.println("New patient " + name + " (NRIC: " + nric + ") created.");
         } else {
@@ -68,8 +73,8 @@ public class ManagementSystem {
 
         String[] historyEntries = medHistory.split(",\s*");
         for (String entry : historyEntries) {
-            if (!existedPatient.getMedicalHistory().contains(entry.trim())) {
-                existedPatient.getMedicalHistory().add(entry.trim());
+            if (!existingPatient.getMedicalHistory().contains(entry.trim())) {
+                existingPatient.getMedicalHistory().add(entry.trim());
             }
         }
         System.out.println("Medical history added for " + name + " (NRIC: " + nric + ").");
@@ -105,7 +110,6 @@ public class ManagementSystem {
         }
     }
 
-    // Find patient by NRIC
     private Patient findPatientByNric(String nric) {
         String object = nric.trim().toUpperCase();
         for (Patient p : patients) {
@@ -117,18 +121,18 @@ public class ManagementSystem {
         return null;
     }
 
-    // Find patients by Name
-    public List<Patient> findPatientsByName(String name) {
-        List<Patient> object = new ArrayList<>();
+
+    private List<Patient> findPatientsByName(String name) {
+        List<Patient> result = new ArrayList<>();
         for (Patient p : patients) {
             if (p.getName().trim().equalsIgnoreCase(name)) {
-                object.add(p);
+                result.add(p);
             }
         }
-        return object;
+        return result;
     }
 
-
+    //@@author chwenyee
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
     }

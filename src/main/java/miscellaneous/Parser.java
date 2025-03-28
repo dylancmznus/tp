@@ -16,6 +16,14 @@ import exception.UnknownCommandException;
 import manager.Appointment;
 import manager.Patient;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static manager.Appointment.DATE_TIME_FORMAT;
+
 public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
         // Split into two parts to extract the command keyword and its detail
@@ -56,12 +64,23 @@ public class Parser {
         String gender = extractValue(temp, "g/");
         String phone = extractValue(temp, "p/");
         String address = extractValue(temp, "a/");
+        String history = extractValue(temp, "h/");
 
         if (name == null || nric == null || birthdate == null || gender == null || phone == null || address == null) {
-            throw new InvalidInputFormatException ("Patient details are incomplete!" + System.lineSeparator()
+            throw new InvalidInputFormatException("Patient details are incomplete!" + System.lineSeparator()
                     + "Also, please use: add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS");
         }
-        return new Patient(nric.trim(), name.trim(), birthdate.trim(), gender.trim(), address.trim(), phone.trim());
+
+        List<String> medHistory = new ArrayList<>();
+        if (history != null && !history.trim().isEmpty()) {
+            String[] entries = history.split(",\\s*");
+            for (String entry : entries) {
+                medHistory.add(entry.trim());
+            }
+        }
+
+        return new Patient(nric.trim(), name.trim(), birthdate.trim(),
+                gender.trim(), address.trim(), phone.trim(), medHistory);
     }
 
     private static String parseDeletePatient(String input) throws InvalidInputFormatException {
@@ -115,7 +134,7 @@ public class Parser {
         return new String[]{type, nameOrIc};
     }
 
-    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException{
+    public static String[] parseStoreHistory(String input) throws InvalidInputFormatException {
         // Remove the command prefix "store-history" (case-insensitive)
         // and get the remaining string.
         String temp = input.replaceFirst("(?i)store-history\\s*", "");
@@ -143,10 +162,18 @@ public class Parser {
         String desc = extractValue(temp, "dsc/");
 
         if (nric == null || date == null || time == null || desc == null) {
-            throw new InvalidInputFormatException("Missing details or wrong format for add-appointment!"
-                    + System.lineSeparator() +  "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION");
+            String msg = "Missing details or wrong format for add-appointment!" + System.lineSeparator()
+                    + "Please use: add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION";
+            throw new InvalidInputFormatException(msg);
         }
-        return new Appointment(nric.trim(), date.trim(), time.trim(), desc.trim());
+
+        try {
+            String combined = date.trim() + " " + time.trim();
+            LocalDateTime dateTime = LocalDateTime.parse(combined, DATE_TIME_FORMAT);
+            return new Appointment(nric.trim(), dateTime, desc.trim());
+        } catch (DateTimeParseException e) {
+            throw new InvalidInputFormatException("Invalid date/time format. Please use dt/yyyy-MM-dd and t/HHmm");
+        }
     }
 
     public static String parseDeleteAppointment(String input) throws InvalidInputFormatException {
@@ -160,6 +187,8 @@ public class Parser {
     }
 
     private static String extractValue(String input, String prefix) {
+        assert prefix != null : "Prefix cannot be null";
+
         String lowerInput = input.toLowerCase();
         String lowerPrefix = prefix.toLowerCase();
         int start = -1;
@@ -206,6 +235,23 @@ public class Parser {
 
         String detail = input.substring(start, end).trim();
         return detail.isEmpty() ? null : detail;
+    }
+
+    public static Patient parsePatient(String line) {
+        String[] tokens = line.split("\\|");
+        if (tokens.length < 7) {
+            return null;
+        }
+
+        String id = tokens[0];
+        String name = tokens[1];
+        String dob = tokens[2];
+        String gender = tokens[3];
+        String address = tokens[4];
+        String contact = tokens[5];
+        List<String> medHistory = Arrays.asList(tokens[6].split(","));
+
+        return new Patient(id, name, dob, gender, address, contact, medHistory);
     }
 
 }
