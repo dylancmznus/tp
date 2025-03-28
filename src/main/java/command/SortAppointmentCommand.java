@@ -9,10 +9,21 @@ import miscellaneous.Ui;
 import java.util.List;
 
 public class SortAppointmentCommand extends Command {
+    protected String type;
+
+    public SortAppointmentCommand(String type) {
+        this.type = type;
+    }
+
     @Override
     public void execute (ManagementSystem manager, Ui ui) throws DuplicatePatientIDException,
             UnloadedStorageException {
-        List<Appointment> sortedAppointment = manager.sortAppointments(manager.getAppointments());
-        ui.showAppointmentList(sortedAppointment);
+        if (type.equals("date")) {
+            List<Appointment> sortedApptByDateTime = manager.sortAppointmentsByDateTime(manager.getAppointments());
+            ui.showAppointmentList(sortedApptByDateTime);
+        } else {
+            List<Appointment> sortedApptById = manager.sortAppointmentsById(manager.getAppointments());
+            ui.showAppointmentList(sortedApptById);
+        }
     }
 }

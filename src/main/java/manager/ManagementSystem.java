@@ -146,13 +146,14 @@ public class ManagementSystem {
         return null;
     }
 
-    public List<Appointment> sortAppointments(List<Appointment> appointments) {
-        // comparing NRIC and Desc could be useless as there will not have clashing appointments
-        appointments.sort(Comparator
-                .comparing(Appointment::getDateTime)
-                .thenComparing(Appointment::getNric)
-                .thenComparing(Appointment::getDescription));
+    public List<Appointment> sortAppointmentsByDateTime(List<Appointment> appointments) {
+        appointments.sort(Comparator.comparing(Appointment::getDateTime));
 
+        return appointments;
+    }
+
+    public List<Appointment> sortAppointmentsById(List<Appointment> appointments) {
+        appointments.sort(Comparator.comparing(Appointment::getId));
         return appointments;
     }
 }

@@ -29,7 +29,7 @@ public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
         // Split into two parts to extract the command keyword and its detail
         String[] parts = userInput.split(" ", 2);
-        String commandWord = parts[0];
+        String commandWord = parts[0].toLowerCase();
 
         switch (commandWord) {
         case "bye":
@@ -53,7 +53,7 @@ public class Parser {
         case "list-appointment":
             return new ListAppointmentCommand();
         case "sort-appointment":
-            return new SortAppointmentCommand();
+            return new SortAppointmentCommand(parseSortAppointment(userInput));
         default:
             throw new UnknownCommandException("Unknown command. Please try again.");
         }
@@ -187,6 +187,20 @@ public class Parser {
 
         String apptId = input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
         return apptId;
+    }
+
+    private static String parseSortAppointment(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)sort-appointment\\s*", "");
+
+        switch (temp.toLowerCase()) {
+        case "bydate":
+            return "date";
+        case "byid":
+            return "id";
+        default:
+            throw new InvalidInputFormatException("Invalid format! Please use: 'sort-appointment byDate' or " +
+                    "'sort-appointment byId' (case-insensitive).");
+        }
     }
 
     private static String extractValue(String input, String prefix) {

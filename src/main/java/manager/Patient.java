@@ -47,13 +47,14 @@ public class Patient {
     @Override
     public String toString() {
         return String.format(
-                "Patient ID: %s\n" +
+                "Patient NRIC: %s\n" +
                         "Name: %s\n" +
                         "Date of Birth: %s\n" +
                         "Gender: %s\n" +
                         "Address: %s\n" +
-                        "Contact: %s",
-                id, name, dob, gender, address, contactInfo
+                        "Contact: %s\n" +
+                        "Medical History: %s",
+                id, name, dob, gender, address, contactInfo, medicalHistory
         );
     }
 
@@ -63,7 +64,7 @@ public class Patient {
                 : String.join(", ", medicalHistory);
 
         return String.format(
-                "Patient ID: %s\n   Name: %s\n   Date of Birth: %s\n   Gender: %s\n   " +
+                "Patient NRIC: %s\n   Name: %s\n   Date of Birth: %s\n   Gender: %s\n   " +
                         "Address: %s\n   Contact: %s\n   Medical History: %s",
                 id, name, dob, gender, address, contactInfo, history
         );
