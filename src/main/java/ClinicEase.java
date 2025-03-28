@@ -48,6 +48,6 @@ public class ClinicEase {
     }
 
     public static void main(String[] args) {
-        new ClinicEase("src/main/java/storage").run();
+        new ClinicEase("data").run();
     }
 }
