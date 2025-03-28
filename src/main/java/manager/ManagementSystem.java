@@ -35,11 +35,12 @@ public class ManagementSystem {
         Storage.savePatients(patients);
     }
 
-    public Patient deletePatient(String nric) {
+    public Patient deletePatient(String nric) throws UnloadedStorageException {
         for (Patient patient : patients) {
             if (patient.getId().equals(nric)) {
                 patients.remove(patient);
                 // Return the removed patient
+                Storage.savePatients(patients);
                 return patient;
             }
         }
