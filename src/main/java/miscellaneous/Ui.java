@@ -3,11 +3,13 @@ package miscellaneous;
 import manager.Appointment;
 import manager.Patient;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 public class Ui {
     public static final String DIVIDER = "-".repeat(100);
+    public static final DateTimeFormatter OUTPUT_TIME_FORMAT = DateTimeFormatter.ofPattern("h:mm a");
 
     private final Scanner sc;
 
@@ -111,7 +113,7 @@ public class Ui {
 
         showLine();
         System.out.println("Appointment added for NRIC: " + currentAppt.getNric() + " on " + currentAppt.getDate()
-                + " at " + currentAppt.getTime() + ".");
+                + " at " + currentAppt.getTime().format(OUTPUT_TIME_FORMAT) + ".");
         System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
         showLine();
     }
@@ -175,9 +177,13 @@ public class Ui {
 
     public void showAppointmentFound(Appointment appointment, String nric) {
         if (appointment != null) {
+            showLine();
             System.out.println("Appointment found for NRIC " + nric + ": " + appointment);
+            showLine();
         } else {
+            showLine();
             System.out.println("No appointment found for NRIC " + nric);
+            showLine();
         }
     }
 }

@@ -67,7 +67,7 @@ public class Patient {
     @Override
     public String toString() {
         return String.format(
-                "Patient ID: %s\n" +
+                "Patient NRIC: %s\n" +
                 "Name: %s\n" +
                 "Date of Birth: %s\n" +
                 "Gender: %s\n" +
@@ -80,7 +80,7 @@ public class Patient {
 
     public String toStringForListView() {
         String result = String.format(
-                "Patient ID: %s\n   " +
+                "Patient NRIC: %s\n   " +
                         "Name: %s\n   " +
                         "Date of Birth: %s\n   " +
                         "Gender: %s\n   " +

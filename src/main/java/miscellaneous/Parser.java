@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static manager.Appointment.DATE_TIME_FORMAT;
+import static manager.Appointment.INPUT_FORMAT;
 
 public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
@@ -188,7 +188,7 @@ public class Parser {
 
         try {
             String combined = date.trim() + " " + time.trim();
-            LocalDateTime dateTime = LocalDateTime.parse(combined, DATE_TIME_FORMAT);
+            LocalDateTime dateTime = LocalDateTime.parse(combined, INPUT_FORMAT);
             return new Appointment(nric.trim(), dateTime, desc.trim());
         } catch (DateTimeParseException e) {
             throw new InvalidInputFormatException("Invalid date/time format. Please use: dt/yyyy-MM-dd and t/HHmm");
@@ -236,11 +236,11 @@ public class Parser {
     }
 
     private static String parseFindAppointment(String input) throws InvalidInputFormatException {
-        String apptId = input.replaceFirst("(?i)find-appointment\\s*", "").trim();
-        if (apptId.isEmpty()) {
-            throw new InvalidInputFormatException("Invalid format! Use: find-appointment APPOINTMENT_ID");
+        String patientId = input.replaceFirst("(?i)find-appointment\\s*", "").trim();
+        if (patientId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: find-appointment PATIENT_NRIC");
         }
-        return apptId;
+        return patientId;
     }
 
     private static String extractValue(String input, String prefix) {
