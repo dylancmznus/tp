@@ -222,4 +222,13 @@ public class ManagementSystem {
         return null;
     }
 
+    public Appointment findAppointmentByNric(String nric) {
+        for (Appointment appt : appointments) {
+            if (appt.getNric().equals(nric)) {
+                return appt;
+            }
+        }
+        return null;
+    }
+
 }

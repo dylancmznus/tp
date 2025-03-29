@@ -172,4 +172,11 @@ public class Ui {
         showLine();
     }
 
+    public void showAppointmentFound(Appointment appointment, String nric) {
+        if (appointment != null) {
+            System.out.println("Appointment found for NRIC " + nric + ": " + appointment);
+        } else {
+            System.out.println("No appointment found for NRIC " + nric);
+        }
+    }
 }
