@@ -234,7 +234,6 @@ class ManagementSystemTest {
     }
 
     @Test
-<<<<<<< HEAD
     void sortAppointmentsByDateTime_sortByDateTime_appointmentsSortedByDateTime() {
         ManagementSystem manager = new ManagementSystem(new ArrayList<>());
         List<Appointment> appointments = new ArrayList<>();
@@ -284,7 +283,8 @@ class ManagementSystemTest {
         assertEquals("CT scan", appointments.get(1).getDescription());
         assertEquals("Consultation", appointments.get(2).getDescription());
     }
-=======
+
+    @Test
     void markAppointment_validInput_expectAppointmentMarked() {
         List<Patient> emptyList = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(emptyList);
@@ -337,6 +337,4 @@ class ManagementSystemTest {
 
         assertNull(foundAppointment, "Non-existent appointment should return null");
     }
-
->>>>>>> fix3
 }
