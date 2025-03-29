@@ -14,12 +14,14 @@ public class Appointment {
     private final String nric;
     private final LocalDateTime dateTime;
     private final String description;
+    private boolean isDone;
 
     public Appointment(String nric, LocalDateTime dateTime, String description) {
         this.id = "A" + runningId++;
         this.nric = nric;
         this.dateTime = dateTime;
         this.description = description;
+        this.isDone = false;
     }
 
     public String getId() {
@@ -44,6 +46,18 @@ public class Appointment {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void markAsDone() {
+        this.isDone = true;
+    }
+
+    public void unmarkAsDone() {
+        this.isDone = false;
     }
 
     @Override

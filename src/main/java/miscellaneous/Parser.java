@@ -1,17 +1,23 @@
 package miscellaneous;
 
-import command.AddAppointmentCommand;
+
 import command.AddPatientCommand;
 import command.Command;
-import command.DeleteAppointmentCommand;
 import command.DeletePatientCommand;
 import command.ExitCommand;
+import command.AddAppointmentCommand;
+import command.DeleteAppointmentCommand;
+import command.EditPatientCommand;
 import command.ListAppointmentCommand;
+import command.EditPatientHistoryCommand;
 import command.ListPatientCommand;
 import command.SortAppointmentCommand;
 import command.StoreMedHistoryCommand;
-import command.ViewMedHistoryCommand;
 import command.ViewPatientCommand;
+import command.ViewMedHistoryCommand;
+import command.MarkApppointmentCommand;
+import command.UnmarkAppointmentCommand;
+import command.FindAppointmentCommand;
 import exception.InvalidInputFormatException;
 import exception.UnknownCommandException;
 import manager.Appointment;
@@ -54,6 +60,16 @@ public class Parser {
             return new ListAppointmentCommand();
         case "sort-appointment":
             return new SortAppointmentCommand(parseSortAppointment(userInput));
+        case "edit-patient":
+            return new EditPatientCommand(parseEditPatient(userInput));
+        case "edit-history":
+            return new EditPatientHistoryCommand(parseEditHistory(userInput));
+        case "mark-appointment":
+            return new MarkApppointmentCommand(parseMarkAppointment(userInput));
+        case "unmark-appointment":
+            return new UnmarkAppointmentCommand(parseUnmarkAppointment(userInput));
+        case "find-appointment":
+            return new FindAppointmentCommand(parseFindAppointment(userInput));
         default:
             throw new UnknownCommandException("Unknown command. Please try again.");
         }
@@ -203,6 +219,30 @@ public class Parser {
         }
     }
 
+    private static String parseMarkAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)mark-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: mark-appointment APPOINTMENT_ID");
+        }
+        return apptId;
+    }
+
+    private static String parseUnmarkAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)unmark-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: unmark-appointment APPOINTMENT_ID");
+        }
+        return apptId;
+    }
+
+    private static String parseFindAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)find-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: find-appointment APPOINTMENT_ID");
+        }
+        return apptId;
+    }
+
     private static String extractValue(String input, String prefix) {
         assert prefix != null : "Prefix cannot be null";
 
@@ -227,7 +267,7 @@ public class Parser {
         }
 
         start += prefix.length();
-        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/", "h/"};
+        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/", "h/", "old/", "new/"};
         int end = input.length();
 
         // Determine where the current parameter's detail ends by finding the start of the next parameter
@@ -252,6 +292,42 @@ public class Parser {
 
         String detail = input.substring(start, end).trim();
         return detail.isEmpty() ? null : detail;
+    }
+
+    private static String[] parseEditPatient(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)edit-patient\\s*", "");
+        String nric = extractValue(temp, "ic/");
+        if (nric == null) {
+            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-patient ic/NRIC [n/NAME] " +
+                    "[dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]");
+        }
+        String name = extractValue(temp, "n/");
+        String dob = extractValue(temp, "dob/");
+        String gender = extractValue(temp, "g/");
+        String address = extractValue(temp, "a/");
+        String phone = extractValue(temp, "p/");
+
+        return new String[]{nric, name, dob, gender, address, phone};
+    }
+
+    private static String[] parseEditHistory(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)edit-history\\s*", "");
+
+        String nric = extractValue(temp, "ic/");
+        if (nric == null) {
+            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-history ic/NRIC " +
+                    "old/OLD_HISTORY new/NEW_HISTORY");
+        }
+
+        String oldHistory = extractValue(temp, "old/");
+        String newHistory = extractValue(temp, "new/");
+
+        if (oldHistory == null || newHistory == null) {
+            throw new InvalidInputFormatException("Missing old or new history text! Usage: edit-history " +
+                    "ic/NRIC old/OLD_TEXT new/NEW_TEXT");
+        }
+
+        return new String[]{nric, oldHistory, newHistory};
     }
 
     public static Patient parsePatient(String line) {
