@@ -233,4 +233,58 @@ class ManagementSystemTest {
         assertNull(removedAppointment, "Should return null");
     }
 
+    @Test
+    void markAppointment_validInput_expectAppointmentMarked() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-04-10 1500", DATE_TIME_FORMAT);
+        Appointment appointment = new Appointment("S9876543Z", appointmentTime, "Dental Checkup");
+
+        manager.addAppointment(appointment);
+        manager.markAppointment(appointment.getId());
+
+        assertTrue(manager.getAppointments().get(0).isDone(), "Appointment should be marked");
+    }
+
+    @Test
+    void unmarkAppointment_validInput_expectAppointmentUnmarked() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-05-15 1030", DATE_TIME_FORMAT);
+        Appointment appointment = new Appointment("S8765432Y", appointmentTime, "Eye Examination");
+
+        manager.addAppointment(appointment);
+        manager.markAppointment(appointment.getId());
+        manager.unmarkAppointment(appointment.getId());
+
+        assertFalse(manager.getAppointments().get(0).isDone(), "Appointment should be unmarked");
+    }
+
+    @Test
+    void findAppointment_existingAppointment_expectAppointmentFound() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-06-20 0900", DATE_TIME_FORMAT);
+        Appointment appointment = new Appointment("S7654321X", appointmentTime, "General Consultation");
+
+        manager.addAppointment(appointment);
+        Appointment foundAppointment = manager.findAppointmentByNric(appointment.getNric());
+
+        assertNotNull(foundAppointment, "Appointment should be found");
+        assertEquals(appointment.getId(), foundAppointment.getId(), "Appointment ID should match");
+    }
+
+    @Test
+    void findAppointment_nonExistentAppointment_expectNullReturned() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        Appointment foundAppointment = manager.findAppointmentByNric("A999");
+
+        assertNull(foundAppointment, "Non-existent appointment should return null");
+    }
+
 }
