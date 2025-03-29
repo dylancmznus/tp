@@ -12,6 +12,7 @@ public class Patient {
     private String gender;
     private String address;
     private final List<String> medicalHistory;
+    private final List<Appointment> appointments;
 
     public Patient(String id, String name, String dob, String gender, String address,
                    String contactInfo, List<String> medicalHistory) {
@@ -22,6 +23,7 @@ public class Patient {
         this.address = address;
         this.contactInfo = contactInfo;
         this.medicalHistory = new ArrayList<>(medicalHistory);
+        this.appointments = new ArrayList<>();
     }
 
     public String getId() {
@@ -64,9 +66,33 @@ public class Patient {
         this.address = address;
     }
 
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void addAppointment(Appointment appointment) {
+        appointments.add(appointment);
+    }
+
+    public void deleteAppointment(String apptId) {
+        for (Appointment appt : appointments) {
+            if (appt.getId().equals(apptId)) {
+                appointments.remove(appt);
+                break;
+            }
+        }
+    }
+
     @Override
     public String toString() {
-        return String.format(
+        String formattedMedicalHistory;
+        if (medicalHistory.isEmpty()) {
+            formattedMedicalHistory = "None";
+        } else {
+            formattedMedicalHistory = String.join(", ", medicalHistory);
+        }
+
+        String result = String.format(
                 "Patient NRIC: %s\n" +
                 "Name: %s\n" +
                 "Date of Birth: %s\n" +
@@ -74,8 +100,23 @@ public class Patient {
                 "Address: %s\n" +
                 "Contact: %s\n" +
                 "Medical History: %s",
-                id, name, dob, gender, address, contactInfo, medicalHistory
+                id, name, dob, gender, address, contactInfo, formattedMedicalHistory
         );
+
+        if (appointments.isEmpty()) {
+            result += "\nAppointments: None";
+        } else {
+            result += "\nAppointments:";
+            for (Appointment appt : appointments) {
+                result += String.format(
+                        "\n- [%s][%s]: %s (%s)",
+                        appt.getId(),
+                        appt.getStatusIcon(),
+                        appt.getDateTime().format(Appointment.OUTPUT_FORMAT),
+                        appt.getDescription());
+            }
+        }
+        return result;
     }
 
     public String toStringForListView() {
@@ -95,6 +136,20 @@ public class Patient {
             result += "\n   Medical History:";
             for (String h : medicalHistory) {
                 result += "\n   - " + h;
+            }
+        }
+
+        if (appointments.isEmpty()) {
+            result += "\n   Appointments: None";
+        } else {
+            result += "\n   Appointments:";
+            for (Appointment appt : appointments) {
+                result += String.format(
+                        "\n   - [%s][%s]: %s (%s)",
+                        appt.getId(),
+                        appt.getStatusIcon(),
+                        appt.getDateTime().format(Appointment.OUTPUT_FORMAT),
+                        appt.getDescription());
             }
         }
         return result;

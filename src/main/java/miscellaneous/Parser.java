@@ -104,7 +104,7 @@ public class Parser {
 
     private static String parseDeletePatient(String input) throws InvalidInputFormatException {
         if (input.length() < 15) {
-            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient [NRIC]");
+            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient NRIC");
         }
 
         String nric = input.substring(15).trim();
@@ -113,7 +113,7 @@ public class Parser {
 
     private static String parseViewPatient(String input) throws InvalidInputFormatException {
         if (input.length() < 13) {
-            throw new InvalidInputFormatException("Invalid command format. Use: view-patient [NRIC]");
+            throw new InvalidInputFormatException("Invalid command format. Use: view-patient NRIC");
         }
 
         String nric = input.substring(13).trim(); // Extract and trim NRIC

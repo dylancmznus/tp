@@ -45,6 +45,7 @@ public class Ui {
         showLine();
     }
 
+    //@@author judHoka
     public void showPatientAdded(List<Patient> patients) {
         showLine();
         System.out.println("Patient added successfully: " + patients.get(patients.size() - 1).getName());
@@ -63,6 +64,7 @@ public class Ui {
         showLine();
     }
 
+    //@@author dylancmznus
     public void showPatientViewed(Patient matchedPatient, String nric) {
         if (matchedPatient == null) {
             showLine();
@@ -75,7 +77,7 @@ public class Ui {
         showLine();
     }
 
-
+    //@@author judHoka
     public void showPatientList(List<Patient> patients) {
         if (patients.isEmpty()) {
             showLine();
@@ -94,7 +96,7 @@ public class Ui {
         }
     }
 
-
+    //@@author jyukuan
     public static void showPatientHistory(Patient patient) {
         System.out.println("Medical History for " + patient.getName() + " (NRIC: " + patient.getId() + "):");
         List<String> histories = patient.getMedicalHistory();
@@ -108,12 +110,14 @@ public class Ui {
         }
     }
 
+    //@@author chwenyee
     public void showAppointmentAdded(List<Appointment> appointments) {
-        Appointment currentAppt = appointments.get(appointments.size() - 1);
+        Appointment currentAppointment = appointments.get(appointments.size() - 1);
 
         showLine();
-        System.out.println("Appointment added for NRIC: " + currentAppt.getNric() + " on " + currentAppt.getDate()
-                + " at " + currentAppt.getTime().format(OUTPUT_TIME_FORMAT) + ".");
+        System.out.println("Appointment added for NRIC: " + currentAppointment.getNric() + " on "
+                + currentAppointment.getDate() + " at " + currentAppointment.getTime().format(OUTPUT_TIME_FORMAT)
+                + ".");
         System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
         showLine();
     }
@@ -132,6 +136,7 @@ public class Ui {
         showLine();
     }
 
+    //@@author dylancmznus
     public void showAppointmentMarked(List<Appointment> appointments, Appointment markedAppointment, String apptId) {
         if (markedAppointment == null) {
             showLine();
@@ -158,6 +163,7 @@ public class Ui {
         showLine();
     }
 
+    //@@author Basudeb2005
     public void showAppointmentList(List<Appointment> appointments) {
         if (appointments.isEmpty()) {
             showLine();
@@ -175,6 +181,7 @@ public class Ui {
         showLine();
     }
 
+    //@@author dylancmznus
     public void showAppointmentFound(Appointment appointment, String nric) {
         if (appointment != null) {
             showLine();
