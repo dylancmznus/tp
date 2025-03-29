@@ -21,7 +21,7 @@ public class Ui {
 
     public void showWelcome() {
         showLine();
-        System.out.println("Welcome to ClinicEase v1!");
+        System.out.println("Welcome to ClinicEase!");
         System.out.println("Type a command, or 'bye' to exit.");
         showLine();
     }
@@ -68,6 +68,7 @@ public class Ui {
             showLine();
             return;
         }
+        System.out.println("-".repeat(42) + "Patient Details" + "-".repeat(42));
         System.out.println(matchedPatient);
         showLine();
     }
@@ -81,7 +82,7 @@ public class Ui {
             return;
         }
 
-        System.out.println("-".repeat(43) + "Patient Details" + "-".repeat(43));
+        System.out.println("-".repeat(42)+ "Patient Details" + "-".repeat(42));
 
         int count = 1;
         for (Patient p : patients) {
@@ -109,7 +110,7 @@ public class Ui {
         Appointment currentAppt = appointments.get(appointments.size() - 1);
 
         showLine();
-        System.out.println("Appointment added for NRIC: " + currentAppt.getId() + " on " + currentAppt.getDate()
+        System.out.println("Appointment added for NRIC: " + currentAppt.getNric() + " on " + currentAppt.getDate()
                 + " at " + currentAppt.getTime() + ".");
         System.out.println("Now you have " + appointments.size() + " appointment(s) in the list.");
         showLine();

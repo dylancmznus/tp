@@ -11,6 +11,7 @@ import command.EditPatientCommand;
 import command.ListAppointmentCommand;
 import command.EditPatientHistoryCommand;
 import command.ListPatientCommand;
+import command.SortAppointmentCommand;
 import command.StoreMedHistoryCommand;
 import command.ViewPatientCommand;
 import command.ViewMedHistoryCommand;
@@ -34,7 +35,7 @@ public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
         // Split into two parts to extract the command keyword and its detail
         String[] parts = userInput.split(" ", 2);
-        String commandWord = parts[0];
+        String commandWord = parts[0].toLowerCase();
 
         switch (commandWord) {
         case "bye":
@@ -57,6 +58,8 @@ public class Parser {
             return new DeleteAppointmentCommand(parseDeleteAppointment(userInput));
         case "list-appointment":
             return new ListAppointmentCommand();
+        case "sort-appointment":
+            return new SortAppointmentCommand(parseSortAppointment(userInput));
         case "edit-patient":
             return new EditPatientCommand(parseEditPatient(userInput));
         case "edit-history":
@@ -188,7 +191,7 @@ public class Parser {
             LocalDateTime dateTime = LocalDateTime.parse(combined, DATE_TIME_FORMAT);
             return new Appointment(nric.trim(), dateTime, desc.trim());
         } catch (DateTimeParseException e) {
-            throw new InvalidInputFormatException("Invalid date/time format. Please use dt/yyyy-MM-dd and t/HHmm");
+            throw new InvalidInputFormatException("Invalid date/time format. Please use: dt/yyyy-MM-dd and t/HHmm");
         }
     }
 
@@ -200,6 +203,20 @@ public class Parser {
 
         String apptId = input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
         return apptId;
+    }
+
+    private static String parseSortAppointment(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)sort-appointment\\s*", "");
+
+        switch (temp.toLowerCase()) {
+        case "bydate":
+            return "date";
+        case "byid":
+            return "id";
+        default:
+            throw new InvalidInputFormatException("Invalid format! Please use: 'sort-appointment byDate' or " +
+                    "'sort-appointment byId' (case-insensitive).");
+        }
     }
 
     private static String parseMarkAppointment(String input) throws InvalidInputFormatException {

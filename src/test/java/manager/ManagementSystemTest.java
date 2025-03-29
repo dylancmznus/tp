@@ -234,6 +234,57 @@ class ManagementSystemTest {
     }
 
     @Test
+    void sortAppointmentsByDateTime_sortByDateTime_appointmentsSortedByDateTime() {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
+        List<Appointment> appointments = new ArrayList<>();
+
+        LocalDateTime appointmentTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime2 = LocalDateTime.parse("2025-03-24 1200", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime3 = LocalDateTime.parse("2025-03-25 1000", DATE_TIME_FORMAT);
+
+        Appointment appointment1 = new Appointment("S1234567D", appointmentTime1, "Checkup");
+        appointments.add(appointment1);
+
+        Appointment appointment2 = new Appointment("S4567890D", appointmentTime2, "CT scan");
+        appointments.add(appointment2);
+
+        Appointment appointment3 = new Appointment("S7891234D", appointmentTime3, "Consultation");
+        appointments.add(appointment3);
+
+        manager.sortAppointmentsByDateTime(appointments);
+
+        assertEquals("CT scan", appointments.get(0).getDescription());
+        assertEquals("Consultation", appointments.get(1).getDescription());
+        assertEquals("Checkup", appointments.get(2).getDescription());
+    }
+
+    @Test
+    void sortAppointmentsById_sortById_appointmentsSortedById() {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
+        List<Appointment> appointments = new ArrayList<>();
+
+        LocalDateTime appointmentTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime2 = LocalDateTime.parse("2025-03-24 1200", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime3 = LocalDateTime.parse("2025-03-25 1000", DATE_TIME_FORMAT);
+
+        Appointment appointment1 = new Appointment("S1234567D", appointmentTime1, "Checkup");
+        appointments.add(appointment1);
+
+        Appointment appointment2 = new Appointment("S4567890D", appointmentTime2, "CT scan");
+        appointments.add(appointment2);
+
+        Appointment appointment3 = new Appointment("S7891234D", appointmentTime3, "Consultation");
+        appointments.add(appointment3);
+
+        manager.sortAppointmentsByDateTime(appointments);
+        manager.sortAppointmentsById(appointments);
+
+        assertEquals("Checkup", appointments.get(0).getDescription());
+        assertEquals("CT scan", appointments.get(1).getDescription());
+        assertEquals("Consultation", appointments.get(2).getDescription());
+    }
+
+    @Test
     void markAppointment_validInput_expectAppointmentMarked() {
         List<Patient> emptyList = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(emptyList);
@@ -286,5 +337,4 @@ class ManagementSystemTest {
 
         assertNull(foundAppointment, "Non-existent appointment should return null");
     }
-
 }

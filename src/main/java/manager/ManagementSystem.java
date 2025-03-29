@@ -6,6 +6,7 @@ import miscellaneous.Ui;
 import storage.Storage;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ManagementSystem {
@@ -202,6 +203,18 @@ public class ManagementSystem {
         return null;
     }
 
+    public List<Appointment> sortAppointmentsByDateTime(List<Appointment> appointments) {
+        appointments.sort(Comparator.comparing(Appointment::getDateTime));
+
+        return appointments;
+    }
+
+    public List<Appointment> sortAppointmentsById(List<Appointment> appointments) {
+        appointments.sort(Comparator.comparing(Appointment::getId));
+        return appointments;
+    }
+
+    //@@author dylancmznus
     public Appointment markAppointment(String apptId) {
         for (Appointment appointment : appointments) {
             if (appointment.getId().equalsIgnoreCase(apptId)) {
@@ -230,5 +243,4 @@ public class ManagementSystem {
         }
         return null;
     }
-
 }
