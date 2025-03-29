@@ -129,6 +129,32 @@ public class Ui {
         showLine();
     }
 
+    public void showAppointmentMarked(List<Appointment> appointments, Appointment markedAppointment, String apptId) {
+        if (markedAppointment == null) {
+            showLine();
+            System.out.println("No appointment found with ID: " + apptId + ".");
+            showLine();
+            return;
+        }
+
+        showLine();
+        System.out.println("Appointment " + apptId + " is marked successfully.");
+        showLine();
+    }
+
+    public void showAppointmentUnmarked(List<Appointment> appointments, Appointment markedAppointment, String apptId) {
+        if (markedAppointment == null) {
+            showLine();
+            System.out.println("No appointment found with ID: " + apptId + ".");
+            showLine();
+            return;
+        }
+
+        showLine();
+        System.out.println("Appointment " + apptId + " is unmarked successfully.");
+        showLine();
+    }
+
     public void showAppointmentList(List<Appointment> appointments) {
         if (appointments.isEmpty()) {
             showLine();
@@ -146,4 +172,11 @@ public class Ui {
         showLine();
     }
 
+    public void showAppointmentFound(Appointment appointment, String nric) {
+        if (appointment != null) {
+            System.out.println("Appointment found for NRIC " + nric + ": " + appointment);
+        } else {
+            System.out.println("No appointment found for NRIC " + nric);
+        }
+    }
 }

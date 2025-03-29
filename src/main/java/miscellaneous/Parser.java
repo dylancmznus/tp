@@ -14,6 +14,9 @@ import command.ListPatientCommand;
 import command.StoreMedHistoryCommand;
 import command.ViewPatientCommand;
 import command.ViewMedHistoryCommand;
+import command.MarkApppointmentCommand;
+import command.UnmarkAppointmentCommand;
+import command.FindAppointmentCommand;
 import exception.InvalidInputFormatException;
 import exception.UnknownCommandException;
 import manager.Appointment;
@@ -58,6 +61,12 @@ public class Parser {
             return new EditPatientCommand(parseEditPatient(userInput));
         case "edit-history":
             return new EditPatientHistoryCommand(parseEditHistory(userInput));
+        case "mark-appointment":
+            return new MarkApppointmentCommand(parseMarkAppointment(userInput));
+        case "unmark-appointment":
+            return new UnmarkAppointmentCommand(parseUnmarkAppointment(userInput));
+        case "find-appointment":
+            return new FindAppointmentCommand(parseFindAppointment(userInput));
         default:
             throw new UnknownCommandException("Unknown command. Please try again.");
         }
@@ -190,6 +199,30 @@ public class Parser {
         }
 
         String apptId = input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
+        return apptId;
+    }
+
+    private static String parseMarkAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)mark-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: mark-appointment APPOINTMENT_ID");
+        }
+        return apptId;
+    }
+
+    private static String parseUnmarkAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)unmark-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: unmark-appointment APPOINTMENT_ID");
+        }
+        return apptId;
+    }
+
+    private static String parseFindAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)find-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: find-appointment APPOINTMENT_ID");
+        }
         return apptId;
     }
 

@@ -201,4 +201,34 @@ public class ManagementSystem {
         }
         return null;
     }
+
+    public Appointment markAppointment(String apptId) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getId().equalsIgnoreCase(apptId)) {
+                appointment.markAsDone();
+                return appointment;
+            }
+        }
+        return null;
+    }
+
+    public Appointment unmarkAppointment(String apptId) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getId().equalsIgnoreCase(apptId)) {
+                appointment.unmarkAsDone();
+                return appointment;
+            }
+        }
+        return null;
+    }
+
+    public Appointment findAppointmentByNric(String nric) {
+        for (Appointment appt : appointments) {
+            if (appt.getNric().equals(nric)) {
+                return appt;
+            }
+        }
+        return null;
+    }
+
 }
