@@ -65,7 +65,7 @@ public class ManagementSystem {
     }
 
     public void editPatient(String nric, String newName, String newDob, String newGender,
-                            String newAddress, String newPhone) {
+                            String newAddress, String newPhone) throws UnloadedStorageException {
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
             System.out.println("Patient with NRIC " + nric + " not found.");
@@ -86,12 +86,13 @@ public class ManagementSystem {
         if (newPhone != null && !newPhone.isBlank()) {
             patient.setContactInfo(newPhone);
         }
+        Storage.savePatients(patients);
         System.out.println("Patient with NRIC " + nric + " updated successfully.");
     }
 
 
     //@@author jyukuan
-    public void storeMedicalHistory(String name, String nric, String medHistory) {
+    public void storeMedicalHistory(String name, String nric, String medHistory) throws UnloadedStorageException {
         Patient existingPatient = findPatientByNric(nric);
 
         if (existingPatient == null) {
@@ -109,6 +110,7 @@ public class ManagementSystem {
                 existingPatient.getMedicalHistory().add(entry.trim());
             }
         }
+        Storage.savePatients(patients);
         System.out.println("Medical history added for " + name + " (NRIC: " + nric + ").");
 
         Ui.showLine();
@@ -142,7 +144,7 @@ public class ManagementSystem {
         }
     }
 
-    public void editPatientHistory(String nric, String oldHistory, String newHistory) {
+    public void editPatientHistory(String nric, String oldHistory, String newHistory) throws UnloadedStorageException {
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
             System.out.println("Patient with NRIC " + nric + " not found.");
@@ -158,6 +160,7 @@ public class ManagementSystem {
                 break;
             }
         }
+        Storage.savePatients(patients);
         if (!foundOld) {
             System.out.println("Old history \"" + oldHistory + "\" not found for patient " + patient.getName());
         }
