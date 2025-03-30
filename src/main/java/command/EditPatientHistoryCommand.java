@@ -1,5 +1,6 @@
 package command;
 
+import exception.UnloadedStorageException;
 import manager.ManagementSystem;
 import miscellaneous.Ui;
 
@@ -12,7 +13,7 @@ public class EditPatientHistoryCommand extends Command {
     }
 
     @Override
-    public void execute(ManagementSystem manager, Ui ui) {
+    public void execute(ManagementSystem manager, Ui ui) throws UnloadedStorageException {
         String nric = details[0];
         String oldHistory = details[1];
         String newHistory = details[2];
