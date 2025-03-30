@@ -1,4 +1,4 @@
-# Duke
+# ClinicEase
 
 {Give product intro here}
 
