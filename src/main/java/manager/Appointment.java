@@ -18,6 +18,10 @@ public class Appointment {
     private boolean isDone;
 
     public Appointment(String nric, LocalDateTime dateTime, String description) {
+        assert nric != null && !nric.isBlank() : "NRIC cannot be null or blank";
+        assert dateTime != null : "DateTime cannot be null";
+        assert description != null && !description.isBlank() : "Description cannot be null or blank";
+        
         this.id = "A" + runningId++;
         this.nric = nric;
         this.dateTime = dateTime;
@@ -68,6 +72,6 @@ public class Appointment {
     @Override
     public String toString() {
         return "[" + id + "]" + "[" + this.getStatusIcon() + "]" + " - "
-                + nric + " - " + dateTime.format(OUTPUT_FORMAT)  + " - " + description;
+                + nric + " - " + dateTime.format(OUTPUT_FORMAT) + " - " + description;
     }
 }
