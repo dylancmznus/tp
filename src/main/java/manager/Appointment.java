@@ -95,4 +95,6 @@ public class Appointment {
     public String toFileFormat() {
         return id.substring(1) + "|" + this.nric + "|" + dateTime.format(OUTPUT_FORMAT) + "|" + this.description;
     }
+
+    //THIS IS FOR DEBUGGING GRADLE
 }
