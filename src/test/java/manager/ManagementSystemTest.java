@@ -165,11 +165,14 @@ class ManagementSystemTest {
 
     @Test
     void addAppointment_validInput_expectAppointmentAdded() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients);
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-20 1900", DATE_TIME_FORMAT);
 
+        Patient patient = new Patient("S1234567D", "Billy", "1990-10-01",
+                "M", "124 High St", "81234567", new ArrayList<>());
+        patients.add(patient);
         Appointment appointment = new Appointment("S1234567D", appointmentTime, "Medical Checkup");
 
         String expectedNric = appointment.getNric();
@@ -183,11 +186,14 @@ class ManagementSystemTest {
 
     @Test
     void deleteAppointment_validInput_expectAppointmentDeleted() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients);
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-20 1900", DATE_TIME_FORMAT);
 
+        Patient patient = new Patient("S1234567D", "Billy", "1990-10-01",
+                "M", "124 High St", "81234567", new ArrayList<>());
+        patients.add(patient);
         Appointment appointment = new Appointment("S1234567D", appointmentTime, "Medical Checkup");
 
         String expectedId = appointment.getId();
@@ -201,12 +207,15 @@ class ManagementSystemTest {
 
     @Test
     void deleteAppointment_lowerCaseInput_expectAppointmentDeleted() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients);
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-30 2200", DATE_TIME_FORMAT);
 
-        Appointment appointment = new Appointment("S3456789D", appointmentTime, "Checkup");
+        Patient patient = new Patient("S1234567D", "Billy", "1990-10-01",
+                "M", "124 High St", "81234567", new ArrayList<>());
+        patients.add(patient);
+        Appointment appointment = new Appointment("S1234567D", appointmentTime, "Medical Checkup");
 
         String expectedId = appointment.getId();
         manager.addAppointment(appointment);
@@ -219,12 +228,15 @@ class ManagementSystemTest {
 
     @Test
     void deleteAppointment_nonExistentId_expectNullReturned() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients);
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-25 2100", DATE_TIME_FORMAT);
 
-        Appointment appointment = new Appointment("S2345678D", appointmentTime, "Checkup");
+        Patient patient = new Patient("S1234567D", "Billy", "1990-10-01",
+                "M", "124 High St", "81234567", new ArrayList<>());
+        patients.add(patient);
+        Appointment appointment = new Appointment("S1234567D", appointmentTime, "Medical Checkup");
 
         manager.addAppointment(appointment);
         Appointment removedAppointment = manager.deleteAppointment("A999");
@@ -233,4 +245,108 @@ class ManagementSystemTest {
         assertNull(removedAppointment, "Should return null");
     }
 
+    @Test
+    void sortAppointmentsByDateTime_sortByDateTime_appointmentsSortedByDateTime() {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
+        List<Appointment> appointments = new ArrayList<>();
+
+        LocalDateTime appointmentTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime2 = LocalDateTime.parse("2025-03-24 1200", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime3 = LocalDateTime.parse("2025-03-25 1000", DATE_TIME_FORMAT);
+
+        Appointment appointment1 = new Appointment("S1234567D", appointmentTime1, "Checkup");
+        appointments.add(appointment1);
+
+        Appointment appointment2 = new Appointment("S4567890D", appointmentTime2, "CT scan");
+        appointments.add(appointment2);
+
+        Appointment appointment3 = new Appointment("S7891234D", appointmentTime3, "Consultation");
+        appointments.add(appointment3);
+
+        manager.sortAppointmentsByDateTime(appointments);
+
+        assertEquals("CT scan", appointments.get(0).getDescription());
+        assertEquals("Consultation", appointments.get(1).getDescription());
+        assertEquals("Checkup", appointments.get(2).getDescription());
+    }
+
+    @Test
+    void sortAppointmentsById_sortById_appointmentsSortedById() {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
+        List<Appointment> appointments = new ArrayList<>();
+
+        LocalDateTime appointmentTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime2 = LocalDateTime.parse("2025-03-24 1200", DATE_TIME_FORMAT);
+        LocalDateTime appointmentTime3 = LocalDateTime.parse("2025-03-25 1000", DATE_TIME_FORMAT);
+
+        Appointment appointment1 = new Appointment("S1234567D", appointmentTime1, "Checkup");
+        appointments.add(appointment1);
+
+        Appointment appointment2 = new Appointment("S4567890D", appointmentTime2, "CT scan");
+        appointments.add(appointment2);
+
+        Appointment appointment3 = new Appointment("S7891234D", appointmentTime3, "Consultation");
+        appointments.add(appointment3);
+
+        manager.sortAppointmentsByDateTime(appointments);
+        manager.sortAppointmentsById(appointments);
+
+        assertEquals("Checkup", appointments.get(0).getDescription());
+        assertEquals("CT scan", appointments.get(1).getDescription());
+        assertEquals("Consultation", appointments.get(2).getDescription());
+    }
+
+    /*    @Test
+    void markAppointment_validInput_expectAppointmentMarked() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-04-10 1500", DATE_TIME_FORMAT);
+        Appointment appointment = new Appointment("S9876543Z", appointmentTime, "Dental Checkup");
+
+        manager.addAppointment(appointment);
+        manager.markAppointment(appointment.getId());
+
+        assertTrue(manager.getAppointments().get(0).isDone(), "Appointment should be marked");
+    }
+
+    @Test
+    void unmarkAppointment_validInput_expectAppointmentUnmarked() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-05-15 1030", DATE_TIME_FORMAT);
+        Appointment appointment = new Appointment("S8765432Y", appointmentTime, "Eye Examination");
+
+        manager.addAppointment(appointment);
+        manager.markAppointment(appointment.getId());
+        manager.unmarkAppointment(appointment.getId());
+
+        assertFalse(manager.getAppointments().get(0).isDone(), "Appointment should be unmarked");
+    }
+
+    @Test
+    void findAppointment_existingAppointment_expectAppointmentFound() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-06-20 0900", DATE_TIME_FORMAT);
+        Appointment appointment = new Appointment("S7654321X", appointmentTime, "General Consultation");
+
+        manager.addAppointment(appointment);
+        Appointment foundAppointment = manager.findAppointmentByNric(appointment.getNric());
+
+        assertNotNull(foundAppointment, "Appointment should be found");
+        assertEquals(appointment.getId(), foundAppointment.getId(), "Appointment ID should match");
+    } */
+
+    @Test
+    void findAppointment_nonExistentAppointment_expectNullReturned() {
+        List<Patient> emptyList = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyList);
+
+        Appointment foundAppointment = manager.findAppointmentByNric("A999");
+
+        assertNull(foundAppointment, "Non-existent appointment should return null");
+    }
 }

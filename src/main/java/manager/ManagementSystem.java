@@ -6,6 +6,7 @@ import miscellaneous.Ui;
 import storage.Storage;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ManagementSystem {
@@ -13,6 +14,7 @@ public class ManagementSystem {
     private final List<Patient> patients;
 
     public ManagementSystem(List<Patient> loadedPatients, List<Appointment> loadedAppointments) {
+        assert loadedPatients != null : "Patient list cannot be null";
         appointments = loadedAppointments;
         patients = loadedPatients;
     }
@@ -26,10 +28,11 @@ public class ManagementSystem {
     }
 
     public void addPatient(Patient patient) throws DuplicatePatientIDException, UnloadedStorageException {
-        assert patient != null : "Patient should not be null";
+        assert patient != null : "Patient cannot be null";
+        assert patients != null : "Patient list cannot be null";
 
         for (Patient existingPatient : patients) {
-            assert existingPatient != null : "Existing patient in list should not be null";
+            assert existingPatient != null : "Existing patient in list cannot be null";
             if (existingPatient.getId().equals(patient.getId())) {
                 throw new DuplicatePatientIDException("Patient ID already exists!");
             }
@@ -40,10 +43,11 @@ public class ManagementSystem {
 
     public Patient deletePatient(String nric) throws UnloadedStorageException {
         assert nric != null && !nric.isBlank() : "NRIC must not be null or blank";
+        assert patients != null : "Patient list cannot be null";
+        
         for (Patient patient : patients) {
             if (patient.getId().equals(nric)) {
                 patients.remove(patient);
-                // Return the removed patient
                 Storage.savePatients(patients);
                 return patient;
             }
@@ -64,6 +68,7 @@ public class ManagementSystem {
         return matchedPatient;
     }
 
+    //@@author jyukuan
     public void editPatient(String nric, String newName, String newDob, String newGender,
                             String newAddress, String newPhone) throws UnloadedStorageException {
         Patient patient = findPatientByNric(nric);
@@ -90,8 +95,6 @@ public class ManagementSystem {
         System.out.println("Patient with NRIC " + nric + " updated successfully.");
     }
 
-
-    //@@author jyukuan
     public void storeMedicalHistory(String name, String nric, String medHistory) throws UnloadedStorageException {
         Patient existingPatient = findPatientByNric(nric);
 
@@ -104,7 +107,7 @@ public class ManagementSystem {
             Ui.showLine();
         }
 
-        String[] historyEntries = medHistory.split(",\s*");
+        String[] historyEntries = medHistory.split(",\\s*");
         for (String entry : historyEntries) {
             if (!existingPatient.getMedicalHistory().contains(entry.trim())) {
                 existingPatient.getMedicalHistory().add(entry.trim());
@@ -112,7 +115,6 @@ public class ManagementSystem {
         }
         Storage.savePatients(patients);
         System.out.println("Medical history added for " + name + " (NRIC: " + nric + ").");
-
         Ui.showLine();
     }
 
@@ -166,8 +168,6 @@ public class ManagementSystem {
         }
     }
 
-
-    // Find patient by NRIC
     private Patient findPatientByNric(String nric) {
         String object = nric.trim().toUpperCase();
         for (Patient p : patients) {
@@ -178,7 +178,6 @@ public class ManagementSystem {
         }
         return null;
     }
-
 
     private List<Patient> findPatientsByName(String name) {
         List<Patient> result = new ArrayList<>();
@@ -191,19 +190,76 @@ public class ManagementSystem {
     }
 
     //@@author chwenyee
-    public void addAppointment(Appointment appointment) throws UnloadedStorageException {
+    public void addAppointment(Appointment appointment) throws IllegalArgumentException, UnloadedStorageException {
+        assert appointment != null : "Appointment cannot be null";
+        assert patients != null : "Patient list cannot be null";
+        
+        Patient patient = findPatientByNric(appointment.getNric());
+        if (patient == null) {
+            throw new IllegalArgumentException("Patient with NRIC: " + appointment.getNric() + " not found");
+        }
+
         appointments.add(appointment);
+        patient.addAppointment(appointment);
         Storage.saveAppointments(appointments);
     }
 
     public Appointment deleteAppointment(String apptId) throws UnloadedStorageException {
+        assert apptId != null && !apptId.isBlank() : "Appointment ID cannot be null or blank";
+        assert appointments != null : "Appointment list cannot be null";
+        
         for (Appointment appointment : appointments) {
             if (appointment.getId().equalsIgnoreCase(apptId)) {
                 appointments.remove(appointment);
-                Storage.saveAppointments(appointments);
+                Patient patient = findPatientByNric(appointment.getNric());
+                if (patient != null) {
+                    patient.deleteAppointment(apptId);
+                    Storage.saveAppointments(appointments);
+                }
                 return appointment;
             }
         }
         return null;
     }
+
+    public List<Appointment> sortAppointmentsByDateTime(List<Appointment> appointments) {
+        appointments.sort(Comparator.comparing(Appointment::getDateTime));
+        return appointments;
+    }
+
+    public List<Appointment> sortAppointmentsById(List<Appointment> appointments) {
+        appointments.sort(Comparator.comparing(Appointment::getId));
+        return appointments;
+    }
+
+    //@@author dylancmznus
+    public Appointment markAppointment(String apptId) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getId().equalsIgnoreCase(apptId)) {
+                appointment.markAsDone();
+                return appointment;
+            }
+        }
+        return null;
+    }
+
+    public Appointment unmarkAppointment(String apptId) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getId().equalsIgnoreCase(apptId)) {
+                appointment.unmarkAsDone();
+                return appointment;
+            }
+        }
+        return null;
+    }
+
+    public Appointment findAppointmentByNric(String nric) {
+        for (Appointment appt : appointments) {
+            if (appt.getNric().equals(nric)) {
+                return appt;
+            }
+        }
+        return null;
+    }
+
 }

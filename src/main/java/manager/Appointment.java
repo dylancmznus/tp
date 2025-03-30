@@ -9,19 +9,26 @@ import static java.lang.Integer.parseInt;
 
 public class Appointment {
 
-    public static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    public static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    public static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm a");
 
     private static int runningId = 100;
     private final String id;
     private final String nric;
     private final LocalDateTime dateTime;
     private final String description;
+    private boolean isDone;
 
     public Appointment(String nric, LocalDateTime dateTime, String description) {
+        assert nric != null && !nric.isBlank() : "NRIC cannot be null or blank";
+        assert dateTime != null : "DateTime cannot be null";
+        assert description != null && !description.isBlank() : "Description cannot be null or blank";
+        
         this.id = "A" + runningId++;
         this.nric = nric;
         this.dateTime = dateTime;
         this.description = description;
+        this.isDone = false;
     }
 
     public Appointment(String id, String nric, LocalDateTime dateTime, String description) {
@@ -63,9 +70,26 @@ public class Appointment {
         return description;
     }
 
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void markAsDone() {
+        this.isDone = true;
+    }
+
+    public void unmarkAsDone() {
+        this.isDone = false;
+    }
+
+    public String getStatusIcon() {
+        return (isDone ? "X" : " ");
+    }
+
     @Override
     public String toString() {
-        return "[" + id + "] - " + nric + " - " + dateTime.format(DATE_TIME_FORMAT)  + " - " + description;
+        return "[" + id + "]" + "[" + this.getStatusIcon() + "]" + " - "
+                + nric + " - " + dateTime.format(OUTPUT_FORMAT) + " - " + description;
     }
 
     public String toFileFormat() {

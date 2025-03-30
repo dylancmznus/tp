@@ -43,8 +43,8 @@ public class ClinicEase {
                 Command command = Parser.parse(input);
                 command.execute(manager, ui);
                 running = !command.isExit();
-            } catch (InvalidInputFormatException | UnknownCommandException |
-                     DuplicatePatientIDException | UnloadedStorageException e) {
+            } catch (InvalidInputFormatException | UnknownCommandException | DuplicatePatientIDException |
+                     UnloadedStorageException | IllegalArgumentException e) {
                 ui.showError(e.getMessage());
             }
         }

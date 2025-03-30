@@ -11,9 +11,13 @@ import command.EditPatientCommand;
 import command.ListAppointmentCommand;
 import command.EditPatientHistoryCommand;
 import command.ListPatientCommand;
+import command.SortAppointmentCommand;
 import command.StoreMedHistoryCommand;
 import command.ViewPatientCommand;
 import command.ViewMedHistoryCommand;
+import command.MarkApppointmentCommand;
+import command.UnmarkAppointmentCommand;
+import command.FindAppointmentCommand;
 import exception.InvalidInputFormatException;
 import exception.UnknownCommandException;
 import manager.Appointment;
@@ -25,13 +29,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static manager.Appointment.DATE_TIME_FORMAT;
+import static manager.Appointment.INPUT_FORMAT;
 
 public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
         // Split into two parts to extract the command keyword and its detail
         String[] parts = userInput.split(" ", 2);
-        String commandWord = parts[0];
+        String commandWord = parts[0].toLowerCase();
 
         switch (commandWord) {
         case "bye":
@@ -54,10 +58,18 @@ public class Parser {
             return new DeleteAppointmentCommand(parseDeleteAppointment(userInput));
         case "list-appointment":
             return new ListAppointmentCommand();
+        case "sort-appointment":
+            return new SortAppointmentCommand(parseSortAppointment(userInput));
         case "edit-patient":
             return new EditPatientCommand(parseEditPatient(userInput));
         case "edit-history":
             return new EditPatientHistoryCommand(parseEditHistory(userInput));
+        case "mark-appointment":
+            return new MarkApppointmentCommand(parseMarkAppointment(userInput));
+        case "unmark-appointment":
+            return new UnmarkAppointmentCommand(parseUnmarkAppointment(userInput));
+        case "find-appointment":
+            return new FindAppointmentCommand(parseFindAppointment(userInput));
         default:
             throw new UnknownCommandException("Unknown command. Please try again.");
         }
@@ -92,7 +104,7 @@ public class Parser {
 
     private static String parseDeletePatient(String input) throws InvalidInputFormatException {
         if (input.length() < 15) {
-            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient [NRIC]");
+            throw new InvalidInputFormatException("Invalid command format. Use: delete-patient NRIC");
         }
 
         String nric = input.substring(15).trim();
@@ -101,7 +113,7 @@ public class Parser {
 
     private static String parseViewPatient(String input) throws InvalidInputFormatException {
         if (input.length() < 13) {
-            throw new InvalidInputFormatException("Invalid command format. Use: view-patient [NRIC]");
+            throw new InvalidInputFormatException("Invalid command format. Use: view-patient NRIC");
         }
 
         String nric = input.substring(13).trim(); // Extract and trim NRIC
@@ -176,10 +188,10 @@ public class Parser {
 
         try {
             String combined = date.trim() + " " + time.trim();
-            LocalDateTime dateTime = LocalDateTime.parse(combined, DATE_TIME_FORMAT);
+            LocalDateTime dateTime = LocalDateTime.parse(combined, INPUT_FORMAT);
             return new Appointment(nric.trim(), dateTime, desc.trim());
         } catch (DateTimeParseException e) {
-            throw new InvalidInputFormatException("Invalid date/time format. Please use dt/yyyy-MM-dd and t/HHmm");
+            throw new InvalidInputFormatException("Invalid date/time format. Please use: dt/yyyy-MM-dd and t/HHmm");
         }
     }
 
@@ -191,6 +203,44 @@ public class Parser {
 
         String apptId = input.replaceFirst("(?i)delete-appointment\\s*", "").trim();
         return apptId;
+    }
+
+    private static String parseSortAppointment(String input) throws InvalidInputFormatException {
+        String temp = input.replaceFirst("(?i)sort-appointment\\s*", "");
+
+        switch (temp.toLowerCase()) {
+        case "bydate":
+            return "date";
+        case "byid":
+            return "id";
+        default:
+            throw new InvalidInputFormatException("Invalid format! Please use: 'sort-appointment byDate' or " +
+                    "'sort-appointment byId' (case-insensitive).");
+        }
+    }
+
+    private static String parseMarkAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)mark-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: mark-appointment APPOINTMENT_ID");
+        }
+        return apptId;
+    }
+
+    private static String parseUnmarkAppointment(String input) throws InvalidInputFormatException {
+        String apptId = input.replaceFirst("(?i)unmark-appointment\\s*", "").trim();
+        if (apptId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: unmark-appointment APPOINTMENT_ID");
+        }
+        return apptId;
+    }
+
+    private static String parseFindAppointment(String input) throws InvalidInputFormatException {
+        String patientId = input.replaceFirst("(?i)find-appointment\\s*", "").trim();
+        if (patientId.isEmpty()) {
+            throw new InvalidInputFormatException("Invalid format! Use: find-appointment PATIENT_NRIC");
+        }
+        return patientId;
     }
 
     private static String extractValue(String input, String prefix) {
@@ -248,7 +298,7 @@ public class Parser {
         String temp = input.replaceFirst("(?i)edit-patient\\s*", "");
         String nric = extractValue(temp, "ic/");
         if (nric == null) {
-            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-patient ic/NRIC [n/NAME] " +
+            throw new InvalidInputFormatException("Missing NRIC! Use: edit-patient ic/NRIC [n/NAME] " +
                     "[dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]");
         }
         String name = extractValue(temp, "n/");
@@ -265,7 +315,7 @@ public class Parser {
 
         String nric = extractValue(temp, "ic/");
         if (nric == null) {
-            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-history ic/NRIC " +
+            throw new InvalidInputFormatException("Missing NRIC! Use: edit-history ic/NRIC " +
                     "old/OLD_HISTORY new/NEW_HISTORY");
         }
 
@@ -273,7 +323,7 @@ public class Parser {
         String newHistory = extractValue(temp, "new/");
 
         if (oldHistory == null || newHistory == null) {
-            throw new InvalidInputFormatException("Missing old or new history text! Usage: edit-history " +
+            throw new InvalidInputFormatException("Missing old or new history text! Use: edit-history " +
                     "ic/NRIC old/OLD_TEXT new/NEW_TEXT");
         }
 
