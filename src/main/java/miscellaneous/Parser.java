@@ -354,7 +354,9 @@ public class Parser {
         }
 
         String[] tokens = line.split("\\|");
-        if (tokens.length < 4) return null;
+        if (tokens.length < 4) {
+            return null;
+        }
 
         try {
             String id = tokens[0].trim();
