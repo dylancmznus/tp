@@ -16,6 +16,14 @@ public class Patient {
 
     public Patient(String id, String name, String dob, String gender, String address,
                    String contactInfo, List<String> medicalHistory) {
+        assert id != null && !id.isBlank() : "Patient ID cannot be null or blank";
+        assert name != null && !name.isBlank() : "Patient name cannot be null or blank";
+        assert dob != null : "Date of birth cannot be null";
+        assert gender != null : "Gender cannot be null";
+        assert address != null : "Address cannot be null";
+        assert contactInfo != null : "Contact info cannot be null";
+        assert medicalHistory != null : "Medical history list cannot be null";
+        
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -71,10 +79,13 @@ public class Patient {
     }
 
     public void addAppointment(Appointment appointment) {
+        assert appointment != null : "Appointment cannot be null";
+        assert appointment.getNric().equals(this.id) : "Appointment NRIC must match patient ID";
         appointments.add(appointment);
     }
 
     public void deleteAppointment(String apptId) {
+        assert apptId != null && !apptId.isBlank() : "Appointment ID cannot be null or blank";
         for (Appointment appt : appointments) {
             if (appt.getId().equals(apptId)) {
                 appointments.remove(appt);
@@ -93,15 +104,14 @@ public class Patient {
         }
 
         String result = String.format(
-                "Patient NRIC: %s\n" +
-                "Name: %s\n" +
-                "Date of Birth: %s\n" +
-                "Gender: %s\n" +
-                "Address: %s\n" +
-                "Contact: %s\n" +
-                "Medical History: %s",
-                id, name, dob, gender, address, contactInfo, formattedMedicalHistory
-        );
+                "Patient NRIC: %s\n"
+                        + "Name: %s\n"
+                        + "Date of Birth: %s\n"
+                        + "Gender: %s\n"
+                        + "Address: %s\n"
+                        + "Contact: %s\n"
+                        + "Medical History: %s",
+                id, name, dob, gender, address, contactInfo, formattedMedicalHistory);
 
         if (appointments.isEmpty()) {
             result += "\nAppointments: None";
@@ -121,14 +131,13 @@ public class Patient {
 
     public String toStringForListView() {
         String result = String.format(
-                "Patient NRIC: %s\n   " +
-                        "Name: %s\n   " +
-                        "Date of Birth: %s\n   " +
-                        "Gender: %s\n   " +
-                        "Address: %s\n   " +
-                        "Contact: %s",
-                id, name, dob, gender, address, contactInfo
-        );
+                "Patient NRIC: %s\n   "
+                        + "Name: %s\n   "
+                        + "Date of Birth: %s\n   "
+                        + "Gender: %s\n   "
+                        + "Address: %s\n   "
+                        + "Contact: %s",
+                id, name, dob, gender, address, contactInfo);
 
         if (medicalHistory.isEmpty()) {
             result += "\n   Medical History: None";

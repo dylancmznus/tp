@@ -14,6 +14,7 @@ public class ManagementSystem {
     private final List<Patient> patients;
 
     public ManagementSystem(List<Patient> list) {
+        assert list != null : "Patient list cannot be null";
         appointments = new ArrayList<>();
         patients = list;
     }
@@ -27,10 +28,11 @@ public class ManagementSystem {
     }
 
     public void addPatient(Patient patient) throws DuplicatePatientIDException, UnloadedStorageException {
-        assert patient != null : "Patient should not be null";
+        assert patient != null : "Patient cannot be null";
+        assert patients != null : "Patient list cannot be null";
 
         for (Patient existingPatient : patients) {
-            assert existingPatient != null : "Existing patient in list should not be null";
+            assert existingPatient != null : "Existing patient in list cannot be null";
             if (existingPatient.getId().equals(patient.getId())) {
                 throw new DuplicatePatientIDException("Patient ID already exists!");
             }
@@ -41,10 +43,11 @@ public class ManagementSystem {
 
     public Patient deletePatient(String nric) throws UnloadedStorageException {
         assert nric != null && !nric.isBlank() : "NRIC must not be null or blank";
+        assert patients != null : "Patient list cannot be null";
+        
         for (Patient patient : patients) {
             if (patient.getId().equals(nric)) {
                 patients.remove(patient);
-                // Return the removed patient
                 Storage.savePatients(patients);
                 return patient;
             }
@@ -67,7 +70,7 @@ public class ManagementSystem {
 
     //@@author jyukuan
     public void editPatient(String nric, String newName, String newDob, String newGender,
-                            String newAddress, String newPhone) {
+            String newAddress, String newPhone) {
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
             System.out.println("Patient with NRIC " + nric + " not found.");
@@ -103,14 +106,13 @@ public class ManagementSystem {
             Ui.showLine();
         }
 
-        String[] historyEntries = medHistory.split(",\s*");
+        String[] historyEntries = medHistory.split(",\\s*");
         for (String entry : historyEntries) {
             if (!existingPatient.getMedicalHistory().contains(entry.trim())) {
                 existingPatient.getMedicalHistory().add(entry.trim());
             }
         }
         System.out.println("Medical history added for " + name + " (NRIC: " + nric + ").");
-
         Ui.showLine();
     }
 
@@ -163,8 +165,6 @@ public class ManagementSystem {
         }
     }
 
-
-    // Find patient by NRIC
     private Patient findPatientByNric(String nric) {
         String object = nric.trim().toUpperCase();
         for (Patient p : patients) {
@@ -175,7 +175,6 @@ public class ManagementSystem {
         }
         return null;
     }
-
 
     private List<Patient> findPatientsByName(String name) {
         List<Patient> result = new ArrayList<>();
@@ -189,6 +188,9 @@ public class ManagementSystem {
 
     //@@author chwenyee
     public void addAppointment(Appointment appointment) throws IllegalArgumentException {
+        assert appointment != null : "Appointment cannot be null";
+        assert patients != null : "Patient list cannot be null";
+        
         Patient patient = findPatientByNric(appointment.getNric());
         if (patient == null) {
             throw new IllegalArgumentException("Patient with NRIC: " + appointment.getNric() + " not found");
@@ -199,11 +201,14 @@ public class ManagementSystem {
     }
 
     public Appointment deleteAppointment(String apptId) {
+        assert apptId != null && !apptId.isBlank() : "Appointment ID cannot be null or blank";
+        assert appointments != null : "Appointment list cannot be null";
+        
         for (Appointment appointment : appointments) {
             if (appointment.getId().equalsIgnoreCase(apptId)) {
+                appointments.remove(appointment);
                 Patient patient = findPatientByNric(appointment.getNric());
                 if (patient != null) {
-                    appointments.remove(appointment);
                     patient.deleteAppointment(apptId);
                 }
                 return appointment;
@@ -214,7 +219,6 @@ public class ManagementSystem {
 
     public List<Appointment> sortAppointmentsByDateTime(List<Appointment> appointments) {
         appointments.sort(Comparator.comparing(Appointment::getDateTime));
-
         return appointments;
     }
 
