@@ -33,7 +33,7 @@ class DeleteAppointmentCommandTest {
     void setUp() throws UnloadedStorageException {
         storage = new Storage(tempDir.toString());
         ui = new Ui();
-        manager = new ManagementSystem(storage.loadPatients());
+        manager = new ManagementSystem(storage.loadPatients(), storage.loadAppointments());
     }
 
     @Test

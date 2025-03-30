@@ -29,8 +29,19 @@ public class Appointment {
         this.isDone = false;
     }
 
+    public Appointment(String id, String nric, LocalDateTime dateTime, String description) {
+        this.id = id;
+        this.nric = nric;
+        this.dateTime = dateTime;
+        this.description = description;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public static void setRunningId(int newId) {
+        runningId = newId;
     }
 
     public String getNric() {
@@ -47,6 +58,10 @@ public class Appointment {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public static int getRunningId() {
+        return runningId;
     }
 
     public String getDescription() {
@@ -73,5 +88,9 @@ public class Appointment {
     public String toString() {
         return "[" + id + "]" + "[" + this.getStatusIcon() + "]" + " - "
                 + nric + " - " + dateTime.format(OUTPUT_FORMAT) + " - " + description;
+    }
+
+    public String toFileFormat() {
+        return id.substring(1) + "|" + this.nric + "|" + dateTime.format(OUTPUT_FORMAT) + "|" + this.description;
     }
 }

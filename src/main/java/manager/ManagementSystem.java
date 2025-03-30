@@ -13,10 +13,11 @@ public class ManagementSystem {
     private final List<Appointment> appointments;
     private final List<Patient> patients;
 
-    public ManagementSystem(List<Patient> list) {
-        assert list != null : "Patient list cannot be null";
-        appointments = new ArrayList<>();
-        patients = list;
+    public ManagementSystem(List<Patient> loadedPatients, List<Appointment> loadedAppointments) {
+        assert loadedPatients != null : "Patient list cannot be null";
+        assert loadedAppointments != null : "Appointment list cannot be null";
+        appointments = loadedAppointments;
+        patients = loadedPatients;
     }
 
     public List<Patient> getPatients() {
@@ -70,7 +71,7 @@ public class ManagementSystem {
 
     //@@author jyukuan
     public void editPatient(String nric, String newName, String newDob, String newGender,
-            String newAddress, String newPhone) {
+                            String newAddress, String newPhone) throws UnloadedStorageException {
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
             System.out.println("Patient with NRIC " + nric + " not found.");
@@ -91,10 +92,11 @@ public class ManagementSystem {
         if (newPhone != null && !newPhone.isBlank()) {
             patient.setContactInfo(newPhone);
         }
+        Storage.savePatients(patients);
         System.out.println("Patient with NRIC " + nric + " updated successfully.");
     }
 
-    public void storeMedicalHistory(String name, String nric, String medHistory) {
+    public void storeMedicalHistory(String name, String nric, String medHistory) throws UnloadedStorageException {
         Patient existingPatient = findPatientByNric(nric);
 
         if (existingPatient == null) {
@@ -112,6 +114,7 @@ public class ManagementSystem {
                 existingPatient.getMedicalHistory().add(entry.trim());
             }
         }
+        Storage.savePatients(patients);
         System.out.println("Medical history added for " + name + " (NRIC: " + nric + ").");
         Ui.showLine();
     }
@@ -144,7 +147,7 @@ public class ManagementSystem {
         }
     }
 
-    public void editPatientHistory(String nric, String oldHistory, String newHistory) {
+    public void editPatientHistory(String nric, String oldHistory, String newHistory) throws UnloadedStorageException {
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
             System.out.println("Patient with NRIC " + nric + " not found.");
@@ -160,6 +163,7 @@ public class ManagementSystem {
                 break;
             }
         }
+        Storage.savePatients(patients);
         if (!foundOld) {
             System.out.println("Old history \"" + oldHistory + "\" not found for patient " + patient.getName());
         }
@@ -187,7 +191,7 @@ public class ManagementSystem {
     }
 
     //@@author chwenyee
-    public void addAppointment(Appointment appointment) throws IllegalArgumentException {
+    public void addAppointment(Appointment appointment) throws IllegalArgumentException, UnloadedStorageException {
         assert appointment != null : "Appointment cannot be null";
         assert patients != null : "Patient list cannot be null";
         
@@ -198,9 +202,10 @@ public class ManagementSystem {
 
         appointments.add(appointment);
         patient.addAppointment(appointment);
+        Storage.saveAppointments(appointments);
     }
 
-    public Appointment deleteAppointment(String apptId) {
+    public Appointment deleteAppointment(String apptId) throws UnloadedStorageException {
         assert apptId != null && !apptId.isBlank() : "Appointment ID cannot be null or blank";
         assert appointments != null : "Appointment list cannot be null";
         
@@ -210,6 +215,7 @@ public class ManagementSystem {
                 Patient patient = findPatientByNric(appointment.getNric());
                 if (patient != null) {
                     patient.deleteAppointment(apptId);
+                    Storage.saveAppointments(appointments);
                 }
                 return appointment;
             }
