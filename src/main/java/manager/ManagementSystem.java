@@ -234,20 +234,22 @@ public class ManagementSystem {
     }
 
     //@@author dylancmznus
-    public Appointment markAppointment(String apptId) {
+    public Appointment markAppointment(String apptId) throws UnloadedStorageException {
         for (Appointment appointment : appointments) {
             if (appointment.getId().equalsIgnoreCase(apptId)) {
                 appointment.markAsDone();
+                Storage.saveAppointments(appointments);
                 return appointment;
             }
         }
         return null;
     }
 
-    public Appointment unmarkAppointment(String apptId) {
+    public Appointment unmarkAppointment(String apptId) throws UnloadedStorageException {
         for (Appointment appointment : appointments) {
             if (appointment.getId().equalsIgnoreCase(apptId)) {
                 appointment.unmarkAsDone();
+                Storage.saveAppointments(appointments);
                 return appointment;
             }
         }

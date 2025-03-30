@@ -347,25 +347,26 @@ public class Parser {
         return new Patient(id, name, dob, gender, address, contact, medHistory);
     }
 
-    public static Appointment parseAppointment(String line) {
-        // Skip header line like "countId:103"
+    public static Appointment parseLoadAppointment(String line) {
         if (line.startsWith("countId:")) {
             return null;
         }
 
         String[] tokens = line.split("\\|");
-        if (tokens.length < 4) {
+        if (tokens.length < 5) {
             return null;
         }
 
         try {
             String id = tokens[0].trim();
-            String nric = tokens[1].trim();
-            String dateTimeStr = tokens[2].trim();
-            String desc = tokens[3].trim();
+            boolean isDone = tokens[1].equals("true");
+            String nric = tokens[2].trim();
+            String dateTimeStr = tokens[3].trim();
+            String desc = tokens[4].trim();
 
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, Appointment.OUTPUT_FORMAT);
             Appointment appointment = new Appointment("A" + id, nric, dateTime, desc);
+            appointment.setIsDone(isDone);
 
             return appointment;
         } catch (Exception e) {
