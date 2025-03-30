@@ -39,8 +39,9 @@ class ManagementSystemTest {
 
     @Test
     void addPatient_validInput_expectPatientAdded() throws DuplicatePatientIDException, UnloadedStorageException {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+        List<Patient> emptyListPatient = new ArrayList<>();
+        List<Appointment> emptyListAppoint = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyListPatient, emptyListAppoint);
 
         Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>());
@@ -58,7 +59,7 @@ class ManagementSystemTest {
                 "M", "123 Main St", "81234567", new ArrayList<>());
         existing.add(patient);
 
-        ManagementSystem manager = new ManagementSystem(existing);
+        ManagementSystem manager = new ManagementSystem(existing, new ArrayList<>());
 
         Patient duplicate = new Patient("S1234567A", "Jane Smith", "1992-02-02",
                 "F", "456 Sample Rd", "90000000", new ArrayList<>());
@@ -69,8 +70,9 @@ class ManagementSystemTest {
     @Test
     void addPatient_validInput_expectPatientAddedAndSaved()
             throws DuplicatePatientIDException, UnloadedStorageException, IOException {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+        List<Patient> emptyListPatient = new ArrayList<>();
+        List<Appointment> emptyListAppoint = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyListPatient, emptyListAppoint);
 
         Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>());
@@ -92,7 +94,7 @@ class ManagementSystemTest {
         Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>());
         patients.add(patient);
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         Patient deletedPatient = manager.deletePatient("S1234567A");
 
@@ -108,7 +110,7 @@ class ManagementSystemTest {
         Patient patient = new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>());
         patients.add(patient);
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         Patient deletedPatient = manager.deletePatient("S9999999X");
 
@@ -119,7 +121,7 @@ class ManagementSystemTest {
     @Test
     void deletePatient_emptyList_patientNotFound() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         Patient deletedPatient = manager.deletePatient("S1234567A");
 
@@ -132,7 +134,7 @@ class ManagementSystemTest {
         List<Patient> patients = new ArrayList<>();
         patients.add(new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>()));
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         Patient retrievedPatient = manager.viewPatient("S1234567A");
 
@@ -146,7 +148,7 @@ class ManagementSystemTest {
         List<Patient> patients = new ArrayList<>();
         patients.add(new Patient("S1234567A", "John Doe", "1990-01-01",
                 "M", "123 Main St", "81234567", new ArrayList<>()));
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         Patient retrievedPatient = manager.viewPatient("S9999999X");
 
@@ -156,7 +158,7 @@ class ManagementSystemTest {
     @Test
     void viewPatient_emptySystem_patientNotFound() {
         List<Patient> patients = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         Patient retrievedPatient = manager.viewPatient("S1234567A");
 
@@ -164,9 +166,9 @@ class ManagementSystemTest {
     }
 
     @Test
-    void addAppointment_validInput_expectAppointmentAdded() {
+    void addAppointment_validInput_expectAppointmentAdded() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-20 1900", DATE_TIME_FORMAT);
 
@@ -185,9 +187,9 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deleteAppointment_validInput_expectAppointmentDeleted() {
+    void deleteAppointment_validInput_expectAppointmentDeleted() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-20 1900", DATE_TIME_FORMAT);
 
@@ -206,9 +208,9 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deleteAppointment_lowerCaseInput_expectAppointmentDeleted() {
+    void deleteAppointment_lowerCaseInput_expectAppointmentDeleted() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-30 2200", DATE_TIME_FORMAT);
 
@@ -227,9 +229,9 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deleteAppointment_nonExistentId_expectNullReturned() {
+    void deleteAppointment_nonExistentId_expectNullReturned() throws UnloadedStorageException {
         List<Patient> patients = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(patients);
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-25 2100", DATE_TIME_FORMAT);
 
@@ -247,7 +249,7 @@ class ManagementSystemTest {
 
     @Test
     void sortAppointmentsByDateTime_sortByDateTime_appointmentsSortedByDateTime() {
-        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>(), new ArrayList<>());
         List<Appointment> appointments = new ArrayList<>();
 
         LocalDateTime appointmentTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
@@ -272,7 +274,7 @@ class ManagementSystemTest {
 
     @Test
     void sortAppointmentsById_sortById_appointmentsSortedById() {
-        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>(), new ArrayList<>());
         List<Appointment> appointments = new ArrayList<>();
 
         LocalDateTime appointmentTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
@@ -342,8 +344,9 @@ class ManagementSystemTest {
 
     @Test
     void findAppointment_nonExistentAppointment_expectNullReturned() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+        List<Patient> emptyListPatient = new ArrayList<>();
+        List<Appointment> emptyListAppoint = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(emptyListPatient, emptyListAppoint);
 
         Appointment foundAppointment = manager.findAppointmentByNric("A999");
 

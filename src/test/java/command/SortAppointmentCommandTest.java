@@ -35,7 +35,7 @@ class SortAppointmentCommandTest {
     void setUp() throws UnloadedStorageException, DuplicatePatientIDException {
         storage = new Storage(tempDir.toString());
         ui = new Ui();
-        manager = new ManagementSystem(storage.loadPatients());
+        manager = new ManagementSystem(storage.loadPatients(), storage.loadAppointments());
 
         List<Patient> patients = List.of(
                 new Patient("S1234567D", "Billy", "1990-10-01",
@@ -91,7 +91,7 @@ class SortAppointmentCommandTest {
 
     @Test
     void execute_emptyList_expectEmptyList() throws DuplicatePatientIDException, UnloadedStorageException {
-        ManagementSystem emptyManager = new ManagementSystem(new ArrayList<>());
+        ManagementSystem emptyManager = new ManagementSystem(new ArrayList<>(), new ArrayList<>());
 
         new SortAppointmentCommand("date").execute(emptyManager, ui);
         assertTrue(emptyManager.getAppointments().isEmpty(), "Appointment list should be empty");

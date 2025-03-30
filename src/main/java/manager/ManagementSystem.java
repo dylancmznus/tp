@@ -15,6 +15,7 @@ public class ManagementSystem {
 
     public ManagementSystem(List<Patient> loadedPatients, List<Appointment> loadedAppointments) {
         assert loadedPatients != null : "Patient list cannot be null";
+        assert loadedAppointments != null : "Appointment list cannot be null";
         appointments = loadedAppointments;
         patients = loadedPatients;
     }
