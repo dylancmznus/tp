@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import static manager.Appointment.DATE_TIME_FORMAT;
+import static manager.Appointment.INPUT_FORMAT;
 import static miscellaneous.Parser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -30,7 +30,7 @@ class ParserTest {
 
         assertNotNull(appointment);
         assertEquals("S1234567D", appointment.getNric());
-        assertEquals(LocalDateTime.parse("2025-03-20 1430", DATE_TIME_FORMAT), appointment.getDateTime());
+        assertEquals(LocalDateTime.parse("2025-03-20 1430", INPUT_FORMAT), appointment.getDateTime());
         assertEquals("Checkup", appointment.getDescription());
     }
 

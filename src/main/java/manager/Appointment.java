@@ -7,7 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Appointment {
 
-    public static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    public static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    public static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm a");
 
     private static int runningId = 100;
     private final String id;
@@ -60,8 +61,13 @@ public class Appointment {
         this.isDone = false;
     }
 
+    public String getStatusIcon() {
+        return (isDone ? "X" : " ");
+    }
+
     @Override
     public String toString() {
-        return "[" + id + "] - " + nric + " - " + dateTime.format(DATE_TIME_FORMAT)  + " - " + description;
+        return "[" + id + "]" + "[" + this.getStatusIcon() + "]" + " - "
+                + nric + " - " + dateTime.format(OUTPUT_FORMAT)  + " - " + description;
     }
 }

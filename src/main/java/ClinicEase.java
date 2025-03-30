@@ -41,7 +41,7 @@ public class ClinicEase {
                 command.execute(manager, ui);
                 running = !command.isExit();
             } catch (InvalidInputFormatException | UnknownCommandException | DuplicatePatientIDException |
-                     UnloadedStorageException e) {
+                     UnloadedStorageException | IllegalArgumentException e) {
                 ui.showError(e.getMessage());
             }
         }

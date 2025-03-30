@@ -65,6 +65,7 @@ public class ManagementSystem {
         return matchedPatient;
     }
 
+    //@@author jyukuan
     public void editPatient(String nric, String newName, String newDob, String newGender,
                             String newAddress, String newPhone) {
         Patient patient = findPatientByNric(nric);
@@ -90,8 +91,6 @@ public class ManagementSystem {
         System.out.println("Patient with NRIC " + nric + " updated successfully.");
     }
 
-
-    //@@author jyukuan
     public void storeMedicalHistory(String name, String nric, String medHistory) {
         Patient existingPatient = findPatientByNric(nric);
 
@@ -189,14 +188,24 @@ public class ManagementSystem {
     }
 
     //@@author chwenyee
-    public void addAppointment(Appointment appointment) {
+    public void addAppointment(Appointment appointment) throws IllegalArgumentException {
+        Patient patient = findPatientByNric(appointment.getNric());
+        if (patient == null) {
+            throw new IllegalArgumentException("Patient with NRIC: " + appointment.getNric() + " not found");
+        }
+
         appointments.add(appointment);
+        patient.addAppointment(appointment);
     }
 
     public Appointment deleteAppointment(String apptId) {
         for (Appointment appointment : appointments) {
             if (appointment.getId().equalsIgnoreCase(apptId)) {
-                appointments.remove(appointment);
+                Patient patient = findPatientByNric(appointment.getNric());
+                if (patient != null) {
+                    appointments.remove(appointment);
+                    patient.deleteAppointment(apptId);
+                }
                 return appointment;
             }
         }
@@ -243,4 +252,5 @@ public class ManagementSystem {
         }
         return null;
     }
+
 }

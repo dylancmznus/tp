@@ -1,32 +1,59 @@
 package command;
 
+import exception.DuplicatePatientIDException;
+import exception.UnloadedStorageException;
 import manager.Appointment;
 import manager.ManagementSystem;
+import manager.Patient;
 import miscellaneous.Ui;
+import storage.Storage;
 
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class ListAppointmentCommandTest {
-
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
-    @Test
-    void execute_always_requestsAppointmentsFromManager() {
-        ManagementSystem manager = new ManagementSystem(new ArrayList<>());
-        Ui ui = new Ui();
+    @TempDir
+    Path tempDir;
+    private ManagementSystem manager;
+    private Ui ui;
+    private Storage storage;
 
+    @BeforeEach
+    void setUp() throws UnloadedStorageException {
+        storage = new Storage(tempDir.toString());
+        ui = new Ui();
+        manager = new ManagementSystem(storage.loadPatients());
+    }
+
+    @Test
+    void execute_always_requestsAppointmentsFromManager() throws DuplicatePatientIDException, UnloadedStorageException {
         LocalDateTime dateTime1 = LocalDateTime.parse("2025-03-25 1900", DATE_TIME_FORMAT);
         LocalDateTime dateTime2 = LocalDateTime.parse("2025-03-28 2000", DATE_TIME_FORMAT);
         LocalDateTime dateTime3 = LocalDateTime.parse("2025-03-23 1200", DATE_TIME_FORMAT);
 
+        List<Patient> patients = List.of(
+                new Patient("S1234567D", "Billy", "1990-10-01",
+                        "M", "124 High St", "81234567", new ArrayList<>()),
+                new Patient("S2345678D", "James" , "1980-12-31",
+                        "M", "133 Main St", "81229312", new ArrayList<>()),
+                new Patient("S3456789D", "William" , "1970-08-31",
+                        "M", "17 Cornelia St", "81009214", new ArrayList<>())
+        );
+        manager.addPatient(patients.get(0));
+        manager.addPatient(patients.get(1));
+        manager.addPatient(patients.get(2));
 
         List<Appointment> appointments = List.of(
                 new Appointment("S1234567D", dateTime1 , "Checkup"),
