@@ -114,7 +114,7 @@ public class Storage {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 if (!line.trim().isEmpty()) {
-                    Appointment appointment = Parser.parseAppointment(line);
+                    Appointment appointment = Parser.parseLoadAppointment(line);
                     if (appointment != null) {
                         appointments.add(appointment);
                     }

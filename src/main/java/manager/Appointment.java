@@ -80,6 +80,10 @@ public class Appointment {
         this.isDone = false;
     }
 
+    public void setIsDone(boolean mark) {
+        this.isDone = mark;
+    }
+
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
@@ -91,6 +95,7 @@ public class Appointment {
     }
 
     public String toFileFormat() {
-        return id.substring(1) + "|" + this.nric + "|" + dateTime.format(OUTPUT_FORMAT) + "|" + this.description;
+        return id.substring(1) + "|" + this.isDone + "|" + this.nric + "|" +
+                dateTime.format(OUTPUT_FORMAT) + "|" + this.description;
     }
 }
