@@ -298,7 +298,7 @@ public class Parser {
         String temp = input.replaceFirst("(?i)edit-patient\\s*", "");
         String nric = extractValue(temp, "ic/");
         if (nric == null) {
-            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-patient ic/NRIC [n/NAME] " +
+            throw new InvalidInputFormatException("Missing NRIC! Use: edit-patient ic/NRIC [n/NAME] " +
                     "[dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]");
         }
         String name = extractValue(temp, "n/");
@@ -315,7 +315,7 @@ public class Parser {
 
         String nric = extractValue(temp, "ic/");
         if (nric == null) {
-            throw new InvalidInputFormatException("Missing NRIC! Usage: edit-history ic/NRIC " +
+            throw new InvalidInputFormatException("Missing NRIC! Use: edit-history ic/NRIC " +
                     "old/OLD_HISTORY new/NEW_HISTORY");
         }
 
@@ -323,7 +323,7 @@ public class Parser {
         String newHistory = extractValue(temp, "new/");
 
         if (oldHistory == null || newHistory == null) {
-            throw new InvalidInputFormatException("Missing old or new history text! Usage: edit-history " +
+            throw new InvalidInputFormatException("Missing old or new history text! Use: edit-history " +
                     "ic/NRIC old/OLD_TEXT new/NEW_TEXT");
         }
 
