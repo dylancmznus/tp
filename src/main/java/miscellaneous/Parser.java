@@ -362,7 +362,7 @@ public class Parser {
             String dateTimeStr = tokens[2].trim();
             String desc = tokens[3].trim();
 
-            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, Appointment.DATE_TIME_FORMAT);
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, Appointment.OUTPUT_FORMAT);
             Appointment appointment = new Appointment("A" + id, nric, dateTime, desc);
 
             return appointment;
