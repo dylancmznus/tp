@@ -25,6 +25,137 @@
 |v1.0|new user|see usage instructions|refer to them when I forget how to use the application|
 |v2.0|user|find a to-do item by name|locate a to-do without having to go through the entire list|
 
+
+## Use Cases
+
+### Use Case: Add a Patient
+
+#### MSS
+User requests to add a patient, adding the personal details.
+ClinicEase adds the patient to the system.
+ClinicEase confirms the patient has been added successfully.
+
+Use case ends.
+
+#### Extensions
+1a. Required details are missing or incorrectly formatted.
+1a1. ClinicEase displays an error message.
+Use case resumes at step 1.
+
+1b. A patient with the same NRIC already exists.
+1b1. ClinicEase displays an error message.
+Use case ends.
+
+### Use Case: Delete a Patient
+
+#### MSS
+User requests to list patients.
+ClinicEase displays a list of patients.
+User requests to delete a specific patient from the list.
+ClinicEase deletes the patient.
+
+Use case ends.
+
+#### Extensions
+2a. The patient list is empty.
+Use case ends.
+
+3a. The given NRIC is invalid.
+3a1. ClinicEase displays an error message.
+Use case resumes at step 2.
+
+### Use Case: Add an Appointment
+
+#### MSS
+User requests to add appointment, specifying the patient NRIC, date, time, and description.
+ClinicEase verifies that the patient exists.
+ClinicEase adds the appointment to the system.
+ClinicEase confirms that the appointment has been added successfully.
+
+Use case ends.
+
+#### Extensions
+2a. The patient does not exist in the system.
+2a1. ClinicEase displays an error message.
+Use case ends.
+
+1a. Required details are missing or incorrectly formatted.
+1a1. ClinicEase displays an error message.
+Use case resumes at step 1.
+
+### Use Case: Delete an Appointment
+
+#### MSS
+User requests to list appointments.
+ClinicEase displays a list of appointments.
+User requests to delete a specific appointment.
+ClinicEase deletes the appointment.
+
+Use case ends.
+
+#### Extensions
+2a. The appointment list is empty.
+Use case ends.
+
+3a. The given appointment ID is invalid.
+3a1. ClinicEase displays an error message.
+Use case resumes at step 2.
+
+### Use Case: View a Patient’s Medical History
+
+#### MSS
+User requests to view patient’s medical history using the patient’s NRIC.
+ClinicEase retrieves and displays the medical history of the patient.
+
+Use case ends.
+
+#### Extensions
+1a. The given NRIC is invalid or does not exist.
+1a1. ClinicEase displays an error message.
+Use case ends.
+
+2a. The patient has no recorded medical history.
+2a1. ClinicEase informs the user that no history is available.
+Use case ends.
+
+### Use Case: Edit a Patient’s Details
+
+#### MSS
+User requests to edit a patient’s details using the patient’s NRIC and the new details.
+ClinicEase verifies that the patient exists.
+ClinicEase updates patient’s details.
+ClinicEase confirms the update was successful.
+
+Use case ends.
+
+#### Extensions
+2a. The patient does not exist in the system.
+2a1. ClinicEase displays an error message.
+Use case ends.
+
+1a. The provided new details are invalid or missing.
+1a1. ClinicEase displays an error message.
+Use case resumes at step 1.
+
+### Use Case: Sort Appointments
+
+#### MSS
+User requests to sort appointments by date or by appointment ID.
+ClinicEase sorts the appointments accordingly.
+ClinicEase displays the sorted list.
+
+Use case ends.
+
+#### Extensions
+1a. The appointment list is empty.
+1a1. ClinicEase displays a message indicating there are no appointments to sort.
+Use case ends.
+
+1b. The sorting parameter is invalid.
+1b1. ClinicEase displays an error message.
+Use case resumes at step 1.
+
+
 ## Non-Functional Requirements
 1. Should work on any mainstream OS as long as it has Java `17` or above installed.
 2. The system should efficiently manage up to 1000 patients or appointments without any noticeable performance lag during typical usage.
