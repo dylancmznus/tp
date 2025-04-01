@@ -277,7 +277,10 @@ public class Parser {
         }
 
         start += prefix.length();
-        String[] possible = {"n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", "dsc/", "h/", "old/", "new/", "s/", "m/", "nt/"};
+        String[] possible = {
+            "n/", "ic/", "dob/", "g/", "p/", "a/", "dt/", "t/", 
+            "dsc/", "h/", "old/", "new/", "s/", "m/", "nt/"
+        };
         int end = input.length();
 
         // Determine where the current parameter's detail ends by finding the start of the next parameter
@@ -290,7 +293,8 @@ public class Parser {
             for (int i = start; i <= lowerInput.length() - lowerP.length(); i++) {
                 boolean isNextParamPrefixMatch = lowerInput.startsWith(lowerP, i);
                 // Check if the character before the prefix is blank space in input to have a valid input format
-                boolean isNextParamAtValidPosition = (i == 0) || Character.isWhitespace(input.charAt(i - 1));
+                boolean isNextParamAtValidPosition = (i == 0) 
+                        || Character.isWhitespace(input.charAt(i - 1));
                 if (isNextParamPrefixMatch && isNextParamAtValidPosition) {
                     if (i < end) {
                         end = i;

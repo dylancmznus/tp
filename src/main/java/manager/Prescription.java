@@ -8,14 +8,14 @@ import java.util.List;
 
 //@@author Basudeb2005
 public class Prescription {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    
     private final String patientId;
     private final LocalDateTime timestamp;
     private final String prescriptionId;
     private final List<String> symptoms;
     private final List<String> medicines;
     private final String notes;
-    
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     
     public Prescription(String patientId, List<String> symptoms, List<String> medicines, String notes) {
         this.patientId = patientId;
@@ -115,11 +115,13 @@ public class Prescription {
             .append("  <style>\n")
             .append("    body { font-family: Arial, sans-serif; margin: 40px; }\n")
             .append("    .prescription { border: 1px solid #333; padding: 20px; max-width: 800px; margin: 0 auto; }\n")
-            .append("    .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }\n")
+            .append("    .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px;\n")
+            .append("             margin-bottom: 20px; }\n")
             .append("    .section { margin-bottom: 15px; }\n")
             .append("    h1 { color: #333; }\n")
             .append("    h2 { color: #555; margin-bottom: 5px; }\n")
-            .append("    .footer { margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px; text-align: center; }\n")
+            .append("    .footer { margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px;\n")
+            .append("             text-align: center; }\n")
             .append("    @media print { .no-print { display: none; } }\n")
             .append("    table { width: 100%; border-collapse: collapse; }\n")
             .append("    td { padding: 5px; }\n")
@@ -193,3 +195,4 @@ public class Prescription {
         return html.toString();
     }
 } 
+
