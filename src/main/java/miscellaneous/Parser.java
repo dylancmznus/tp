@@ -290,7 +290,8 @@ public class Parser {
             for (int i = start; i <= lowerInput.length() - lowerP.length(); i++) {
                 boolean isNextParamPrefixMatch = lowerInput.startsWith(lowerP, i);
                 // Check if the character before the prefix is blank space in input to have a valid input format
-                boolean isNextParamAtValidPosition = (i == 0) || Character.isWhitespace(input.charAt(i - 1));
+                boolean isNextParamAtValidPosition = (i == 0) 
+                        || Character.isWhitespace(input.charAt(i - 1));
                 if (isNextParamPrefixMatch && isNextParamAtValidPosition) {
                     if (i < end) {
                         end = i;

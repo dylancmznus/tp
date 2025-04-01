@@ -63,3 +63,4 @@ public class ViewAllPrescriptionsCommand extends Command {
         return false;
     }
 } 
+

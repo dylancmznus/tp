@@ -8,14 +8,14 @@ import java.util.List;
 
 //@@author Basudeb2005
 public class Prescription {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    
     private final String patientId;
     private final LocalDateTime timestamp;
     private final String prescriptionId;
     private final List<String> symptoms;
     private final List<String> medicines;
     private final String notes;
-    
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     
     public Prescription(String patientId, List<String> symptoms, List<String> medicines, String notes) {
         this.patientId = patientId;
@@ -193,3 +193,4 @@ public class Prescription {
         return html.toString();
     }
 } 
+

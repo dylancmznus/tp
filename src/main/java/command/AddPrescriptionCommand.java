@@ -5,8 +5,6 @@ import manager.ManagementSystem;
 import manager.Prescription;
 import miscellaneous.Ui;
 
-import java.util.List;
-
 //@@author Basudeb2005
 public class AddPrescriptionCommand extends Command {
     private final Prescription prescription;
@@ -37,3 +35,4 @@ public class AddPrescriptionCommand extends Command {
         return false;
     }
 } 
+
