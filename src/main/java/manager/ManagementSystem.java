@@ -1,6 +1,7 @@
 package manager;
 
 import exception.DuplicatePatientIDException;
+import exception.PatientNotFoundException;
 import exception.UnloadedStorageException;
 import miscellaneous.Ui;
 import storage.Storage;
@@ -70,12 +71,11 @@ public class ManagementSystem {
     }
 
     //@@author jyukuan
-    public void editPatient(String nric, String newName, String newDob, String newGender,
-                            String newAddress, String newPhone) throws UnloadedStorageException {
+    public void editPatient(String nric, String newName, String newDob, String newGender, String newAddress,
+                            String newPhone) throws UnloadedStorageException, PatientNotFoundException {
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
-            System.out.println("Patient with NRIC " + nric + " not found.");
-            return;
+            throw new PatientNotFoundException("Patient with NRIC " + nric + " not found.");
         }
         if (newName != null && !newName.isBlank()) {
             patient.setName(newName);
@@ -96,11 +96,12 @@ public class ManagementSystem {
         System.out.println("Patient with NRIC " + nric + " updated successfully.");
     }
 
-    public void storeMedicalHistory(String name, String nric, String medHistory) throws UnloadedStorageException{
+    public void storeMedicalHistory(String name, String nric, String medHistory) throws PatientNotFoundException,
+            UnloadedStorageException {
         Patient existingPatient = findPatientByNric(nric);
 
         if (existingPatient == null) {
-            throw new UnloadedStorageException("Patient with NRIC not found. Patient's history can not be added");
+            throw new PatientNotFoundException("Patient with NRIC not found. Patient's history can not be added");
         } else {
             Ui.showLine();
         }
@@ -116,12 +117,11 @@ public class ManagementSystem {
         Ui.showLine();
     }
 
-    public void viewMedicalHistoryByNric(String nric) {
+    public void viewMedicalHistoryByNric(String nric) throws PatientNotFoundException {
         Patient foundPatients = findPatientByNric(nric.trim());
 
         if (foundPatients == null) {
-            Ui.showLine();
-            System.out.println("No patient/patients found with NRIC " + nric + ".");
+            throw new PatientNotFoundException("No patient/patients found with NRIC " + nric + ".");
         } else {
             Ui.showLine();
             Ui.showPatientHistory(foundPatients);
@@ -188,13 +188,13 @@ public class ManagementSystem {
     }
 
     //@@author chwenyee
-    public void addAppointment(Appointment appointment) throws IllegalArgumentException, UnloadedStorageException {
+    public void addAppointment(Appointment appointment) throws UnloadedStorageException, PatientNotFoundException {
         assert appointment != null : "Appointment cannot be null";
         assert patients != null : "Patient list cannot be null";
-        
+
         Patient patient = findPatientByNric(appointment.getNric());
         if (patient == null) {
-            throw new IllegalArgumentException("Patient with NRIC: " + appointment.getNric() + " not found");
+            throw new PatientNotFoundException("Patient with NRIC: " + appointment.getNric() + " not found");
         }
 
         appointments.add(appointment);

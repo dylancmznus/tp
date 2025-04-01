@@ -1,5 +1,6 @@
 package command;
 
+import exception.PatientNotFoundException;
 import exception.UnloadedStorageException;
 import manager.Appointment;
 import manager.ManagementSystem;
@@ -14,7 +15,7 @@ public class AddAppointmentCommand extends Command {
     }
 
     @Override
-    public void execute(ManagementSystem manager, Ui ui) throws IllegalArgumentException, UnloadedStorageException {
+    public void execute(ManagementSystem manager, Ui ui) throws UnloadedStorageException, PatientNotFoundException {
         manager.addAppointment(appointment);
         ui.showAppointmentAdded(manager.getAppointments());
     }

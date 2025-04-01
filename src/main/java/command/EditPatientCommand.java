@@ -1,5 +1,6 @@
 package command;
 
+import exception.PatientNotFoundException;
 import exception.UnloadedStorageException;
 import manager.ManagementSystem;
 import miscellaneous.Ui;
@@ -14,7 +15,7 @@ public class EditPatientCommand extends Command {
     }
 
     @Override
-    public void execute(ManagementSystem manager, Ui ui) throws UnloadedStorageException {
+    public void execute(ManagementSystem manager, Ui ui) throws UnloadedStorageException, PatientNotFoundException {
         String nric   = details[0];
         String name   = details[1];
         String dob    = details[2];
