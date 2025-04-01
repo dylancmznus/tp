@@ -46,6 +46,14 @@ public class Patient {
         return dob;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
     public String getContactInfo() {
         return contactInfo;
     }
