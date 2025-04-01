@@ -165,6 +165,73 @@ Use case ends.
 1b1. ClinicEase displays an error message.
 Use case resumes at step 1.
 
+### Use case: Add a new prescription
+
+**MSS**
+
+1. Doctor requests to add a new prescription
+2. System prompts for prescription details (patient ID, symptoms, medicines, optional notes)
+3. Doctor enters the required information
+4. System validates the patient ID exists
+5. System generates a unique prescription ID
+6. System saves the prescription
+7. System displays success message with the prescription details
+
+    Use case ends.
+
+**Extensions**
+
+* 4a. Patient ID does not exist
+    * 4a1. System shows an error message
+    * 4a2. Use case resumes at step 2
+
+* 3a. Required fields are missing
+    * 3a1. System shows error message with correct format
+    * 3a2. Use case resumes at step 2
+
+### Use case: View all prescriptions for a patient
+
+**MSS**
+
+1. Doctor requests to view all prescriptions for a patient
+2. Doctor enters patient ID
+3. System validates patient exists
+4. System retrieves and displays all prescriptions for the patient
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. Patient ID does not exist
+    * 3a1. System shows an error message
+    * 3a2. Use case ends
+
+* 4a. No prescriptions found
+    * 4a1. System shows "No prescriptions found" message
+    * 4a2. Use case ends
+
+### Use case: View and generate HTML prescription
+
+**MSS**
+
+1. Doctor requests to view a specific prescription
+2. Doctor enters prescription ID
+3. System validates prescription exists
+4. System displays prescription details
+5. System generates HTML version
+6. System shows location of generated file
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. Prescription ID does not exist
+    * 3a1. System shows an error message
+    * 3a2. Use case ends
+
+* 5a. HTML generation fails
+    * 5a1. System shows error message
+    * 5a2. Use case ends
 
 ## Non-Functional Requirements
 1. Should work on any mainstream OS as long as it has Java `17` or above installed.
@@ -487,5 +554,43 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
 3. **Add appointments** to different patients and use `list-appointment`, `sort-appointment`, `mark-appointment`, etc. to test appointment functionality.
 4. **Delete a patient** and confirm the removal.
 5. **Exit** the program with `bye`.
+
+---
+
+### Managing Prescriptions
+
+1. Adding a new prescription
+
+   Prerequisites: Patient with ID "S9876543B" exists in the system.
+
+   Test case: `add-prescription ic/S9876543B s/Fever, Cough m/Paracetamol, Cough syrup nt/Take after meals`
+   * Expected: Prescription is added. Details of the new prescription shown.
+
+   Test case: `add-prescription ic/S9876543B s/Fever m/`
+   * Expected: Error shown. Missing medicines field.
+
+   Test case: `add-prescription ic/X1234567Y s/Fever m/Paracetamol`
+   * Expected: Error shown. Patient ID does not exist.
+
+2. Viewing prescriptions
+
+   Prerequisites: At least one prescription exists for patient "S9876543B".
+
+   Test case: `view-all-prescriptions S9876543B`
+   * Expected: List of all prescriptions for the patient shown.
+
+   Test case: `view-prescription S9876543B-1`
+   * Expected: Details of the specific prescription shown. HTML file generated.
+
+   Test case: `view-prescription INVALID-ID`
+   * Expected: Error shown. Invalid prescription ID.
+
+3. Generating HTML prescriptions
+
+   Prerequisites: Valid prescription exists with ID "S9876543B-1".
+
+   Test case: `view-prescription S9876543B-1`
+   * Expected: HTML file generated in data/prescriptions folder.
+   * Verify: Open the generated HTML file in a browser. Check that all prescription details are correctly displayed.
 
 ---

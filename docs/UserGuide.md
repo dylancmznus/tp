@@ -80,6 +80,43 @@ Example of usage:
 * `sort-appointment byDate`
 * `sort-appointment byId`
 
+### Managing Prescriptions
+
+#### Adding a prescription: `add-prescription`
+
+Adds a new prescription for a patient.
+
+Format: `add-prescription ic/PATIENT_ID s/SYMPTOMS m/MEDICINES [nt/NOTES]`
+
+* `PATIENT_ID` must be a valid patient ID in the system
+* `SYMPTOMS` is a comma-separated list of symptoms
+* `MEDICINES` is a comma-separated list of prescribed medications
+* `NOTES` is optional and can contain special instructions
+
+Example:
+* `add-prescription ic/S9876543B s/Fever, Cough m/Paracetamol, Cough syrup nt/Take after meals`
+
+#### Viewing all prescriptions: `view-all-prescriptions`
+
+Shows all prescriptions for a specific patient.
+
+Format: `view-all-prescriptions PATIENT_ID`
+
+Example:
+* `view-all-prescriptions S9876543B`
+
+#### Viewing specific prescription: `view-prescription`
+
+Views details of a specific prescription and generates a printable HTML version.
+
+Format: `view-prescription PRESCRIPTION_ID`
+
+* The HTML file will be generated in the data/prescriptions folder
+* Open the HTML file in a web browser to view and print
+
+Example:
+* `view-prescription S9876543B-1`
+
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
@@ -105,6 +142,11 @@ Example of usage:
 | Unmark appointment    | `unmark-appointment APPOINTMENT_ID`<br/> e.g. `unmark-appointment A101`                                                                                                                        |
 | Sort appointment      | `sort-appointment byDate` or `sort-appointment byId`                                                                                                                                           |
 | Find appointment      | `find-appointment PATIENT_NRIC`<br/> e.g. `find-appointment S1234567D`                                                                                                                         |
+| Prescription Management
+
+* Add prescription : `add-prescription ic/PATIENT_ID s/SYMPTOMS m/MEDICINES [nt/NOTES]`
+* View all prescriptions : `view-all-prescriptions PATIENT_ID`
+* View specific prescription : `view-prescription PRESCRIPTION_ID`
 
 # About us
 
