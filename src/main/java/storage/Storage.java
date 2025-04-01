@@ -3,6 +3,7 @@ package storage;
 import exception.UnloadedStorageException;
 import manager.Appointment;
 import manager.Patient;
+import manager.Prescription;
 import miscellaneous.Parser;
 
 import java.io.BufferedWriter;
@@ -17,11 +18,15 @@ public class Storage {
     private static String directoryPath;
     private static String patientFilePath;
     private static String appointmentFilePath;
+    private static String prescriptionFilePath;
+    private static String prescriptionDirPath;
 
     public Storage(String directory) {
         directoryPath = directory;
         patientFilePath = directory + File.separator + "patient_data.txt";
         appointmentFilePath = directory + File.separator + "appointment_data.txt";
+        prescriptionFilePath = directory + File.separator + "prescription_data.txt";
+        prescriptionDirPath = directory + File.separator + "prescriptions";
     }
 
     public static void savePatients(List<Patient> patientList) throws UnloadedStorageException {
@@ -128,5 +133,72 @@ public class Storage {
         }
 
         return appointments;
+    }
+
+    public static void savePrescriptions(List<Prescription> prescriptionList) throws UnloadedStorageException {
+        if (directoryPath == null || prescriptionFilePath == null) {
+            throw new UnloadedStorageException("Storage not initialized with a directory!");
+        }
+
+        File dir = new File(directoryPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(prescriptionFilePath))) {
+            for (Prescription prescription : prescriptionList) {
+                writer.write(prescription.toFileFormat());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new UnloadedStorageException("Unable to save prescriptions!");
+        }
+    }
+
+    public static List<Prescription> loadPrescriptions() throws UnloadedStorageException {
+        List<Prescription> prescriptions = new ArrayList<>();
+        File file = new File(prescriptionFilePath);
+        
+        if (!file.exists()) {
+            return prescriptions;
+        }
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (!line.trim().isEmpty()) {
+                    Prescription prescription = Prescription.fromFileFormat(line);
+                    if (prescription != null) {
+                        prescriptions.add(prescription);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new UnloadedStorageException("Unable to load prescription data: " + e.getMessage());
+        }
+
+        return prescriptions;
+    }
+
+    public static void savePrescriptionHtml(Prescription prescription, Patient patient) 
+            throws UnloadedStorageException {
+        if (directoryPath == null || prescriptionDirPath == null) {
+            throw new UnloadedStorageException("Storage not initialized with a directory!");
+        }
+
+        File dir = new File(prescriptionDirPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String fileName = "prescription_" + prescription.getPatientId() + "_" 
+                + prescription.getPrescriptionId().split("-")[1] + ".html";
+        String filePath = prescriptionDirPath + File.separator + fileName;
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(prescription.generateHtml(patient));
+        } catch (IOException e) {
+            throw new UnloadedStorageException("Unable to generate HTML prescription: " + e.getMessage());
+        }
     }
 } 

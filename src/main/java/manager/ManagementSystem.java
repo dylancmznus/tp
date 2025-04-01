@@ -12,12 +12,24 @@ import java.util.List;
 public class ManagementSystem {
     private final List<Appointment> appointments;
     private final List<Patient> patients;
+    private final List<Prescription> prescriptions;
 
     public ManagementSystem(List<Patient> loadedPatients, List<Appointment> loadedAppointments) {
         assert loadedPatients != null : "Patient list cannot be null";
         assert loadedAppointments != null : "Appointment list cannot be null";
         appointments = loadedAppointments;
         patients = loadedPatients;
+        prescriptions = new ArrayList<>();
+    }
+
+    public ManagementSystem(List<Patient> loadedPatients, List<Appointment> loadedAppointments, 
+                           List<Prescription> loadedPrescriptions) {
+        assert loadedPatients != null : "Patient list cannot be null";
+        assert loadedAppointments != null : "Appointment list cannot be null";
+        assert loadedPrescriptions != null : "Prescription list cannot be null";
+        appointments = loadedAppointments;
+        patients = loadedPatients;
+        prescriptions = loadedPrescriptions;
     }
 
     public List<Patient> getPatients() {
@@ -257,6 +269,69 @@ public class ManagementSystem {
         for (Appointment appt : appointments) {
             if (appt.getNric().equals(nric)) {
                 return appt;
+            }
+        }
+        return null;
+    }
+
+    //@@author Basudeb2005
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+    
+    //@@author Basudeb2005
+    public void addPrescription(Prescription prescription) 
+            throws IllegalArgumentException, UnloadedStorageException {
+        assert prescription != null : "Prescription cannot be null";
+        assert patients != null : "Patient list cannot be null";
+        
+        Patient patient = findPatientByNric(prescription.getPatientId());
+        if (patient == null) {
+            throw new IllegalArgumentException("Patient with NRIC: " + prescription.getPatientId() + " not found");
+        }
+
+        // Generate prescription ID with counter
+        int prescriptionCount = 1;
+        for (Prescription p : prescriptions) {
+            if (p.getPatientId().equals(prescription.getPatientId())) {
+                prescriptionCount++;
+            }
+        }
+        
+        String prescriptionId = prescription.getPatientId() + "-" + prescriptionCount;
+        
+        // Create a new prescription with updated ID
+        Prescription newPrescription = new Prescription(
+            prescription.getPatientId(),
+            prescriptionId,
+            prescription.getTimestamp(),
+            prescription.getSymptoms(),
+            prescription.getMedicines(),
+            prescription.getNotes()
+        );
+        
+        prescriptions.add(newPrescription);
+        Storage.savePrescriptions(prescriptions);
+        
+        return;
+    }
+    
+    //@@author Basudeb2005
+    public List<Prescription> getPrescriptionsForPatient(String patientId) {
+        List<Prescription> patientPrescriptions = new ArrayList<>();
+        for (Prescription prescription : prescriptions) {
+            if (prescription.getPatientId().equals(patientId)) {
+                patientPrescriptions.add(prescription);
+            }
+        }
+        return patientPrescriptions;
+    }
+    
+    //@@author Basudeb2005
+    public Prescription getPrescriptionById(String prescriptionId) {
+        for (Prescription prescription : prescriptions) {
+            if (prescription.getPrescriptionId().equals(prescriptionId)) {
+                return prescription;
             }
         }
         return null;
