@@ -96,14 +96,11 @@ public class ManagementSystem {
         System.out.println("Patient with NRIC " + nric + " updated successfully.");
     }
 
-    public void storeMedicalHistory(String name, String nric, String medHistory) throws UnloadedStorageException {
+    public void storeMedicalHistory(String name, String nric, String medHistory) throws UnloadedStorageException{
         Patient existingPatient = findPatientByNric(nric);
 
         if (existingPatient == null) {
-            existingPatient = new Patient(nric, name, "", "", "", "", null);
-            patients.add(existingPatient);
-            Ui.showLine();
-            System.out.println("New patient " + name + " (NRIC: " + nric + ") created.");
+            throw new UnloadedStorageException("Patient with NRIC not found. Patient's history can not be added");
         } else {
             Ui.showLine();
         }
