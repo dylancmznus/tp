@@ -84,6 +84,9 @@ public class ManagementSystem {
     //@@author jyukuan
     public void editPatient(String nric, String newName, String newDob, String newGender,
                             String newAddress, String newPhone) throws UnloadedStorageException {
+        assert nric != null && !nric.isBlank() : "NRIC must not be null or blank";
+        assert patients != null : "Patient list cannot be null";
+
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
             System.out.println("Patient with NRIC " + nric + " not found.");
@@ -110,6 +113,11 @@ public class ManagementSystem {
 
     public void storeMedicalHistory(String name, String nric, String medHistory) throws UnloadedStorageException{
         Patient existingPatient = findPatientByNric(nric);
+
+        assert name != null && !name.isBlank() : "Name must not be null or blank";
+        assert nric != null && !nric.isBlank() : "NRIC must not be null or blank";
+        assert medHistory != null && !medHistory.isBlank() : "Medical history must not be null or blank";
+
 
         if (existingPatient == null) {
             throw new UnloadedStorageException("Patient with NRIC not found. Patient's history can not be added");
@@ -157,6 +165,11 @@ public class ManagementSystem {
     }
 
     public void editPatientHistory(String nric, String oldHistory, String newHistory) throws UnloadedStorageException {
+
+        assert nric != null && !nric.isBlank() : "NRIC must not be null or blank";
+        assert oldHistory != null && !oldHistory.isBlank() : "Old history must not be blank";
+        assert newHistory != null && !newHistory.isBlank() : "New history must not be blank";
+
         Patient patient = findPatientByNric(nric);
         if (patient == null) {
             System.out.println("Patient with NRIC " + nric + " not found.");
