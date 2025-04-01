@@ -80,6 +80,52 @@ Example of usage:
 * `sort-appointment byDate`
 * `sort-appointment byId`
 
+## Managing Medical History
+
+### Adding Medical History: `store-history`
+Adds one or more entries to a patient's medical history.
+
+**Format:**
+store-history n/NAME ic/NRIC h/HISTORY_ENTRY1, HISTORY_ENTRY2, ...
+
+*Tip: Use commas to separate multiple history entries.*
+
+**Examples:**
+store-history n/Alex Tan ic/S1234567A h/Diabetes, Hypertension
+store-history n/Lim Mei ic/T7654321Z h/Asthma
+
+---
+
+### Viewing Medical History: `view-history`
+Displays medical history of a patient by NRIC or name.
+
+**Format:**
+`view-history ic/NRIC`
+`view-history NAME`
+
+**Examples:**
+view-history ic/S1234567A
+view-history Alex Tan
+
+---
+
+### Editing Medical History: `edit-history`
+Modifies a specific entry in a patient’s medical history.
+
+**Format:**
+`edit-history ic/NRIC old/OLD_HISTORY_ENTRY new/NEW_HISTORY_ENTRY`
+
+**Example:**
+`edit-history ic/S1234567A old/Diabetes new/Type 2 Diabetes`
+
+---
+
+### Notes
+- NRIC must match an existing patient record.
+- All history entries are stored as simple strings.
+- Viewing by name will display all patients with the given name.
+- Editing only replaces the **first matched** old entry.
+
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
