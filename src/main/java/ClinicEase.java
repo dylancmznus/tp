@@ -43,6 +43,9 @@ public class ClinicEase {
         while (running) {
             try {
                 String input = ui.readCommand();
+                if (input.isEmpty()) {
+                    continue;
+                }
                 Command command = Parser.parse(input);
                 command.execute(manager, ui);
                 running = !command.isExit();

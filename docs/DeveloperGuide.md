@@ -20,11 +20,21 @@
 
 ## User Stories
 
-|Version| As a ... | I want to ... | So that I can ...|
-|--------|----------|---------------|------------------|
-|v1.0|new user|see usage instructions|refer to them when I forget how to use the application|
-|v2.0|user|find a to-do item by name|locate a to-do without having to go through the entire list|
-
+| Version | As a ... | I want to ... | So that I can ... |
+|---------|----------|---------------|-------------------|
+| v1.0    | doctor   | add my patients' personal details | I can add them into the system |
+| v1.0    | doctor   | delete my patients' personal details | I can remove them from the system |
+| v1.0    | doctor   | view my certain patient's personal details | I can view them in the system |
+| v1.0    | doctor   | add appointments into my schedule | I can add appointments plan from a patient needed to be tracked |
+| v1.0    | doctor   | delete appointments from my schedule | I can get rid of appointments no longer needed to track |
+| v1.0    | doctor   | list my upcoming appointments | I can manage my time effectively without manual scheduling |
+| v1.0    | doctor   | store patients' medical history | I can understand the patient's situation better |
+| v1.0    | doctor   | check all medical histories for one certain patient | I can know what happened before the patient come |
+| v2.0    | doctor   | add a new prescription for a patient | record the prescribed medications and instructions |
+| v2.0    | doctor   | view all prescriptions for a patient | track the patient's medication history |
+| v2.0    | doctor   | add symptoms to a prescription | document the patient's condition |
+| v2.0    | doctor   | add special notes to prescriptions | provide additional instructions to patients |
+| v2.0    | doctor   | generate a printable prescription | provide a professional document to the patient |
 
 ## Use Cases
 
@@ -101,10 +111,10 @@ Use case ends.
 3a1. ClinicEase displays an error message.
 Use case resumes at step 2.
 
-### Use Case: View a Patient’s Medical History
+### Use Case: View a Patient's Medical History
 
 #### MSS
-User requests to view patient’s medical history using the patient’s NRIC.
+User requests to view patient's medical history using the patient's NRIC.
 ClinicEase retrieves and displays the medical history of the patient.
 
 Use case ends.
@@ -118,12 +128,12 @@ Use case ends.
 2a1. ClinicEase informs the user that no history is available.
 Use case ends.
 
-### Use Case: Edit a Patient’s Details
+### Use Case: Edit a Patient's Details
 
 #### MSS
-User requests to edit a patient’s details using the patient’s NRIC and the new details.
+User requests to edit a patient's details using the patient's NRIC and the new details.
 ClinicEase verifies that the patient exists.
-ClinicEase updates patient’s details.
+ClinicEase updates patient's details.
 ClinicEase confirms the update was successful.
 
 Use case ends.
@@ -166,7 +176,7 @@ Use case resumes at step 1.
 
 ## Glossary
 * *Mainstream OS* - Windows, Linux, Unix, macOS
-* *Performance Lag* – A noticeable delay or slowdown in the system’s response to user actions.
+* *Performance Lag* – A noticeable delay or slowdown in the system's response to user actions.
 * *Error Messages* – System-generated messages that inform users of incorrect input and provide guidance on how to fix it.
 * *OS Platform Compatibility* – The ability for data files and system functionality to work consistently across different operating systems.
 
@@ -180,12 +190,12 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
 ## 1. Getting Started
 
 1. **Compilation**
-   - Navigate to the project’s root folder (where the `ClinicEase.java` and other `.java` files reside).
+   - Navigate to the project's root folder (where the `ClinicEase.java` and other `.java` files reside).
    - Compile the source files. For example:
      ```
      javac *.java
      ```
-   - Alternatively, use your favorite IDE’s build tool.
+   - Alternatively, use your favorite IDE's build tool.
 
 2. **Launching the Application**
    - Run the compiled main class:
@@ -297,7 +307,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    No patients have been added.
    --------------------------------------------------------------------------------
    ```
-3. If the patient doesn’t exist, it notifies you accordingly.
+3. If the patient doesn't exist, it notifies you accordingly.
 
 ---
 
@@ -339,7 +349,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    store-history n/Bob Lee ic/S7654321B h/Diabetes,High cholesterol
 
    ```
-2. If the patient doesn’t exist, the system creates a new one and prints a confirmation message. If the patient exists, it simply adds new history entries.
+2. If the patient doesn't exist, the system creates a new one and prints a confirmation message. If the patient exists, it simply adds new history entries.
 
 ---
 
@@ -355,7 +365,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    ```
    view-history ic/S7654321B
    ```
-2. Displays the patient’s history if found. Otherwise, notifies you that it cannot find the patient.
+2. Displays the patient's history if found. Otherwise, notifies you that it cannot find the patient.
 
 ---
 
@@ -386,7 +396,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    ```
    add-appointment ic/S1234567A dt/2025-12-01 t/0930 dsc/Dental Checkup
    ```
-2. If the patient is found, the system adds the appointment and shows a success message. If the patient doesn’t exist, it prints an error.
+2. If the patient is found, the system adds the appointment and shows a success message. If the patient doesn't exist, it prints an error.
 
 ---
 
@@ -400,7 +410,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    list-appointment
    ```
 
-2. Shows all appointments if any exist. Otherwise, prints a “No appointments found” message.
+2. Shows all appointments if any exist. Otherwise, prints a "No appointments found" message.
 
 ---
 
@@ -452,7 +462,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    ``` 
    find-appointment S1234567A
    ```
-2. If any matching appointment is found, it prints the details. Otherwise, it prints “No appointment found.”
+2. If any matching appointment is found, it prints the details. Otherwise, it prints "No appointment found."
 
 ---
 
@@ -466,7 +476,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
 - **Missing or Invalid Parameters**
 - For instance, `add-appointment` missing the `dt/DATE` should trigger an error message (`InvalidInputFormatException`).
 - **Storage Failures**
-- If there’s an I/O error with reading or writing to `patient_data.txt`, you might see `UnloadedStorageException`.
+- If there's an I/O error with reading or writing to `patient_data.txt`, you might see `UnloadedStorageException`.
 
 ---
 

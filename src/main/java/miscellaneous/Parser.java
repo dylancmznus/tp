@@ -37,6 +37,11 @@ import static manager.Appointment.INPUT_FORMAT;
 
 public class Parser {
     public static Command parse(String userInput) throws InvalidInputFormatException, UnknownCommandException {
+        // Handle empty input
+        if (userInput == null || userInput.trim().isEmpty()) {
+            throw new InvalidInputFormatException("Please enter a command.");
+        }
+        
         // Split into two parts to extract the command keyword and its detail
         String[] parts = userInput.split(" ", 2);
         String commandWord = parts[0].toLowerCase();
