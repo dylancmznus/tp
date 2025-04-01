@@ -280,7 +280,7 @@ public class ManagementSystem {
     }
     
     //@@author Basudeb2005
-    public void addPrescription(Prescription prescription) 
+    public Prescription addPrescription(Prescription prescription) 
             throws IllegalArgumentException, UnloadedStorageException {
         assert prescription != null : "Prescription cannot be null";
         assert patients != null : "Patient list cannot be null";
@@ -313,7 +313,7 @@ public class ManagementSystem {
         prescriptions.add(newPrescription);
         Storage.savePrescriptions(prescriptions);
         
-        return;
+        return newPrescription;
     }
     
     //@@author Basudeb2005

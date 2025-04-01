@@ -16,14 +16,14 @@ public class AddPrescriptionCommand extends Command {
     @Override
     public void execute(ManagementSystem manager, Ui ui) throws UnloadedStorageException {
         try {
-            manager.addPrescription(prescription);
+            Prescription addedPrescription = manager.addPrescription(prescription);
             ui.showLine();
             System.out.println("Successfully added prescription:");
-            System.out.println(prescription.toString());
+            System.out.println(addedPrescription.toString());
             System.out.println("");
             System.out.println("Prescription has been generated.");
-            System.out.println("View the prescription for the patient with ID: " + prescription.getPatientId());
-            System.out.println("and prescription ID: " + prescription.getPrescriptionId());
+            System.out.println("View the prescription for the patient with ID: " + addedPrescription.getPatientId());
+            System.out.println("and prescription ID: " + addedPrescription.getPrescriptionId());
             ui.showLine();
         } catch (IllegalArgumentException e) {
             ui.showError("Failed to add prescription: " + e.getMessage());
