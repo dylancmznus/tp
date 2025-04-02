@@ -12,11 +12,11 @@
 ## Product scope
 ### Target user profile
 
-{Describe the target user profile}
+The target users are clinic staff, such as receptionists, assistants, or solo practitioners, who need a lightweight, no-frills system to manage patient records and appointment schedules. These users are assumed to be comfortable with basic command-line interfaces but may not have advanced technical expertise.
 
 ### Value proposition
 
-{Describe the value proposition: what problem does it solve?}
+This CLI-based Clinic Management System offers a simple yet effective solution for managing patient data and appointments without the need for complex software installations or internet access. It helps clinics save time, stay organized, and reduce manual errors by streamlining common administrative tasks like adding patients, scheduling appointments, and retrieving records, all from the command line.
 
 ## User Stories
 
