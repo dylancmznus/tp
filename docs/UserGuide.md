@@ -123,6 +123,17 @@ Example of usage:
 
 `unmark-appointment A100`
 
+### Finding a patient's appointments: `find-appointment`
+Searches for appointments based on the patient's NRIC.
+
+Format: `find-appointment NRIC`
+
+* The `NRIC` must match a registered patient’s NRIC in the system.
+* All appointments associated with the specified NRIC will be displayed.
+
+Example of usage:
+* `find-appointment S1234567D`
+
 ### Managing Prescriptions
 
 #### Adding a prescription: `add-prescription`
