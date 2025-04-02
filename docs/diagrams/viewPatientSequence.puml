@@ -1,0 +1,54 @@
+@startuml
+hide footbox
+
+participant ":ClinicEase" as ClinicEase
+participant ":UI" as UI
+participant ":Parser" as Parser
+participant ":ViewPatientCommand" as ViewPatientCommand
+participant ":ManagementSystem" as ManagementSystem
+participant ":Patient" as Patient
+
+ClinicEase -> UI : readCommand()
+activate UI
+
+UI --> ClinicEase : input
+deactivate UI
+ClinicEase -> Parser : parse(input)
+activate Parser
+Parser -> Parser : parseViewPatient(userInput)
+activate Parser
+Parser -> Parser : extractValue(userInput)
+activate Parser
+Parser --> Parser : nric :String
+deactivate Parser
+
+Parser -> ViewPatientCommand : ViewPatientCommand(nric)
+activate ViewPatientCommand
+Parser --> ClinicEase : ViewPatientCommand
+deactivate Parser
+
+deactivate Parser
+
+ClinicEase -> ViewPatientCommand : execute()
+activate ViewPatientCommand
+
+activate ManagementSystem
+ViewPatientCommand -> ManagementSystem : viewPatient(nric)
+
+ManagementSystem -> Patient : getPatient(nric)
+activate Patient
+
+Patient --> ManagementSystem : matchedPatient
+deactivate Patient
+
+ManagementSystem --> ViewPatientCommand
+deactivate ManagementSystem
+
+ViewPatientCommand --> UI : showPatientViewed(matchedPatient)
+activate UI
+
+UI --> ClinicEase : Patient details
+deactivate UI
+deactivate ViewPatientCommand
+
+@enduml
