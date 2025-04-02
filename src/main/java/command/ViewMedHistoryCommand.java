@@ -1,5 +1,6 @@
 package command;
 
+import exception.PatientNotFoundException;
 import manager.ManagementSystem;
 import miscellaneous.Ui;
 
@@ -13,7 +14,7 @@ public class ViewMedHistoryCommand extends Command {
     }
 
     @Override
-    public void execute(ManagementSystem manager, Ui ui) {
+    public void execute(ManagementSystem manager, Ui ui) throws PatientNotFoundException {
         if (type.equals("ic")) {
             manager.viewMedicalHistoryByNric(nameOrIc);
         } else {

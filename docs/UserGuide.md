@@ -6,8 +6,6 @@ ClinicEase is an application designed to assist doctors in managing patient reco
 
 ## Quick Start
 
-{Give steps to get started quickly}
-
 1. Ensure that you have Java 17 or above installed. <br> 
    **Mac users:** Ensure you have the precise JDK version prescribed 
    [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
@@ -25,11 +23,12 @@ ClinicEase is an application designed to assist doctors in managing patient reco
 
 
 ## Features 
+
 > [!NOTE]
 > - Words in `UPPER_CASE` represent parameters that must be provided by the user. <br>
     e.g. in `view-patient NRIC`, `NRIC` is a parameter which can be used as `view-patient S1234567D`.
 > - Items in square brackets are optional. <br>
-    e.g `ic/NRIC [n/NAME] [dob/BIRTHDATE]` can be used as `ic/S1234567D n/John` or as `ic/S1234567D dob/2002-06-07`.
+    e.g. `ic/NRIC [n/NAME] [dob/BIRTHDATE]` can be used as `ic/S1234567D n/John` or as `ic/S1234567D dob/2002-06-07`.
 > - Every parameter must be supplied by the user. <br>
     e.g. if the command specifies `add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION`, the user
     must fill in all parameters for the input to be valid.
@@ -66,7 +65,7 @@ Adds a new appointment to the list of appointment.
 
 Format: `add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION`
 
-* The patient with the specified `NRIC` **must** exist must exist in the system.
+* The patient with the specified `NRIC` **must** exist in the system.
 * `DATE` format: `yyyy-MM-dd`, where `yyyy` is year, `MM` is month,
   `dd` is day (e.g., `2025-03-31`).  
 * `TIME` format: `HHmm` in 24-hour format (e.g., `1430` for 2:30 PM).
@@ -222,7 +221,11 @@ Modifies a specific entry in a patient’s medical history.
 
 **Q**: How do I transfer my data to another computer? 
 
-**A**: {your answer here}
+**A**: You can copy the 'data' folder and paste it in the directory that you save your jar file in another computer. 
+
+## Known Issues
+1. The parameter `NRIC` can take in any format.
+
 
 ## Command Summary
 

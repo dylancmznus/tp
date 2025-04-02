@@ -1,6 +1,7 @@
 package command;
 
 import exception.DuplicatePatientIDException;
+import exception.PatientNotFoundException;
 import exception.UnloadedStorageException;
 import manager.Appointment;
 import manager.ManagementSystem;
@@ -32,7 +33,7 @@ class SortAppointmentCommandTest {
     private Storage storage;
 
     @BeforeEach
-    void setUp() throws UnloadedStorageException, DuplicatePatientIDException {
+    void setUp() throws UnloadedStorageException, DuplicatePatientIDException, PatientNotFoundException {
         storage = new Storage(tempDir.toString());
         ui = new Ui();
         manager = new ManagementSystem(storage.loadPatients(), storage.loadAppointments());

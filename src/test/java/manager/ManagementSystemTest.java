@@ -1,6 +1,7 @@
 package manager;
 
 import exception.DuplicatePatientIDException;
+import exception.PatientNotFoundException;
 import exception.UnloadedStorageException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -166,7 +167,7 @@ class ManagementSystemTest {
     }
 
     @Test
-    void addAppointment_validInput_expectAppointmentAdded() throws UnloadedStorageException {
+    void addAppointment_validInput_expectAppointmentAdded() throws UnloadedStorageException, PatientNotFoundException {
         List<Patient> patients = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
@@ -187,7 +188,8 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deleteAppointment_validInput_expectAppointmentDeleted() throws UnloadedStorageException {
+    void deleteAppointment_validInput_expectAppointmentDeleted() throws UnloadedStorageException,
+            PatientNotFoundException {
         List<Patient> patients = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
@@ -208,7 +210,8 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deleteAppointment_lowerCaseInput_expectAppointmentDeleted() throws UnloadedStorageException {
+    void deleteAppointment_lowerCaseInput_expectAppointmentDeleted() throws UnloadedStorageException,
+            PatientNotFoundException {
         List<Patient> patients = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
@@ -229,7 +232,8 @@ class ManagementSystemTest {
     }
 
     @Test
-    void deleteAppointment_nonExistentId_expectNullReturned() throws UnloadedStorageException {
+    void deleteAppointment_nonExistentId_expectNullReturned() throws UnloadedStorageException,
+            PatientNotFoundException {
         List<Patient> patients = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
 
@@ -351,5 +355,33 @@ class ManagementSystemTest {
         Appointment foundAppointment = manager.findAppointmentByNric("A999");
 
         assertNull(foundAppointment, "Non-existent appointment should return null");
+    }
+
+
+    //@@author jyukuan
+    @Test
+    void storeMedicalHistory_storeMedHistoryOnNewPatient_expectOneNewPatientWithMedHistory()
+            throws UnloadedStorageException, PatientNotFoundException {
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem mhm = new ManagementSystem(patients, new ArrayList<>());
+
+        LocalDateTime appointmentTime = LocalDateTime.parse("2025-03-20 1900", DATE_TIME_FORMAT);
+
+        Patient patient = new Patient("S1234567A", "John Doe", "1990-10-01",
+                "M", "124 High St", "81234567", new ArrayList<>());
+        patients.add(patient);
+
+        mhm.storeMedicalHistory("John Doe", "S1234567A", "Diabetes, Hypertension");
+
+        assertEquals(1, patients.size(), "There should be one patient stored");
+
+        Patient storedPatient = patients.get(0);
+        assertEquals("John Doe", storedPatient.getName(), "Patient name should match");
+        assertEquals("S1234567A", storedPatient.getId(), "Patient NRIC should match");
+
+        List<String> history = storedPatient.getMedicalHistory();
+        assertEquals(2, history.size(), "Medical history should contain 2 entries");
+        assertTrue(history.contains("Diabetes"), "Medical history should contain 'Diabetes'");
+        assertTrue(history.contains("Hypertension"), "Medical history should contain 'Hypertension'");
     }
 }
