@@ -41,6 +41,26 @@ ClinicEase is an application designed to assist doctors in managing patient reco
 > - Command words are **case-insensitive**. <br>
     e.g. `liST-paTIEnt` will be interpreted as `list-patient`.
 
+### Viewing patient details: `view-patient`
+Displays the details of a specific patient.
+
+Format: `view-patient NRIC`
+
+* The `NRIC` must be of a patient existing in the system.
+
+Example of usage:
+
+`view-patient S1234567D`
+
+### Listing all patients: `list-patient`
+Displays a list of all registered patients in the system with details provided.
+
+Format: `list-patient`
+
+Example of usage:
+
+`list-patient`
+
 ### Adding an appointment: `add-appointment`
 Adds a new appointment to the list of appointment.
 
@@ -79,6 +99,40 @@ Example of usage:
 
 * `sort-appointment byDate`
 * `sort-appointment byId`
+
+### Marking an appointment as done: `mark-appointment`
+Marks a specified appointment as done.
+
+Format: `mark-appointment APPOINTMENT_ID`
+
+* The `APPOINTMENT_ID` refers to the unique identifier assigned by the system to an appointment.
+* A completed appointment will be marked accordingly in the system.
+
+Example of usage:
+
+`mark-appointment A100`
+
+### Unmarking a completed appointment: `unmark-appointment`
+Unmarks a completed appointment, setting it back to pending.
+
+Format: `unmark-appointment APPOINTMENT_ID`
+
+* The `APPOINTMENT_ID` must belong to an appointment that has been marked as completed.
+
+Example of usage:
+
+`unmark-appointment A100`
+
+### Finding a patient's appointments: `find-appointment`
+Searches for appointments based on the patient's NRIC.
+
+Format: `find-appointment NRIC`
+
+* The `NRIC` must match a registered patient’s NRIC in the system.
+* All appointments associated with the specified NRIC will be displayed.
+
+Example of usage:
+* `find-appointment S1234567D`
 
 ### Managing Prescriptions
 
