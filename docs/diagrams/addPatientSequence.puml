@@ -1,0 +1,58 @@
+@startuml
+hide footbox
+
+participant ":ClinicEase" as ClinicEase
+participant ":Parser" as Parser
+participant ":AddPatientCommand" as AddPatientCommand
+participant ":ManagementSystem" as ManagementSystem
+participant ":Patient" as Patient
+participant ":Storage" as Storage
+
+ClinicEase -> Parser : parse(input)
+activate Parser
+
+Parser -> Parser : parseAddPatient(userInput)
+activate Parser
+Parser -> Parser : extractValue(userInput)
+activate Parser
+note right of Parser
+  extractValue is called multiple times\n
+  to get name, nric, dob, gender,\n
+  address, and phone
+end note
+Parser --> Parser : :String[]
+deactivate Parser
+
+create AddPatientCommand
+Parser -> AddPatientCommand : new AddPatientCommand(String[])
+activate AddPatientCommand
+Parser --> ClinicEase : :AddPatientCommand
+deactivate Parser
+
+ClinicEase -> AddPatientCommand : execute()
+activate AddPatientCommand
+AddPatientCommand -> ManagementSystem : addPatient(details)
+activate ManagementSystem
+ManagementSystem -> ManagementSystem : check if NRIC exists
+alt NRIC already exists
+    ManagementSystem --> AddPatientCommand : Error message
+else
+    create Patient
+    ManagementSystem -> Patient : new Patient(...)
+    activate Patient
+    Patient --> ManagementSystem :
+    deactivate Patient
+
+    ManagementSystem -> ManagementSystem : add patient to HashMap
+    ManagementSystem -> Storage : savePatients(patients)
+    activate Storage
+    Storage --> ManagementSystem :
+    deactivate Storage
+
+    ManagementSystem --> AddPatientCommand :
+end
+deactivate ManagementSystem
+AddPatientCommand -> ClinicEase :
+deactivate AddPatientCommand
+
+@enduml
