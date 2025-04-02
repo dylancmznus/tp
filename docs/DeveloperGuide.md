@@ -8,6 +8,35 @@
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+### View patient feature
+
+The 'view-patient' feature allows the user to retrieve and view the personal details of a specified patient.
+
+**Step 1.** The user launches the application for the first time.
+- The `ClinicEase` will be initialized and load stored patient data.
+- The patient’s details are now ready to view.
+
+**Step 2.** The user executes `view-patient ic/S1234567D` command to view the patient's details.
+- This command lets `ClinicEase` read the user input through the `UI` and pass it to `Parser`.
+- The `Parser` class determines that the command is `view-patient` and creates a `ViewPatientCommand` object.
+
+> [!NOTE]:  
+> If the input does not match the expected format, an `InvalidInputFormatException` is thrown. Hence, the patient's details will not be retrieved.
+
+**Step 3.** The system calls `execute()` method in `ViewPatientCommand`.
+- This class calls for the patient list in `ManagementSystem`.
+- The system checks if the patient exists in the list:
+    - If the NRIC exists, the system retrieves the patient’s details.
+
+**Step 4.** If the patient is found, the system calls `showPatientViewed()` from `UI`.
+- The patient's details are displayed to the user.
+
+The sequence diagram below illustrates how the operation for 'view-patient' would be executed in the system.
+
+![viewPatientSequence.png](diagrams/viewPatientSequence.png)
+
+
+
 ### Add appointment feature
 The `add-appointment` feature allows users to schedule appointments for registered patients. 
 The system ensures that the **patient exists** before adding the appointment. The appointment is then stored persistently.
