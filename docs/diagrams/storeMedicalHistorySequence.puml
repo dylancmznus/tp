@@ -1,0 +1,54 @@
+@startuml
+hide footbox
+
+participant ":ClinicEase" as ClinicEase
+participant ":Parser" as Parser
+participant ":StoreMedHistoryCommand" as StoreMedHistoryCommand
+participant ":ManagementSystem" as ManagementSystem
+participant ":Patient" as Patient
+participant ":Storage" as Storage
+
+ClinicEase -> Parser : parse(input)
+activate Parser
+
+Parser -> Parser : parseStoreHistory(userInput)
+activate Parser
+Parser -> Parser : extractValue(userInput)
+activate Parser
+note right of Parser
+  extractValue is called multiple times
+  to parse input and extract parameters
+end note
+Parser --> Parser : :String
+deactivate Parser
+
+create StoreMedHistoryCommand
+Parser -> StoreMedHistoryCommand : new StoreMedHistoryCommand(String[])
+activate StoreMedHistoryCommand
+StoreMedHistoryCommand --> Parser : :StoreMedHistoryCommand
+deactivate StoreMedHistoryCommand
+Parser --> ClinicEase : :StoreMedHistoryCommand
+deactivate Parser
+
+ClinicEase -> StoreMedHistoryCommand : execute()
+activate StoreMedHistoryCommand
+StoreMedHistoryCommand -> ManagementSystem : storeMedicalHistory(name, nric, medHistory)
+activate ManagementSystem
+ManagementSystem -> ManagementSystem : findPatientByNric(nric)
+activate ManagementSystem
+ManagementSystem -> Patient : getMedicalHistory()
+activate Patient
+Patient --> ManagementSystem : returns List<String>
+deactivate Patient
+deactivate ManagementSystem
+
+ManagementSystem -> Storage : savePatients(patients)
+activate Storage
+Storage --> ManagementSystem :
+deactivate Storage
+ManagementSystem --> StoreMedHistoryCommand :
+deactivate ManagementSystem
+StoreMedHistoryCommand -> ClinicEase :
+deactivate StoreMedHistoryCommand
+
+@enduml

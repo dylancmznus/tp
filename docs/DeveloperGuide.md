@@ -38,7 +38,42 @@ The following sequence diagram shows how an `add-aappointment` operation goes th
 
 
 
+### Storing Medical History Feature
 
+The `store-history` feature allows users to **add new medical history entries** for a specific patient in the system.  
+The system verifies that the **patient exists** before adding the entries, then the updated data is saved persistently.
+
+Below is a usage scenario illustrating how the `store-history` mechanism behaves step by step.
+
+---
+
+**Step 1.** The user executes a command such as:
+
+store-history n/John Doe ic/S1234567A h/Diabetes,High Cholesterol
+- **ClinicEase** reads this command and passes the input string to **Parser**.
+- **Parser** identifies the command as `store-history` (based on the command word) and extracts the relevant parameters (`name`, `nric`, `h/` tokens).
+- If the input is invalid (missing or malformed parameters), an `InvalidInputFormatException` is thrown, aborting the process.
+
+**Step 2.** **Parser** creates a `StoreMedHistoryCommand` object with the extracted details:
+
+- `StoreMedHistoryCommand` holds the `name` ("John Doe"), `nric` ("S1234567A"), and `medHistory` string ("Diabetes,High Cholesterol").
+
+**Step 3.** `ClinicEase` invokes `StoreMedHistoryCommand#execute(...)`, which calls:
+
+1. `ManagementSystem.storeMedicalHistory(name, nric, medHistory)`
+2. `ManagementSystem` checks if the patient exists using `findPatientByNric(nric)`.
+    - If **not found**, it prints an error, and **no** changes are made to storage.
+    - If **found**, it splits `"Diabetes,High Cholesterol"` into an array of entries:
+        - `"Diabetes"`
+        - `"High Cholesterol"`
+    - Then, it appends these entries to the patient’s existing `medicalHistory` list (skipping duplicates).
+
+**Step 4.** `ManagementSystem` calls `Storage.savePatients(...)` to persist any changes to the patient data on disk:
+
+- If saving fails, `UnloadedStorageException` is thrown, and `ClinicEase` displays an error to the user.
+
+Below is a detailed **PlantUML** sequence diagram showing how a `store-history` operation moves through the system and includes the check for a valid patient:
+![add-appointment](./diagrams/storeMedicalHistorySequence.png)
 
 
 
