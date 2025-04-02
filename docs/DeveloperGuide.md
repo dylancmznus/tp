@@ -20,11 +20,21 @@
 
 ## User Stories
 
-|Version| As a ... | I want to ... | So that I can ...|
-|--------|----------|---------------|------------------|
-|v1.0|new user|see usage instructions|refer to them when I forget how to use the application|
-|v2.0|user|find a to-do item by name|locate a to-do without having to go through the entire list|
-
+| Version | As a ... | I want to ... | So that I can ... |
+|---------|----------|---------------|-------------------|
+| v1.0    | doctor   | add my patients' personal details | I can add them into the system |
+| v1.0    | doctor   | delete my patients' personal details | I can remove them from the system |
+| v1.0    | doctor   | view my certain patient's personal details | I can view them in the system |
+| v1.0    | doctor   | add appointments into my schedule | I can add appointments plan from a patient needed to be tracked |
+| v1.0    | doctor   | delete appointments from my schedule | I can get rid of appointments no longer needed to track |
+| v1.0    | doctor   | list my upcoming appointments | I can manage my time effectively without manual scheduling |
+| v1.0    | doctor   | store patients' medical history | I can understand the patient's situation better |
+| v1.0    | doctor   | check all medical histories for one certain patient | I can know what happened before the patient come |
+| v2.0    | doctor   | add a new prescription for a patient | record the prescribed medications and instructions |
+| v2.0    | doctor   | view all prescriptions for a patient | track the patient's medication history |
+| v2.0    | doctor   | add symptoms to a prescription | document the patient's condition |
+| v2.0    | doctor   | add special notes to prescriptions | provide additional instructions to patients |
+| v2.0    | doctor   | generate a printable prescription | provide a professional document to the patient |
 
 ## Use Cases
 
@@ -101,10 +111,10 @@ Use case ends.
 3a1. ClinicEase displays an error message.
 Use case resumes at step 2.
 
-### Use Case: View a Patient’s Medical History
+### Use Case: View a Patient's Medical History
 
 #### MSS
-User requests to view patient’s medical history using the patient’s NRIC.
+User requests to view patient's medical history using the patient's NRIC.
 ClinicEase retrieves and displays the medical history of the patient.
 
 Use case ends.
@@ -118,12 +128,12 @@ Use case ends.
 2a1. ClinicEase informs the user that no history is available.
 Use case ends.
 
-### Use Case: Edit a Patient’s Details
+### Use Case: Edit a Patient's Details
 
 #### MSS
-User requests to edit a patient’s details using the patient’s NRIC and the new details.
+User requests to edit a patient's details using the patient's NRIC and the new details.
 ClinicEase verifies that the patient exists.
-ClinicEase updates patient’s details.
+ClinicEase updates patient's details.
 ClinicEase confirms the update was successful.
 
 Use case ends.
@@ -155,6 +165,73 @@ Use case ends.
 1b1. ClinicEase displays an error message.
 Use case resumes at step 1.
 
+### Use case: Add a new prescription
+
+**MSS**
+
+1. Doctor requests to add a new prescription
+2. System prompts for prescription details (patient ID, symptoms, medicines, optional notes)
+3. Doctor enters the required information
+4. System validates the patient ID exists
+5. System generates a unique prescription ID
+6. System saves the prescription
+7. System displays success message with the prescription details
+
+    Use case ends.
+
+**Extensions**
+
+* 4a. Patient ID does not exist
+    * 4a1. System shows an error message
+    * 4a2. Use case resumes at step 2
+
+* 3a. Required fields are missing
+    * 3a1. System shows error message with correct format
+    * 3a2. Use case resumes at step 2
+
+### Use case: View all prescriptions for a patient
+
+**MSS**
+
+1. Doctor requests to view all prescriptions for a patient
+2. Doctor enters patient ID
+3. System validates patient exists
+4. System retrieves and displays all prescriptions for the patient
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. Patient ID does not exist
+    * 3a1. System shows an error message
+    * 3a2. Use case ends
+
+* 4a. No prescriptions found
+    * 4a1. System shows "No prescriptions found" message
+    * 4a2. Use case ends
+
+### Use case: View and generate HTML prescription
+
+**MSS**
+
+1. Doctor requests to view a specific prescription
+2. Doctor enters prescription ID
+3. System validates prescription exists
+4. System displays prescription details
+5. System generates HTML version
+6. System shows location of generated file
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. Prescription ID does not exist
+    * 3a1. System shows an error message
+    * 3a2. Use case ends
+
+* 5a. HTML generation fails
+    * 5a1. System shows error message
+    * 5a2. Use case ends
 
 ## Non-Functional Requirements
 1. Should work on any mainstream OS as long as it has Java `17` or above installed.
@@ -166,7 +243,7 @@ Use case resumes at step 1.
 
 ## Glossary
 * *Mainstream OS* - Windows, Linux, Unix, macOS
-* *Performance Lag* – A noticeable delay or slowdown in the system’s response to user actions.
+* *Performance Lag* – A noticeable delay or slowdown in the system's response to user actions.
 * *Error Messages* – System-generated messages that inform users of incorrect input and provide guidance on how to fix it.
 * *OS Platform Compatibility* – The ability for data files and system functionality to work consistently across different operating systems.
 
@@ -180,12 +257,12 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
 ## 1. Getting Started
 
 1. **Compilation**
-   - Navigate to the project’s root folder (where the `ClinicEase.java` and other `.java` files reside).
+   - Navigate to the project's root folder (where the `ClinicEase.java` and other `.java` files reside).
    - Compile the source files. For example:
      ```
      javac *.java
      ```
-   - Alternatively, use your favorite IDE’s build tool.
+   - Alternatively, use your favorite IDE's build tool.
 
 2. **Launching the Application**
    - Run the compiled main class:
@@ -297,7 +374,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    No patients have been added.
    --------------------------------------------------------------------------------
    ```
-3. If the patient doesn’t exist, it notifies you accordingly.
+3. If the patient doesn't exist, it notifies you accordingly.
 
 ---
 
@@ -339,7 +416,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    store-history n/Bob Lee ic/S7654321B h/Diabetes,High cholesterol
 
    ```
-2. If the patient doesn’t exist, the system creates a new one and prints a confirmation message. If the patient exists, it simply adds new history entries.
+2. If the patient doesn't exist, the system creates a new one and prints a confirmation message. If the patient exists, it simply adds new history entries.
 
 ---
 
@@ -355,7 +432,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    ```
    view-history ic/S7654321B
    ```
-2. Displays the patient’s history if found. Otherwise, notifies you that it cannot find the patient.
+2. Displays the patient's history if found. Otherwise, notifies you that it cannot find the patient.
 
 ---
 
@@ -386,7 +463,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    ```
    add-appointment ic/S1234567A dt/2025-12-01 t/0930 dsc/Dental Checkup
    ```
-2. If the patient is found, the system adds the appointment and shows a success message. If the patient doesn’t exist, it prints an error.
+2. If the patient is found, the system adds the appointment and shows a success message. If the patient doesn't exist, it prints an error.
 
 ---
 
@@ -400,7 +477,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    list-appointment
    ```
 
-2. Shows all appointments if any exist. Otherwise, prints a “No appointments found” message.
+2. Shows all appointments if any exist. Otherwise, prints a "No appointments found" message.
 
 ---
 
@@ -452,7 +529,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
    ``` 
    find-appointment S1234567A
    ```
-2. If any matching appointment is found, it prints the details. Otherwise, it prints “No appointment found.”
+2. If any matching appointment is found, it prints the details. Otherwise, it prints "No appointment found."
 
 ---
 
@@ -466,7 +543,7 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
 - **Missing or Invalid Parameters**
 - For instance, `add-appointment` missing the `dt/DATE` should trigger an error message (`InvalidInputFormatException`).
 - **Storage Failures**
-- If there’s an I/O error with reading or writing to `patient_data.txt`, you might see `UnloadedStorageException`.
+- If there's an I/O error with reading or writing to `patient_data.txt`, you might see `UnloadedStorageException`.
 
 ---
 
@@ -477,5 +554,43 @@ Below is a suggested guide for **manual testing** of the ClinicEase application 
 3. **Add appointments** to different patients and use `list-appointment`, `sort-appointment`, `mark-appointment`, etc. to test appointment functionality.
 4. **Delete a patient** and confirm the removal.
 5. **Exit** the program with `bye`.
+
+---
+
+### Managing Prescriptions
+
+1. Adding a new prescription
+
+   Prerequisites: Patient with ID "S9876543B" exists in the system.
+
+   Test case: `add-prescription ic/S9876543B s/Fever, Cough m/Paracetamol, Cough syrup nt/Take after meals`
+   * Expected: Prescription is added. Details of the new prescription shown.
+
+   Test case: `add-prescription ic/S9876543B s/Fever m/`
+   * Expected: Error shown. Missing medicines field.
+
+   Test case: `add-prescription ic/X1234567Y s/Fever m/Paracetamol`
+   * Expected: Error shown. Patient ID does not exist.
+
+2. Viewing prescriptions
+
+   Prerequisites: At least one prescription exists for patient "S9876543B".
+
+   Test case: `view-all-prescriptions S9876543B`
+   * Expected: List of all prescriptions for the patient shown.
+
+   Test case: `view-prescription S9876543B-1`
+   * Expected: Details of the specific prescription shown. HTML file generated.
+
+   Test case: `view-prescription INVALID-ID`
+   * Expected: Error shown. Invalid prescription ID.
+
+3. Generating HTML prescriptions
+
+   Prerequisites: Valid prescription exists with ID "S9876543B-1".
+
+   Test case: `view-prescription S9876543B-1`
+   * Expected: HTML file generated in data/prescriptions folder.
+   * Verify: Open the generated HTML file in a browser. Check that all prescription details are correctly displayed.
 
 ---

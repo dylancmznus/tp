@@ -40,6 +40,26 @@ ClinicEase is an application designed to assist doctors in managing patient reco
 > - Command words are **case-insensitive**. <br>
     e.g. `liST-paTIEnt` will be interpreted as `list-patient`.
 
+### Viewing patient details: `view-patient`
+Displays the details of a specific patient.
+
+Format: `view-patient NRIC`
+
+* The `NRIC` must be of a patient existing in the system.
+
+Example of usage:
+
+`view-patient S1234567D`
+
+### Listing all patients: `list-patient`
+Displays a list of all registered patients in the system with details provided.
+
+Format: `list-patient`
+
+Example of usage:
+
+`list-patient`
+
 ### Adding an appointment: `add-appointment`
 Adds a new appointment to the list of appointment.
 
@@ -79,6 +99,124 @@ Example of usage:
 * `sort-appointment byDate`
 * `sort-appointment byId`
 
+### Marking an appointment as done: `mark-appointment`
+Marks a specified appointment as done.
+
+Format: `mark-appointment APPOINTMENT_ID`
+
+* The `APPOINTMENT_ID` refers to the unique identifier assigned by the system to an appointment.
+* A completed appointment will be marked accordingly in the system.
+
+Example of usage:
+
+`mark-appointment A100`
+
+### Unmarking a completed appointment: `unmark-appointment`
+Unmarks a completed appointment, setting it back to pending.
+
+Format: `unmark-appointment APPOINTMENT_ID`
+
+* The `APPOINTMENT_ID` must belong to an appointment that has been marked as completed.
+
+Example of usage:
+
+`unmark-appointment A100`
+
+### Finding a patient's appointments: `find-appointment`
+Searches for appointments based on the patient's NRIC.
+
+Format: `find-appointment NRIC`
+
+* The `NRIC` must match a registered patient’s NRIC in the system.
+* All appointments associated with the specified NRIC will be displayed.
+
+Example of usage:
+* `find-appointment S1234567D`
+
+### Managing Prescriptions
+
+#### Adding a prescription: `add-prescription`
+
+Adds a new prescription for a patient.
+
+Format: `add-prescription ic/PATIENT_ID s/SYMPTOMS m/MEDICINES [nt/NOTES]`
+
+* `PATIENT_ID` must be a valid patient ID in the system
+* `SYMPTOMS` is a comma-separated list of symptoms
+* `MEDICINES` is a comma-separated list of prescribed medications
+* `NOTES` is optional and can contain special instructions
+
+Example:
+* `add-prescription ic/S9876543B s/Fever, Cough m/Paracetamol, Cough syrup nt/Take after meals`
+
+#### Viewing all prescriptions: `view-all-prescriptions`
+
+Shows all prescriptions for a specific patient.
+
+Format: `view-all-prescriptions PATIENT_ID`
+
+Example:
+* `view-all-prescriptions S9876543B`
+
+#### Viewing specific prescription: `view-prescription`
+
+Views details of a specific prescription and generates a printable HTML version.
+
+Format: `view-prescription PRESCRIPTION_ID`
+
+* The HTML file will be generated in the data/prescriptions folder
+* Open the HTML file in a web browser to view and print
+
+Example:
+* `view-prescription S9876543B-1`
+=======
+## Managing Medical History
+
+### Adding Medical History: `store-history`
+Adds one or more entries to a patient's medical history.
+
+**Format:**
+store-history n/NAME ic/NRIC h/HISTORY_ENTRY1, HISTORY_ENTRY2, ...
+
+*Tip: Use commas to separate multiple history entries.*
+
+**Examples:**
+store-history n/Alex Tan ic/S1234567A h/Diabetes, Hypertension
+store-history n/Lim Mei ic/T7654321Z h/Asthma
+
+---
+
+### Viewing Medical History: `view-history`
+Displays medical history of a patient by NRIC or name.
+
+**Format:**
+`view-history ic/NRIC`
+`view-history NAME`
+
+**Examples:**
+view-history ic/S1234567A
+view-history Alex Tan
+
+---
+
+### Editing Medical History: `edit-history`
+Modifies a specific entry in a patient’s medical history.
+
+**Format:**
+`edit-history ic/NRIC old/OLD_HISTORY_ENTRY new/NEW_HISTORY_ENTRY`
+
+**Example:**
+`edit-history ic/S1234567A old/Diabetes new/Type 2 Diabetes`
+
+---
+
+### Notes
+- NRIC must match an existing patient record.
+- All history entries are stored as simple strings.
+- Viewing by name will display all patients with the given name.
+- Editing only replaces the **first matched** old entry.
+
+
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
@@ -108,6 +246,11 @@ Example of usage:
 | Unmark appointment    | `unmark-appointment APPOINTMENT_ID`<br/> e.g. `unmark-appointment A101`                                                                                                                        |
 | Sort appointment      | `sort-appointment byDate` or `sort-appointment byId`                                                                                                                                           |
 | Find appointment      | `find-appointment PATIENT_NRIC`<br/> e.g. `find-appointment S1234567D`                                                                                                                         |
+| Prescription Management
+
+* Add prescription : `add-prescription ic/PATIENT_ID s/SYMPTOMS m/MEDICINES [nt/NOTES]`
+* View all prescriptions : `view-all-prescriptions PATIENT_ID`
+* View specific prescription : `view-prescription PRESCRIPTION_ID`
 
 # About us
 
