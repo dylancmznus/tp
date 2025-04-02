@@ -86,7 +86,7 @@ Example of usage:
 **A**: You can copy the 'data' folder and paste it in the directory that you save your jar file in another computer. 
 
 ## Known Issues
-1. The parameter `NRIC` can take in 
+1. The parameter `NRIC` can take in any format.
 
 
 ## Command Summary
