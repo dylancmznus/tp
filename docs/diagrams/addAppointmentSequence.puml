@@ -1,0 +1,58 @@
+@startuml
+hide footbox
+
+participant ":ClinicEase" as ClinicEase
+participant ":Parser" as Parser
+participant ":Appointment" as Appointment
+participant ":AddAppointmentCommand" as AddAppointmentCommand
+participant ":ManagementSystem" as ManagementSystem
+participant ":Storage" as Storage
+
+ClinicEase -> Parser : parse(input)
+activate Parser
+
+Parser -> Parser : parseAddAppointment(userInput)
+activate Parser
+Parser -> Parser : extractValue(userInput)
+activate Parser
+note right of Parser: extractValue is called multiple times\n to parse input and extract parameters
+Parser --> Parser : :String
+deactivate Parser
+
+create Appointment
+Parser -> Appointment : new Appointment()
+activate Appointment
+Appointment --> Parser : :Appointment
+deactivate Appointment
+deactivate Parser
+
+create AddAppointmentCommand
+Parser -> AddAppointmentCommand : new AddAppointmentCommand(Appointment)
+activate AddAppointmentCommand
+AddAppointmentCommand --> Parser : :AddAppointmentCommand
+deactivate AddAppointmentCommand
+Parser --> ClinicEase : :AddAppointmentCommand
+deactivate Parser
+
+ClinicEase -> AddAppointmentCommand : execute()
+activate AddAppointmentCommand
+AddAppointmentCommand -> ManagementSystem : addAppointment(appointment)
+activate ManagementSystem
+ManagementSystem -> ManagementSystem : findPatientByNRIC()
+activate ManagementSystem
+ManagementSystem -> Appointment : getNric()
+activate Appointment
+Appointment --> ManagementSystem : nric :String
+deactivate Appointment
+deactivate ManagementSystem
+
+ManagementSystem -> Storage : saveAppointments()
+activate Storage
+Storage --> ManagementSystem :
+deactivate Storage
+ManagementSystem --> AddAppointmentCommand :
+deactivate ManagementSystem
+AddAppointmentCommand -> ClinicEase :
+deactivate AddAppointmentCommand
+
+@enduml

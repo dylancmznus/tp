@@ -8,6 +8,39 @@
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+### Add appointment feature
+The `add-appointment` feature allows users to schedule appointments for registered patients. 
+The system ensures that the **patient exists** before adding the appointment. The appointment is then stored persistently.
+
+Given below is an example usage scenario and how the `add appointment` mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `ClinicEase` will be initialized with the....
+The system loads the stored list of patients and appointments. The user is now ready to add a new appointment.
+
+Step 2. The user executes `add-appointment ic/S1234567D ...` command to add the appointment to the appointment list. 
+This command let `ClinicEase` class reads the user input and passes it to the `Parser`. 
+The `Parser` class determines that the command is `add-appointment` and creates an `AddAppointmentCommand` object.
+
+> [!NOTE]:
+> If the input does not match the expected format, an InvalidInputFormatException is thrown. Hence, the appointment will
+> not be successfully added and stored. 
+
+Step 3. The system calls `execute()` method in `AddAppointmentCommand`. Then, this class calls `ManagementSystem.addAppointment()` 
+to add the appointment to the system. `ManagementSystem` checks if the patient exists using `findPatientByNRIC()`. 
+If the patient is found, the system creates an `Appointment` object and adds it to the appointment list.
+If the patient’s NRIC does not exist, a PatientNotFoundException is thrown. Thus, the appointment will not be successfully added and stored.
+
+Step 4. After the appointment is successfully added, `Storage.saveAppointments()` is called to update the saved appointment list.
+If saving fails, `ClinicEase` catches an `UnloadedStorageException` and informs the user.
+
+The following sequence diagram shows how an `add-aappointment` operation goes through the system:
+![add-appointment](./diagrams/addAppointmentSequence.png)
+
+
+
+
+
+
 
 ## Product scope
 ### Target user profile

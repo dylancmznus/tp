@@ -131,7 +131,8 @@ Format: `find-appointment NRIC`
 * All appointments associated with the specified NRIC will be displayed.
 
 Example of usage:
-* `find-appointment S1234567D`
+
+`find-appointment S1234567D`
 
 ### Managing Prescriptions
 
@@ -169,8 +170,7 @@ Format: `view-prescription PRESCRIPTION_ID`
 
 Example:
 * `view-prescription S9876543B-1`
-=======
-## Managing Medical History
+
 
 ### Adding Medical History: `store-history`
 Adds one or more entries to a patient's medical history.
@@ -181,10 +181,9 @@ store-history n/NAME ic/NRIC h/HISTORY_ENTRY1, HISTORY_ENTRY2, ...
 *Tip: Use commas to separate multiple history entries.*
 
 **Examples:**
-store-history n/Alex Tan ic/S1234567A h/Diabetes, Hypertension
-store-history n/Lim Mei ic/T7654321Z h/Asthma
+`store-history n/Alex Tan ic/S1234567A h/Diabetes, Hypertension`
+`store-history n/Lim Mei ic/T7654321Z h/Asthma`
 
----
 
 ### Viewing Medical History: `view-history`
 Displays medical history of a patient by NRIC or name.
@@ -194,10 +193,9 @@ Displays medical history of a patient by NRIC or name.
 `view-history NAME`
 
 **Examples:**
-view-history ic/S1234567A
-view-history Alex Tan
+`view-history ic/S1234567A`
+`view-history Alex Tan`
 
----
 
 ### Editing Medical History: `edit-history`
 Modifies a specific entry in a patient’s medical history.
@@ -205,17 +203,13 @@ Modifies a specific entry in a patient’s medical history.
 **Format:**
 `edit-history ic/NRIC old/OLD_HISTORY_ENTRY new/NEW_HISTORY_ENTRY`
 
-**Example:**
-`edit-history ic/S1234567A old/Diabetes new/Type 2 Diabetes`
-
----
-
-### Notes
 - NRIC must match an existing patient record.
 - All history entries are stored as simple strings.
 - Viewing by name will display all patients with the given name.
 - Editing only replaces the **first matched** old entry.
 
+**Example:**
+`edit-history ic/S1234567A old/Diabetes new/Type 2 Diabetes`
 
 ## FAQ
 
@@ -224,33 +218,32 @@ Modifies a specific entry in a patient’s medical history.
 **A**: You can copy the 'data' folder and paste it in the directory that you save your jar file in another computer. 
 
 ## Known Issues
-1. The parameter `NRIC` can take in any format.
+1. The parameter `NRIC` can take in any String format.
 
 
 ## Command Summary
 
-| Action                | Format, Examples                                                                                                                                                                               |
-|-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Add patient           | `add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS`<br/> e.g. `add-patient n/John Doe ic/S1234567D dob/1999-12-12 g/M p/98765432 a/123 Main Street h/Diabetes, Hypertension` |
-| Delete patient        | `delete-patient NRIC`<br/> e.g. `delete-patient S1234567D`                                                                                                                                     |
-| Edit patient          | `edit-patient ic/NRIC [n/NAME] [dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]`<br/> e.g. `edit-patient ic/S1234567D n/Billy Joe dob/1999-12-21`                                              |
-| List patient          | `list-patient`                                                                                                                                                                                 |
-| View patient          | `view-patient NRIC`<br/> e.g. `view-patient S1234567D`                                                                                                                                         |
-| Store medical history | `store-history n/NAME ic/NRIC h/MEDICAL_HISTORY`<br/> e.g. `store-history n/John Doe ic/S1234567D h/Depression`                                                                                |
-| View medical history  | `view-history NRIC` or `view-history NAME`<br/> e.g. `view-history S1234567D` or `view-history John Doe`                                                                                       |
-| Edit medical history  | `edit-history ic/NRIC old/OLD_TEXT new/NEW_TEXT`<br/> e.g. `edit-history ic/S1234567D old/Depression new/Obesity`                                                                              |
-| Add appointment       | `add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION`<br/> e.g. `add-appointment ic/S1234567D dt/2025-06-15 t/1400 dsc/Annual Checkup`                                                      |
-| Delete appointment    | `delete-appointment APPOINTMENT_ID`<br/> e.g. `delete-appointment A123`                                                                                                                        |
-| List appointment      | `list-appointment`                                                                                                                                                                             |
-| Mark appointment      | `mark-appointment APPOINTMENT_ID`<br/> e.g. `mark-appointment A101`                                                                                                                            |
-| Unmark appointment    | `unmark-appointment APPOINTMENT_ID`<br/> e.g. `unmark-appointment A101`                                                                                                                        |
-| Sort appointment      | `sort-appointment byDate` or `sort-appointment byId`                                                                                                                                           |
-| Find appointment      | `find-appointment PATIENT_NRIC`<br/> e.g. `find-appointment S1234567D`                                                                                                                         |
-| Prescription Management
+| Action                     | Format, Examples                                                                                                                                                                               |
+|----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Add patient                | `add-patient n/NAME ic/NRIC dob/BIRTHDATE g/GENDER p/PHONE a/ADDRESS`<br/> e.g. `add-patient n/John Doe ic/S1234567D dob/1999-12-12 g/M p/98765432 a/123 Main Street h/Diabetes, Hypertension` |
+| Delete patient             | `delete-patient NRIC`<br/> e.g. `delete-patient S1234567D`                                                                                                                                     |
+| Edit patient               | `edit-patient ic/NRIC [n/NAME] [dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]`<br/> e.g. `edit-patient ic/S1234567D n/Billy Joe dob/1999-12-21`                                              |
+| List patient               | `list-patient`                                                                                                                                                                                 |
+| View patient               | `view-patient NRIC`<br/> e.g. `view-patient S1234567D`                                                                                                                                         |
+| Store medical history      | `store-history n/NAME ic/NRIC h/MEDICAL_HISTORY`<br/> e.g. `store-history n/John Doe ic/S1234567D h/Depression`                                                                                |
+| View medical history       | `view-history NRIC` or `view-history NAME`<br/> e.g. `view-history S1234567D` or `view-history John Doe`                                                                                       |
+| Edit medical history       | `edit-history ic/NRIC old/OLD_TEXT new/NEW_TEXT`<br/> e.g. `edit-history ic/S1234567D old/Depression new/Obesity`                                                                              |
+| Add appointment            | `add-appointment ic/NRIC dt/DATE t/TIME dsc/DESCRIPTION`<br/> e.g. `add-appointment ic/S1234567D dt/2025-06-15 t/1400 dsc/Annual Checkup`                                                      |
+| Delete appointment         | `delete-appointment APPOINTMENT_ID`<br/> e.g. `delete-appointment A123`                                                                                                                        |
+| List appointment           | `list-appointment`                                                                                                                                                                             |
+| Mark appointment           | `mark-appointment APPOINTMENT_ID`<br/> e.g. `mark-appointment A101`                                                                                                                            |
+| Unmark appointment         | `unmark-appointment APPOINTMENT_ID`<br/> e.g. `unmark-appointment A101`                                                                                                                        |
+| Sort appointment           | `sort-appointment byDate` or `sort-appointment byId`                                                                                                                                           |
+| Find appointment           | `find-appointment PATIENT_NRIC`<br/> e.g. `find-appointment S1234567D`                                                                                                                         |
+| Add prescription           | `add-prescription ic/PATIENT_ID s/SYMPTOMS m/MEDICINES [nt/NOTES]`                                                                                                                             |
+| View all prescriptions     | `view-all-prescriptions PATIENT_ID`                                                                                                                                                            |
+| View specific prescription | `view-prescription PRESCRIPTION_ID`                                                                                                                                                            |
 
-* Add prescription : `add-prescription ic/PATIENT_ID s/SYMPTOMS m/MEDICINES [nt/NOTES]`
-* View all prescriptions : `view-all-prescriptions PATIENT_ID`
-* View specific prescription : `view-prescription PRESCRIPTION_ID`
 
 # About us
 
