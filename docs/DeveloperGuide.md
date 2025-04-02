@@ -36,7 +36,40 @@ If saving fails, `ClinicEase` catches an `UnloadedStorageException` and informs 
 The following sequence diagram shows how an `add-aappointment` operation goes through the system:
 ![add-appointment](./diagrams/addAppointmentSequence.png)
 
+### Add patient feature
+The `add-patient` feature allows users to register new patients by providing their personal information.  
+The system ensures that the **input is valid** and that the **patient does not already exist** before adding them to the patient list.
 
+**Step 1.**
+The user launches the application for the first time. `ClinicEase` will be initialized with the saved data (if any).  
+The system loads the stored list of patients and appointments. The user is now ready to register a new patient.
+
+**Step 2.**
+The user executes the following command to add a new patient:
+
+add-patient n/John Doe ic/S1234567A dob/01-01-1990 g/M p/98765432 a/123 Main St
+
+This command is read by the `ClinicEase` class and passed to the `Parser`.  
+The `Parser` class identifies the command as `add-patient` and parses the fields. A `Patient` object is then constructed from the parsed data.
+
+> **Note**  
+> If any required field (such as name, NRIC, or address) is missing, the parser will return `null`, and the system will display an appropriate error message.  
+> The patient will not be added in this case.
+
+**Step 3.**
+The `ManagementSystem.addPatient()` method is called with the parsed input.  
+The method first checks if a patient with the same NRIC already exists in the system.  
+If the NRIC is unique and all details are present, a new `Patient` object is added to the patient list.
+
+> **Note**  
+> If the NRIC already exists, a message is shown to inform the user that the patient has already been registered.
+
+**Step 4.**
+After successful registration, `Storage.savePatients()` is called to update the saved patient list on disk.  
+If saving fails, `ClinicEase` catches an `UnloadedStorageException` and alerts the user.
+
+The following sequence diagram shows how an `add-patient` operation flows through the system:
+![add-patient](./diagrams/addPatientSequence.png)
 
 ### Storing Medical History Feature
 
