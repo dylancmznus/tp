@@ -182,15 +182,16 @@ public class Ui {
     }
 
     //@@author dylancmznus
-    public void showAppointmentFound(Appointment appointment, String nric) {
-        if (appointment != null) {
-            showLine();
-            System.out.println("Appointment found for NRIC " + nric + ": " + appointment);
-            showLine();
+    public void showAppointmentsFound(List<Appointment> appointments, String nric) {
+        System.out.println("____________________________________________________________");
+        if (appointments.isEmpty()) {
+            System.out.println(" No appointments found for NRIC: " + nric);
         } else {
-            showLine();
-            System.out.println("No appointment found for NRIC " + nric);
-            showLine();
+            System.out.println(" Appointments found for NRIC: " + nric);
+            for (Appointment appt : appointments) {
+                System.out.println(" - " + appt);
+            }
         }
+        System.out.println("____________________________________________________________");
     }
 }

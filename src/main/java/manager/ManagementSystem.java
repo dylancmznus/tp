@@ -279,13 +279,14 @@ public class ManagementSystem {
         return null;
     }
 
-    public Appointment findAppointmentByNric(String nric) {
+    public List<Appointment> findAppointmentsByNric(String nric) {
+        List<Appointment> matchingAppointments = new ArrayList<>();
         for (Appointment appt : appointments) {
             if (appt.getNric().equals(nric)) {
-                return appt;
+                matchingAppointments.add(appt);
             }
         }
-        return null;
+        return matchingAppointments;
     }
 
     //@@author Basudeb2005

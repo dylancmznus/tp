@@ -1,5 +1,6 @@
 package command;
 
+import java.util.List;
 import manager.Appointment;
 import manager.ManagementSystem;
 import miscellaneous.Ui;
@@ -13,7 +14,7 @@ public class FindAppointmentCommand extends Command {
 
     @Override
     public void execute(ManagementSystem manager, Ui ui) {
-        Appointment foundAppointment = manager.findAppointmentByNric(nric);
-        ui.showAppointmentFound(foundAppointment, nric);
+        List<Appointment> foundAppointments = manager.findAppointmentsByNric(nric);
+        ui.showAppointmentsFound(foundAppointments, nric);
     }
 }
