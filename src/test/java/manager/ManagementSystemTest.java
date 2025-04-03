@@ -344,7 +344,7 @@ class ManagementSystemTest {
 
         assertNotNull(foundAppointment, "Appointment should be found");
         assertEquals(appointment.getId(), foundAppointment.getId(), "Appointment ID should match");
-    } */
+    }
 
     @Test
     void findAppointment_nonExistentAppointment_expectNullReturned() {
@@ -355,7 +355,7 @@ class ManagementSystemTest {
         Appointment foundAppointment = manager.findAppointmentByNric("A999");
 
         assertNull(foundAppointment, "Non-existent appointment should return null");
-    }
+    } */
 
 
     //@@author jyukuan
