@@ -302,10 +302,14 @@ class ManagementSystemTest {
         assertEquals("Consultation", appointments.get(2).getDescription());
     }
 
-    /*    @Test
-    void markAppointment_validInput_expectAppointmentMarked() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+    @Test
+    void markAppointment_validInput_expectAppointmentMarked() throws DuplicatePatientIDException,
+            UnloadedStorageException, PatientNotFoundException {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>(), new ArrayList<>());
+
+        Patient patient = new Patient("S9876543Z", "John Doe", "1990-01-01",
+                "M", "123 Street", "12345678", new ArrayList<>());
+        manager.addPatient(patient);
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-04-10 1500", DATE_TIME_FORMAT);
         Appointment appointment = new Appointment("S9876543Z", appointmentTime, "Dental Checkup");
@@ -317,9 +321,13 @@ class ManagementSystemTest {
     }
 
     @Test
-    void unmarkAppointment_validInput_expectAppointmentUnmarked() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+    void unmarkAppointment_validInput_expectAppointmentUnmarked() throws DuplicatePatientIDException,
+            UnloadedStorageException, PatientNotFoundException {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>(), new ArrayList<>());
+
+        Patient patient = new Patient("S8765432Y", "John Doe", "1990-01-01",
+                "M", "123 Street", "12345678", new ArrayList<>());
+        manager.addPatient(patient);
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-05-15 1030", DATE_TIME_FORMAT);
         Appointment appointment = new Appointment("S8765432Y", appointmentTime, "Eye Examination");
@@ -332,18 +340,22 @@ class ManagementSystemTest {
     }
 
     @Test
-    void findAppointment_existingAppointment_expectAppointmentFound() {
-        List<Patient> emptyList = new ArrayList<>();
-        ManagementSystem manager = new ManagementSystem(emptyList);
+    void findAppointment_existingAppointment_expectAppointmentFound() throws DuplicatePatientIDException,
+            UnloadedStorageException, PatientNotFoundException {
+        ManagementSystem manager = new ManagementSystem(new ArrayList<>(), new ArrayList<>());
+
+        Patient patient = new Patient("S7654321X", "John Doe", "1990-01-01",
+                "M", "123 Street", "12345678", new ArrayList<>());
+        manager.addPatient(patient);
 
         LocalDateTime appointmentTime = LocalDateTime.parse("2025-06-20 0900", DATE_TIME_FORMAT);
         Appointment appointment = new Appointment("S7654321X", appointmentTime, "General Consultation");
 
         manager.addAppointment(appointment);
-        Appointment foundAppointment = manager.findAppointmentByNric(appointment.getNric());
+        List<Appointment> foundAppointments = manager.findAppointmentsByNric(appointment.getNric());
 
-        assertNotNull(foundAppointment, "Appointment should be found");
-        assertEquals(appointment.getId(), foundAppointment.getId(), "Appointment ID should match");
+        assertNotNull(foundAppointments, "Appointment should be found");
+        assertEquals(appointment.getId(), foundAppointments.get(0).getId(), "Appointment ID should match");
     }
 
     @Test
@@ -352,10 +364,10 @@ class ManagementSystemTest {
         List<Appointment> emptyListAppoint = new ArrayList<>();
         ManagementSystem manager = new ManagementSystem(emptyListPatient, emptyListAppoint);
 
-        Appointment foundAppointment = manager.findAppointmentByNric("A999");
+        List<Appointment> foundAppointments = manager.findAppointmentsByNric("A999");
 
-        assertNull(foundAppointment, "Non-existent appointment should return null");
-    } */
+        assertTrue(foundAppointments.isEmpty(), "Non-existent appointment should return empty list");
+    }
 
 
     //@@author jyukuan
@@ -384,4 +396,54 @@ class ManagementSystemTest {
         assertTrue(history.contains("Diabetes"), "Medical history should contain 'Diabetes'");
         assertTrue(history.contains("Hypertension"), "Medical history should contain 'Hypertension'");
     }
+
+    @Test
+    void editPatientHistory_oldEntryNotFound_expectNoChange() throws UnloadedStorageException {
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
+
+        List<String> history = new ArrayList<>(List.of("Cold", "Migraine"));
+        Patient patient = new Patient("F8888888Q", "Ellen", "1970-12-12", "F", "99 Peace Ave", "85556666", history);
+        patients.add(patient);
+
+        manager.editPatientHistory("F8888888Q", "Cancer", "Diabetes");
+
+        List<String> updatedHistory = patient.getMedicalHistory();
+
+        assertEquals(2, updatedHistory.size(), "Unexpected change in history size");
+        assertFalse(updatedHistory.contains("Diabetes"), "Incorrectly added new history");
+        assertTrue(updatedHistory.contains("Cold"), "Valid entry unexpectedly removed");
+        assertTrue(updatedHistory.contains("Migraine"), "Valid entry unexpectedly removed");
+    }
+
+    @Test
+    void editPatientHistory_validHistory_expectUpdated() throws UnloadedStorageException {
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
+        List<String> history = new ArrayList<>(List.of("High BP", "Migraine"));
+        Patient patient = new Patient("F1234567X", "Carol", "1975-03-15", "F", "Blk 999", "83334444", history);
+        patients.add(patient);
+
+        manager.editPatientHistory("F1234567X", "High BP", "Hypertension");
+
+        List<String> updatedHistory = patient.getMedicalHistory();
+        assertTrue(updatedHistory.contains("Hypertension"), "Replacement failed");
+        assertFalse(updatedHistory.contains("High BP"), "Old entry not removed");
+    }
+
+    @Test
+    void editPatientHistory_emptyNewHistory_expectAssertionError() {
+        // Setup
+        List<Patient> patients = new ArrayList<>();
+        ManagementSystem manager = new ManagementSystem(patients, new ArrayList<>());
+        List<String> history = new ArrayList<>(List.of("Headache"));
+        Patient patient = new Patient("T7654321B", "Sarah", "1992-03-03",
+                "F", "88 Health Ave", "81231234", history);
+        patients.add(patient);
+
+        // Verify assertion
+        assertThrows(AssertionError.class,
+                () -> manager.editPatientHistory("T7654321B", "Headache", ""));
+    }
+
 }
