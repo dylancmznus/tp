@@ -183,7 +183,7 @@ public class Ui {
 
     //@@author dylancmznus
     public void showAppointmentsFound(List<Appointment> appointments, String nric) {
-        System.out.println("____________________________________________________________");
+        showLine();
         if (appointments.isEmpty()) {
             System.out.println(" No appointments found for NRIC: " + nric);
         } else {
@@ -192,6 +192,6 @@ public class Ui {
                 System.out.println(" - " + appt);
             }
         }
-        System.out.println("____________________________________________________________");
+        showLine();
     }
 }

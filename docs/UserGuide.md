@@ -9,7 +9,7 @@ ClinicEase is an application designed to assist doctors in managing patient reco
 1. Ensure that you have Java 17 or above installed. <br> 
    **Mac users:** Ensure you have the precise JDK version prescribed 
    [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
-2. Download the latest version of `Duke` from [here](http://link.to/duke).   
+2. Download the latest version of `ClinicEase` from [here](https://github.com/AY2425S2-CS2113-T11b-4/tp/releases).   
 3. Copy the file to the folder you want to use as the home folder for ClinicEase.
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the 
    `java -jar ClinicEase.jar` command to run the application.
@@ -59,6 +59,18 @@ Format: `list-patient`
 Example of usage:
 
 `list-patient`
+
+### Editing a specified patient: `edit-patient`
+Displays a list of all registered patients in the system with details provided.
+
+Format: `edit-patient ic/NRIC [n/NAME] [dob/BIRTHDATE] [g/GENDER] [a/ADDRESS] [p/PHONE]`
+
+* The `NRIC` must be of a patient existing in the system.
+
+Example of usage:
+
+`edit-patient ic/S1234567D p/91238989`
+
 
 ### Adding an appointment: `add-appointment`
 Adds a new appointment to the list of appointment.
@@ -176,25 +188,27 @@ Example:
 Adds one or more entries to a patient's medical history.
 
 **Format:**
-store-history n/NAME ic/NRIC h/HISTORY_ENTRY1, HISTORY_ENTRY2, ...
+`store-history n/NAME ic/NRIC h/HISTORY_ENTRY1, HISTORY_ENTRY2, ...`
+
+* The `NRIC` must be of a patient existing in the system. <br>
 
 *Tip: Use commas to separate multiple history entries.*
 
 **Examples:**
-`store-history n/Alex Tan ic/S1234567A h/Diabetes, Hypertension`
-`store-history n/Lim Mei ic/T7654321Z h/Asthma`
+- `store-history n/Alex Tan ic/S1234567A h/Diabetes, Hypertension`
+- `store-history n/Lim Mei ic/T7654321Z h/Asthma`
 
 
 ### Viewing Medical History: `view-history`
 Displays medical history of a patient by NRIC or name.
 
 **Format:**
-`view-history ic/NRIC`
+`view-history ic/NRIC` or
 `view-history NAME`
 
 **Examples:**
-`view-history ic/S1234567A`
-`view-history Alex Tan`
+- `view-history ic/S1234567A`
+- `view-history Alex Tan`
 
 
 ### Editing Medical History: `edit-history`
